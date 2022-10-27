@@ -187,8 +187,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         boton_aniadeUsuario = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         boton_alquileres = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JToolBar.Separator();
-        boton_destruccion = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        logo_camara = new javax.swing.JLabel();
         panel_buscador = new javax.swing.JPanel();
         campo_busquedaLibro = new javax.swing.JTextField();
         boton_buscarLibro = new javax.swing.JButton();
@@ -302,19 +302,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         });
         toolBar.add(boton_alquileres);
-        toolBar.add(jSeparator3);
+        toolBar.add(filler1);
 
-        boton_destruccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/destruccion.png"))); // NOI18N
-        boton_destruccion.setToolTipText("Autodestrucción");
-        boton_destruccion.setFocusable(false);
-        boton_destruccion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        boton_destruccion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        boton_destruccion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boton_destruccionActionPerformed(evt);
-            }
-        });
-        toolBar.add(boton_destruccion);
+        logo_camara.setIcon(new javax.swing.ImageIcon(getClass().getResource("/camara.png"))); // NOI18N
+        toolBar.add(logo_camara);
 
         panel_toolBar.add(toolBar);
 
@@ -762,10 +753,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
         dialogoAlquileres.muestraAlquileres(controlador.getAlquileres());
     }//GEN-LAST:event_boton_alquileresActionPerformed
 
-    private void boton_destruccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_destruccionActionPerformed
-
-    }//GEN-LAST:event_boton_destruccionActionPerformed
-
     private void campo_busquedaLibroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campo_busquedaLibroFocusGained
         JTextField campo = (JTextField) evt.getSource();
         campo.setText("");
@@ -781,7 +768,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton boton_aniadeLibro;
     private javax.swing.JButton boton_aniadeUsuario;
     private javax.swing.JButton boton_buscarLibro;
-    private javax.swing.JButton boton_destruccion;
     private javax.swing.JButton boton_devolucion;
     private javax.swing.JButton boton_limpiarBusqueda;
     private javax.swing.JButton boton_listaLibros;
@@ -794,11 +780,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField campo_nEjemplares;
     private javax.swing.JTextField campo_titulo;
     private javax.swing.JCheckBoxMenuItem checkMenu_modoOscuro;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JLabel label_autor;
     private javax.swing.JLabel label_ejemplares;
     private javax.swing.JLabel label_fecha;
@@ -806,6 +792,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel label_titulo;
     private javax.swing.JList<String> lista_alquileres;
     private javax.swing.JList<String> lista_libros;
+    private javax.swing.JLabel logo_camara;
     private javax.swing.JMenu menu_ajustes;
     private javax.swing.JMenu menu_alquileres;
     private javax.swing.JMenuItem menu_aniadeLibro;
