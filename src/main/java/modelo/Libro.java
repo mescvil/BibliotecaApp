@@ -5,12 +5,13 @@
 package modelo;
 
 import excepciones.SinEjemplaresException;
+import java.io.Serializable;
 
 /**
  *
  * @author Escoz
  */
-public class Libro {
+public class Libro implements Serializable {
 
     // --------------- ATRIBUTOS --------------- 
     private String isbn;

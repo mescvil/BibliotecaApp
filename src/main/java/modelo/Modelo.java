@@ -4,7 +4,8 @@
  */
 package modelo;
 
-import excepciones.SinEjemplaresException;
+import excepciones.CargaDatosException;
+import excepciones.GuardaDatosException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -14,15 +15,15 @@ import java.util.Map;
  */
 public abstract interface Modelo {
 
-    public abstract Map cargaLibros();
+    public abstract Map cargaLibros() throws CargaDatosException;
 
-    public abstract Map cargaPersonas();
+    public abstract Map cargaPersonas() throws CargaDatosException;
 
-    public abstract ArrayList cargaAlquileres();
+    public abstract ArrayList cargaAlquileres() throws CargaDatosException;
 
-    public abstract void guardaLibros(Map libros);
+    public abstract void guardaLibros(Map libros) throws GuardaDatosException;
 
-    public abstract void guardaPersonas(Map personas);
+    public abstract void guardaPersonas(Map personas) throws GuardaDatosException;
 
-    public abstract void guardaAlquileres(ArrayList<Alquiler> alquileres);
+    public abstract void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException;
 }

@@ -1,6 +1,7 @@
 package modelo;
 
 import excepciones.SinEjemplaresException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
@@ -8,7 +9,7 @@ import java.util.GregorianCalendar;
  *
  * @author Escoz
  */
-public class Alquiler {
+public class Alquiler implements Serializable {
 
     // -------------- ATRIBUTOS ---------------
     private Libro libro;

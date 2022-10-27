@@ -4,14 +4,19 @@
  */
 package vista;
 
-import java.awt.Color;
+import excepciones.GuardaDatosException;
 import java.util.GregorianCalendar;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import java.awt.Dimension;
 import java.util.Date;
 import javax.swing.JList;
 import modelo.Usuario;
+import static extras.Extra.ROJO;
+import static extras.Extra.VERDE;
+import static extras.Extra.AZUL;
+import static extras.Extra.DIMENSION_GRANDE;
+import static extras.Extra.DIMENSION_PEQUENIA;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,12 +25,6 @@ import modelo.Usuario;
 public class DialogoPersona extends javax.swing.JDialog {
 
     private VistaPrincipal vista_padre;
-
-    private final Color rojo = new Color(255, 102, 102);
-    private final Color verde = new Color(153, 255, 153);
-
-    private final Dimension dimension_pequeña = new Dimension(400, 300);
-    private final Dimension dimension_grande = new Dimension(500, 300);
 
     private DefaultListModel modelo_lista;
 
@@ -54,11 +53,12 @@ public class DialogoPersona extends javax.swing.JDialog {
         dateChooser_nacimiento.setDate(new Date());
 
         boton_multiple.setText("Guardar");
-        boton_multiple.setBackground(verde);
+        boton_multiple.setBackground(VERDE);
 
         lista_Usuarios.setEnabled(false);
+        panel_busqueda.setVisible(false);
 
-        setPreferredSize(dimension_grande);
+        setPreferredSize(DIMENSION_PEQUENIA);
         lista_Usuarios.clearSelection();
         rellenaDatosPersona(new Usuario());
 
@@ -79,11 +79,12 @@ public class DialogoPersona extends javax.swing.JDialog {
         dateChooser_nacimiento.setEnabled(false);
 
         boton_multiple.setText("Cerrar");
-        boton_multiple.setBackground(rojo);
+        boton_multiple.setBackground(ROJO);
 
         lista_Usuarios.setEnabled(true);
+        panel_busqueda.setVisible(true);
 
-        setPreferredSize(dimension_grande);
+        setPreferredSize(DIMENSION_GRANDE);
 
         pack();
         setVisible(true);
@@ -134,10 +135,13 @@ public class DialogoPersona extends javax.swing.JDialog {
         dateChooser_nacimiento = new com.toedter.calendar.JDateChooser();
         panel_lista = new javax.swing.JScrollPane();
         lista_Usuarios = new javax.swing.JList<>();
+        panel_busqueda = new javax.swing.JPanel();
+        campo_busqueda = new javax.swing.JTextField();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        boton_busqueda = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos de usuario");
-        setPreferredSize(new java.awt.Dimension(400, 300));
         setResizable(false);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -150,7 +154,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         label_dni.setText("DNI");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 9);
         getContentPane().add(label_dni, gridBagConstraints);
@@ -158,7 +162,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_dni.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -168,7 +172,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         label_priApellido.setText("Primer Apellido");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 9);
         getContentPane().add(label_priApellido, gridBagConstraints);
@@ -177,7 +181,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         label_telefono.setText("Teléfono");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 9);
         getContentPane().add(label_telefono, gridBagConstraints);
@@ -185,7 +189,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_priApellido.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -194,7 +198,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_telefono.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -204,7 +208,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         label_email.setText("Email");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 9);
         getContentPane().add(label_email, gridBagConstraints);
@@ -213,7 +217,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         label_fechNacimiento.setText("Fecha nacimiento");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 9);
         getContentPane().add(label_fechNacimiento, gridBagConstraints);
@@ -221,7 +225,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_email.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -237,7 +241,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         getContentPane().add(boton_multiple, gridBagConstraints);
@@ -246,7 +250,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         label_segApellido.setText("Segundo Apellido");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 9);
         getContentPane().add(label_segApellido, gridBagConstraints);
@@ -254,7 +258,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_segApellido.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -264,7 +268,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         label_nombre.setText("Nombre");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 5, 9);
         getContentPane().add(label_nombre, gridBagConstraints);
@@ -272,7 +276,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_nombre.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -283,7 +287,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         dateChooser_nacimiento.setMaxSelectableDate(new Date());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
@@ -306,12 +310,38 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(panel_lista, gridBagConstraints);
+
+        panel_busqueda.setLayout(new javax.swing.BoxLayout(panel_busqueda, javax.swing.BoxLayout.LINE_AXIS));
+
+        campo_busqueda.setText("Introduce un nombre...");
+        panel_busqueda.add(campo_busqueda);
+        panel_busqueda.add(filler1);
+
+        boton_busqueda.setBackground(AZUL);
+        boton_busqueda.setForeground(new java.awt.Color(255, 255, 255));
+        boton_busqueda.setText("Buscar");
+        boton_busqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_busquedaActionPerformed(evt);
+            }
+        });
+        panel_busqueda.add(boton_busqueda);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        getContentPane().add(panel_busqueda, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -325,34 +355,39 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         if (texto_boton.equals("Guardar")) {
 
-            String nombre = campo_nombre.getText();
-            String apellido_1 = campo_priApellido.getText();
-            String apellido_2 = campo_segApellido.getText();
-            String dni = campo_dni.getText();
-            String telf = campo_telefono.getText();
-            String correo = campo_email.getText();
-            GregorianCalendar f_nacimiento = new GregorianCalendar();
+            try {
+                String nombre = campo_nombre.getText();
+                String apellido_1 = campo_priApellido.getText();
+                String apellido_2 = campo_segApellido.getText();
+                String dni = campo_dni.getText();
+                String telf = campo_telefono.getText();
+                String correo = campo_email.getText();
+                GregorianCalendar f_nacimiento = new GregorianCalendar();
 
-            /* Comprobamos todos los campos */
-            if (nombre.isBlank() || apellido_1.isBlank() || apellido_2.isBlank() || dni.isBlank() || telf.isBlank() || correo.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Rellena todos los campos",
-                        "Nuevo usuario", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+                /* Comprobamos todos los campos */
+                if (nombre.isBlank() || apellido_1.isBlank() || apellido_2.isBlank() || dni.isBlank() || telf.isBlank() || correo.isBlank()) {
+                    JOptionPane.showMessageDialog(this, "Rellena todos los campos",
+                            "Nuevo usuario", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
-            f_nacimiento.setTime(dateChooser_nacimiento.getDate());
-            Usuario u = new Usuario(dni, nombre, apellido_1, apellido_2, telf, correo, f_nacimiento);
+                f_nacimiento.setTime(dateChooser_nacimiento.getDate());
+                Usuario u = new Usuario(dni, nombre, apellido_1, apellido_2, telf, correo, f_nacimiento);
 
-            vista_padre.guardaUsuario(u);
-            modelo_lista.addElement(u);
+                vista_padre.guardaUsuario(u);
+                modelo_lista.addElement(u);
 
-            rellenaDatosPersona(new Usuario());
+                rellenaDatosPersona(new Usuario());
 
-            int resultado = JOptionPane.showConfirmDialog(this, "Agregado con éxito, ¿Desea agregar más?",
-                    "", JOptionPane.YES_NO_OPTION);
+                int resultado = JOptionPane.showConfirmDialog(this, "Agregado con éxito, ¿Desea agregar más?",
+                        "", JOptionPane.YES_NO_OPTION);
 
-            if (resultado == 1) {
-                dispose();
+                if (resultado == 1) {
+                    dispose();
+                }
+            } catch (GuardaDatosException ex) {
+                JOptionPane.showMessageDialog(this, "No ha sido posible crear un nuevo usuario",
+                        "Nuevo usuario", JOptionPane.ERROR_MESSAGE);
             }
 
         } else {
@@ -371,8 +406,15 @@ public class DialogoPersona extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_lista_UsuariosValueChanged
 
+    private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
+        JOptionPane.showMessageDialog(this, "En construcción...",
+                "", JOptionPane.WARNING_MESSAGE);
+    }//GEN-LAST:event_boton_busquedaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton boton_busqueda;
     private javax.swing.JButton boton_multiple;
+    private javax.swing.JTextField campo_busqueda;
     private javax.swing.JTextField campo_dni;
     private javax.swing.JTextField campo_email;
     private javax.swing.JTextField campo_nombre;
@@ -380,6 +422,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     private javax.swing.JTextField campo_segApellido;
     private javax.swing.JTextField campo_telefono;
     private com.toedter.calendar.JDateChooser dateChooser_nacimiento;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel label_dni;
     private javax.swing.JLabel label_email;
     private javax.swing.JLabel label_fechNacimiento;
@@ -388,6 +431,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     private javax.swing.JLabel label_segApellido;
     private javax.swing.JLabel label_telefono;
     private javax.swing.JList<String> lista_Usuarios;
+    private javax.swing.JPanel panel_busqueda;
     private javax.swing.JScrollPane panel_lista;
     // End of variables declaration//GEN-END:variables
 }

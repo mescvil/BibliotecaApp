@@ -4,6 +4,8 @@
  */
 package controlador;
 
+import excepciones.CargaDatosException;
+import excepciones.GuardaDatosException;
 import java.util.ArrayList;
 import java.util.Map;
 import modelo.Alquiler;
@@ -29,16 +31,22 @@ public class Controlador {
     public Controlador() {
         modelo = new ModeloSimple();
 
-        mapa_personas = modelo.cargaPersonas();
-        mapa_libros = modelo.cargaLibros();
-        lista_alquileres = modelo.cargaAlquileres();
+        try {
+            mapa_personas = modelo.cargaPersonas();
+            mapa_libros = modelo.cargaLibros();
+            lista_alquileres = modelo.cargaAlquileres();
+
+        } catch (CargaDatosException ex) {
+            // POR VER
+            ex.printStackTrace();
+        }
 
         vista = new VistaPrincipal(this);
         vista.setVisible(true);
 
     }
 
-    public void guardaUsuario(Usuario usuario) {
+    public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
         mapa_personas.put(usuario.getDni(), usuario);
         modelo.guardaPersonas(mapa_personas);
     }
@@ -109,18 +117,24 @@ public class Controlador {
         return usuarios;
     }
 
-    public void guardaLibro(Libro libro) {
+    public void guardaLibro(Libro libro) throws GuardaDatosException {
         mapa_libros.put(libro.getIsbn(), libro);
+        modelo.guardaLibros(mapa_libros);
     }
 
-    public void guardaAlquiler(Alquiler alquiler) {
+    public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
         lista_alquileres.add(alquiler);
+        modelo.guardaAlquileres(lista_alquileres);
     }
 
-    public void realizaDevolucion(Alquiler alquiler) {
+    public void realizaDevolucion(Alquiler alquiler) throws GuardaDatosException {
         alquiler.elimaAlquiler();
         lista_alquileres.remove(alquiler);
-        alquiler = null;
+        modelo.guardaAlquileres(lista_alquileres);
+    }
+
+    public ArrayList<Alquiler> getAlquileres() {
+        return lista_alquileres;
     }
 
 }

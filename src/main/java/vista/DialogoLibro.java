@@ -4,13 +4,15 @@
  */
 package vista;
 
-import java.awt.Color;
+import excepciones.GuardaDatosException;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import java.awt.Dimension;
 import java.util.Calendar;
 import javax.swing.JList;
 import modelo.Libro;
+import static extras.Extra.ROJO;
+import static extras.Extra.VERDE;
+import static extras.Extra.DIMENSION_GRANDE;
 
 /**
  *
@@ -19,12 +21,6 @@ import modelo.Libro;
 public class DialogoLibro extends javax.swing.JDialog {
 
     private VistaPrincipal vista_padre;
-
-    private final Color rojo = new Color(255, 102, 102);
-    private final Color verde = new Color(153, 255, 153);
-    private final Color azul = new Color(51, 153, 255);
-
-    private final Dimension dimension_grande = new Dimension(500, 300);
 
     private DefaultListModel modelo_lista;
 
@@ -51,11 +47,11 @@ public class DialogoLibro extends javax.swing.JDialog {
         spiner_ejemplares.setEnabled(true);
 
         boton_multiple.setText("Guardar");
-        boton_multiple.setBackground(verde);
+        boton_multiple.setBackground(VERDE);
 
         lista_libros.setEnabled(false);
 
-        setPreferredSize(dimension_grande);
+        setPreferredSize(DIMENSION_GRANDE);
 
         pack();
         setVisible(true);
@@ -70,11 +66,11 @@ public class DialogoLibro extends javax.swing.JDialog {
         campo_isbn.setEditable(false);
 
         boton_multiple.setText("Cerrar");
-        boton_multiple.setBackground(rojo);
+        boton_multiple.setBackground(ROJO);
 
         lista_libros.setEnabled(true);
 
-        setPreferredSize(dimension_grande);
+        setPreferredSize(DIMENSION_GRANDE);
 
         pack();
         setVisible(true);
@@ -265,30 +261,35 @@ public class DialogoLibro extends javax.swing.JDialog {
 
         if (texto_boton.equals("Guardar")) {
 
-            String titulo = campo_titulo.getText();
-            String autor = campo_autor.getText();
-            String isbn = campo_isbn.getText();
-            int n_ejemplares = (Integer) spiner_ejemplares.getValue();
-            String anio = String.valueOf(yearChooser_anio.getValue());
+            try {
+                String titulo = campo_titulo.getText();
+                String autor = campo_autor.getText();
+                String isbn = campo_isbn.getText();
+                int n_ejemplares = (Integer) spiner_ejemplares.getValue();
+                String anio = String.valueOf(yearChooser_anio.getValue());
 
-            /* Comprobamos todos los campos */
-            if (titulo.isBlank() || autor.isBlank() || isbn.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Rellena todos los campos",
-                        "Nuevo libro", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+                /* Comprobamos todos los campos */
+                if (titulo.isBlank() || autor.isBlank() || isbn.isBlank()) {
+                    JOptionPane.showMessageDialog(this, "Rellena todos los campos",
+                            "Nuevo libro", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
-            Libro libro = new Libro(isbn, titulo, autor, anio, n_ejemplares);
-            vista_padre.guardaLibro(libro);
+                Libro libro = new Libro(isbn, titulo, autor, anio, n_ejemplares);
+                vista_padre.guardaLibro(libro);
 
-            modelo_lista.addElement(libro);
-            rellenaDatosLibros(new Libro());
+                modelo_lista.addElement(libro);
+                rellenaDatosLibros(new Libro());
 
-            int resultado = JOptionPane.showConfirmDialog(this, "Agregado con éxito, ¿Desea agregar más?",
-                    "", JOptionPane.YES_NO_OPTION);
+                int resultado = JOptionPane.showConfirmDialog(this, "Agregado con éxito, ¿Desea agregar más?",
+                        "", JOptionPane.YES_NO_OPTION);
 
-            if (resultado == 1) {
-                dispose();
+                if (resultado == 1) {
+                    dispose();
+                }
+            } catch (GuardaDatosException ex) {
+                JOptionPane.showMessageDialog(this, "No ha sido posible crear el libro",
+                        "Nuevo libro", JOptionPane.ERROR_MESSAGE);
             }
 
         } else {

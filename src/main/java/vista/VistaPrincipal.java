@@ -7,6 +7,8 @@ package vista;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import controlador.Controlador;
+import excepciones.GuardaDatosException;
+import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -35,6 +37,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private DialogoPersona dialogoPersona;
     private DialogoLibro dialogoLibro;
     private DialogoPrestamo dialogoPrestamo;
+    private DialogoAlquiler dialogoAlquileres;
 
     private boolean tiene_alquileres;
 
@@ -50,9 +53,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
         this.dialogoLibro = new DialogoLibro(this, true, modelo_listaLibros);
         this.dialogoPersona = new DialogoPersona(this, true, modelo_listaUsuarios);
         this.dialogoPrestamo = new DialogoPrestamo(this, true, modelo_listaUsuarios);
+        this.dialogoAlquileres = new DialogoAlquiler(this, false);
 
         initComponents();
-        setIconoApp();
+        iconoAplicacion();
 
         lista_libros.setModel(modelo_listaLibros);
         lista_alquileres.setModel(modelo_listaAlquileres);
@@ -66,19 +70,25 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     }
 
-    public void setIconoApp() {
-        this.setIconImage(new ImageIcon(getClass().getResource("/icono_app.png")).getImage());
+    public void iconoAplicacion() {
+        Image icono = new ImageIcon(getClass().getResource("/icono_app.png")).getImage();
+
+        this.setIconImage(icono);
+        dialogoLibro.setIconImage(icono);
+        dialogoPersona.setIconImage(icono);
+        dialogoPrestamo.setIconImage(icono);
+        dialogoAlquileres.setIconImage(icono);
     }
 
-    public void guardaUsuario(Usuario usuario) {
+    public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
         controlador.guardaUsuario(usuario);
     }
 
-    public void guardaLibro(Libro libro) {
+    public void guardaLibro(Libro libro) throws GuardaDatosException {
         controlador.guardaLibro(libro);
     }
 
-    public void guardaAlquiler(Alquiler alquiler) {
+    public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
         controlador.guardaAlquiler(alquiler);
         setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
         rellenaCamposLibro(alquiler.getLibro());
@@ -158,10 +168,15 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         panel_toolBar = new javax.swing.JPanel();
         toolBar = new javax.swing.JToolBar();
+        boton_listaLibros = new javax.swing.JButton();
         boton_aniadeLibro = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         boton_verUsuarios = new javax.swing.JButton();
         boton_aniadeUsuario = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        boton_alquileres = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        boton_destruccion = new javax.swing.JButton();
         panel_buscador = new javax.swing.JPanel();
         campo_busquedaLibro = new javax.swing.JTextField();
         boton_buscarLibro = new javax.swing.JButton();
@@ -191,13 +206,16 @@ public class VistaPrincipal extends javax.swing.JFrame {
         menu_usuarios = new javax.swing.JMenu();
         menu_aniadeUsuario = new javax.swing.JMenuItem();
         menu_verUsuarios = new javax.swing.JMenuItem();
+        menu_libros = new javax.swing.JMenu();
         menu_aniadeLibro = new javax.swing.JMenuItem();
+        menu_alquileres = new javax.swing.JMenu();
+        menu_listaAlquileres = new javax.swing.JMenuItem();
         menu_ajustes = new javax.swing.JMenu();
         checkMenu_modoOscuro = new javax.swing.JCheckBoxMenuItem();
         menu_salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca App 1.1");
+        setTitle("Biblioteca App 1.2");
         setMinimumSize(new java.awt.Dimension(700, 425));
         setPreferredSize(new java.awt.Dimension(600, 500));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -208,6 +226,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         toolBar.setRollover(true);
         toolBar.setMinimumSize(new java.awt.Dimension(137, 44));
+
+        boton_listaLibros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lista_libros.png"))); // NOI18N
+        boton_listaLibros.setToolTipText("Listado de libros");
+        boton_listaLibros.setFocusable(false);
+        boton_listaLibros.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        boton_listaLibros.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(boton_listaLibros);
 
         boton_aniadeLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/add_libro.png"))); // NOI18N
         boton_aniadeLibro.setToolTipText("Añadir un libro");
@@ -220,6 +245,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         });
         toolBar.add(boton_aniadeLibro);
+
+        jSeparator1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         toolBar.add(jSeparator1);
 
         boton_verUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lista_usuarios.png"))); // NOI18N
@@ -245,6 +272,32 @@ public class VistaPrincipal extends javax.swing.JFrame {
             }
         });
         toolBar.add(boton_aniadeUsuario);
+        toolBar.add(jSeparator2);
+
+        boton_alquileres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lista_alquileres.png"))); // NOI18N
+        boton_alquileres.setToolTipText("Listado de alquileres");
+        boton_alquileres.setFocusable(false);
+        boton_alquileres.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        boton_alquileres.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        boton_alquileres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_alquileresActionPerformed(evt);
+            }
+        });
+        toolBar.add(boton_alquileres);
+        toolBar.add(jSeparator3);
+
+        boton_destruccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/destruccion.png"))); // NOI18N
+        boton_destruccion.setToolTipText("Autodestrucción");
+        boton_destruccion.setFocusable(false);
+        boton_destruccion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        boton_destruccion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        boton_destruccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_destruccionActionPerformed(evt);
+            }
+        });
+        toolBar.add(boton_destruccion);
 
         panel_toolBar.add(toolBar);
 
@@ -504,13 +557,24 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         menu_archivo.add(menu_usuarios);
 
+        menu_libros.setText("Libros");
+
         menu_aniadeLibro.setText("Nuevo libro...");
         menu_aniadeLibro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_aniadeLibroActionPerformed(evt);
             }
         });
-        menu_archivo.add(menu_aniadeLibro);
+        menu_libros.add(menu_aniadeLibro);
+
+        menu_archivo.add(menu_libros);
+
+        menu_alquileres.setText("Alquileres");
+
+        menu_listaAlquileres.setText("Listado de alquileres...");
+        menu_alquileres.add(menu_listaAlquileres);
+
+        menu_archivo.add(menu_alquileres);
 
         barraMenu.add(menu_archivo);
 
@@ -643,17 +707,22 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     private void boton_devolucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_devolucionActionPerformed
         if (lista_alquileres.getSelectedIndex() != -1) {
-            JList lista = lista_alquileres;
+            try {
+                JList lista = lista_alquileres;
 
-            Alquiler alquiler = (Alquiler) lista.getSelectedValue();
-            controlador.realizaDevolucion(alquiler);
+                Alquiler alquiler = (Alquiler) lista.getSelectedValue();
+                controlador.realizaDevolucion(alquiler);
 
-            setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
-            rellenaCamposLibro(alquiler.getLibro());
-            boton_devolucion.setEnabled(false);
+                setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
+                rellenaCamposLibro(alquiler.getLibro());
+                boton_devolucion.setEnabled(false);
 
-            JOptionPane.showMessageDialog(this, "Operación realizada con éxito",
-                    "Devolución", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Operación realizada con éxito",
+                        "Devolución", JOptionPane.INFORMATION_MESSAGE);
+            } catch (GuardaDatosException ex) {
+                JOptionPane.showMessageDialog(this, "No ha sido posible realizar la devolución",
+                        "Devolución", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_boton_devolucionActionPerformed
 
@@ -671,13 +740,24 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lista_alquileresValueChanged
 
+    private void boton_alquileresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_alquileresActionPerformed
+        dialogoAlquileres.muestraAlquileres(controlador.getAlquileres());
+    }//GEN-LAST:event_boton_alquileresActionPerformed
+
+    private void boton_destruccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_destruccionActionPerformed
+
+    }//GEN-LAST:event_boton_destruccionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
+    private javax.swing.JButton boton_alquileres;
     private javax.swing.JButton boton_aniadeLibro;
     private javax.swing.JButton boton_aniadeUsuario;
     private javax.swing.JButton boton_buscarLibro;
+    private javax.swing.JButton boton_destruccion;
     private javax.swing.JButton boton_devolucion;
     private javax.swing.JButton boton_limpiarBusqueda;
+    private javax.swing.JButton boton_listaLibros;
     private javax.swing.JButton boton_nuevoPrestamo;
     private javax.swing.JButton boton_verUsuarios;
     private javax.swing.JTextField campo_autor;
@@ -690,6 +770,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JLabel label_autor;
     private javax.swing.JLabel label_ejemplares;
     private javax.swing.JLabel label_fecha;
@@ -698,9 +780,12 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JList<String> lista_alquileres;
     private javax.swing.JList<String> lista_libros;
     private javax.swing.JMenu menu_ajustes;
+    private javax.swing.JMenu menu_alquileres;
     private javax.swing.JMenuItem menu_aniadeLibro;
     private javax.swing.JMenuItem menu_aniadeUsuario;
     private javax.swing.JMenu menu_archivo;
+    private javax.swing.JMenu menu_libros;
+    private javax.swing.JMenuItem menu_listaAlquileres;
     private javax.swing.JMenu menu_salir;
     private javax.swing.JMenu menu_usuarios;
     private javax.swing.JMenuItem menu_verUsuarios;
