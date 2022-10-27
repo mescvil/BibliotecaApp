@@ -11,12 +11,11 @@ import javax.swing.JOptionPane;
 import java.util.Date;
 import javax.swing.JList;
 import modelo.Usuario;
-import static extras.Extra.ROJO;
-import static extras.Extra.VERDE;
-import static extras.Extra.AZUL;
-import static extras.Extra.DIMENSION_GRANDE;
-import static extras.Extra.DIMENSION_PEQUENIA;
-import javax.swing.table.DefaultTableModel;
+import static extras.Colores_Dimensiones.ROJO;
+import static extras.Colores_Dimensiones.VERDE;
+import static extras.Colores_Dimensiones.AZUL;
+import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
+import static extras.Colores_Dimensiones.DIMENSION_PEQUENIA;
 
 /**
  *

@@ -9,7 +9,7 @@ import java.awt.Dimension;
  *
  * @author Escoz
  */
-public class Extra {
+public class Colores_Dimensiones {
 
     public static final Dimension DIMENSION_EXTRA = new Dimension(700, 400);
     public static final Dimension DIMENSION_GRANDE = new Dimension(500, 350);

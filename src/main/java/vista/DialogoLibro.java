@@ -10,9 +10,9 @@ import javax.swing.JOptionPane;
 import java.util.Calendar;
 import javax.swing.JList;
 import modelo.Libro;
-import static extras.Extra.ROJO;
-import static extras.Extra.VERDE;
-import static extras.Extra.DIMENSION_GRANDE;
+import static extras.Colores_Dimensiones.ROJO;
+import static extras.Colores_Dimensiones.VERDE;
+import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
 
 /**
  *

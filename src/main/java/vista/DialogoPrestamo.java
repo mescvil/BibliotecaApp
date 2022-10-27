@@ -17,8 +17,8 @@ import javax.swing.SpinnerNumberModel;
 import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Usuario;
-import static extras.Extra.AZUL;
-import static extras.Extra.DIMENSION_GRANDE;
+import static extras.Colores_Dimensiones.AZUL;
+import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
 
 /**
  *

@@ -2,10 +2,9 @@
  */
 package vista;
 
-import static extras.Extra.AZUL;
+import static extras.Colores_Dimensiones.AZUL;
 import extras.ModeloAlquiler;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import modelo.Alquiler;
 
@@ -14,7 +13,7 @@ import modelo.Alquiler;
  * @author Escoz
  */
 public class DialogoAlquiler extends javax.swing.JDialog {
-
+    
     private VistaPrincipal padre;
     private ModeloAlquiler modelo_tabla;
 
@@ -23,28 +22,18 @@ public class DialogoAlquiler extends javax.swing.JDialog {
      */
     public DialogoAlquiler(VistaPrincipal padre, boolean modal) {
         super(padre, modal);
-
+        
         this.padre = padre;
         this.modelo_tabla = new ModeloAlquiler();
-
+        
         initComponents();
     }
-
+    
     public void muestraAlquileres(ArrayList<Alquiler> alquileres) {
-
+        
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
-        modelo.setRowCount(0);
-
-        for (Alquiler alquiler : alquileres) {
-            String nombre = alquiler.getPersona().getNombreCompleto();
-            String dni = alquiler.getPersona().getDni();
-            String isbn = alquiler.getLibro().getIsbn();
-            String titulo = alquiler.getLibro().getTitulo();
-            GregorianCalendar devolucion = alquiler.getFecha_limite();
-
-            modelo.addRow(new Object[]{dni, nombre, isbn, titulo, devolucion.getTime(), devolucion.getTime()});
-        }
-
+        modelo.addAlquileres(alquileres);
+        
         pack();
         setVisible(true);
     }
@@ -58,12 +47,20 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void initComponents() {
 
         pop_alquileres = new javax.swing.JPopupMenu();
+        popMenu_verLibro = new javax.swing.JMenuItem();
+        popMenu_verUsuario = new javax.swing.JMenuItem();
         panel_busqueda = new javax.swing.JPanel();
         campo_busqueda = new javax.swing.JTextField();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         boton_busqueda = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_alquileres = new javax.swing.JTable();
+
+        popMenu_verLibro.setText("Datos del libro");
+        pop_alquileres.add(popMenu_verLibro);
+
+        popMenu_verUsuario.setText("Datos del usuario");
+        pop_alquileres.add(popMenu_verUsuario);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Lista de alquileres");
@@ -123,6 +120,8 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panel_busqueda;
+    private javax.swing.JMenuItem popMenu_verLibro;
+    private javax.swing.JMenuItem popMenu_verUsuario;
     private javax.swing.JPopupMenu pop_alquileres;
     private javax.swing.JTable tabla_alquileres;
     // End of variables declaration//GEN-END:variables

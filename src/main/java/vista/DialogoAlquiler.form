@@ -7,6 +7,18 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="popMenu_verLibro">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Datos del libro"/>
+          </Properties>
+        </MenuItem>
+        <MenuItem class="javax.swing.JMenuItem" name="popMenu_verUsuario">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Datos del usuario"/>
+          </Properties>
+        </MenuItem>
+      </SubComponents>
     </Container>
   </NonVisualComponents>
   <Properties>

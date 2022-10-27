@@ -68,6 +68,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         UIManager.put("OptionPane.yesButtonText", "Si");
         UIManager.put("OptionPane.noButtonText", "No");
 
+        // UN POCO CHAPUZA PERO HACE EL APAÑO
+        panel_toolBar.requestFocus();
     }
 
     public void iconoAplicacion() {
@@ -309,9 +311,9 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
         campo_busquedaLibro.setText("Introduce un titulo...");
         campo_busquedaLibro.setToolTipText("Busca un libro por titulo");
-        campo_busquedaLibro.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                campo_busquedaLibroMouseClicked(evt);
+        campo_busquedaLibro.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                campo_busquedaLibroFocusGained(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -623,11 +625,6 @@ public class VistaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_libroSeleccionado
 
-    private void campo_busquedaLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campo_busquedaLibroMouseClicked
-        JTextField campo = (JTextField) evt.getSource();
-        campo.setText("");
-    }//GEN-LAST:event_campo_busquedaLibroMouseClicked
-
     private void boton_buscarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_buscarLibroActionPerformed
         String busqueda = campo_busquedaLibro.getText();
 
@@ -747,6 +744,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private void boton_destruccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_destruccionActionPerformed
 
     }//GEN-LAST:event_boton_destruccionActionPerformed
+
+    private void campo_busquedaLibroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campo_busquedaLibroFocusGained
+        JTextField campo = (JTextField) evt.getSource();
+        campo.setText("");
+    }//GEN-LAST:event_campo_busquedaLibroFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
