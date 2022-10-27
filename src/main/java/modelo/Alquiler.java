@@ -15,6 +15,7 @@ public class Alquiler implements Serializable {
     private Libro libro;
     private Usuario persona;
     private GregorianCalendar fecha_limite;
+    private GregorianCalendar fecha_creacion;
     private int n_ejemplares;
 
     // -------------- CONSTRUCTORES ---------------
@@ -23,6 +24,7 @@ public class Alquiler implements Serializable {
         setPersona(persona);
         creaAlquiler(n_ejemplares = 1);
 
+        fecha_creacion = new GregorianCalendar();
         fecha_limite = new GregorianCalendar();
         fecha_limite.add(GregorianCalendar.DAY_OF_MONTH, 15);
     }
@@ -33,6 +35,7 @@ public class Alquiler implements Serializable {
         setFecha_limite(fecha_limite);
         creaAlquiler(n_ejemplares);
         setN_ejemplares(n_ejemplares);
+        fecha_creacion = new GregorianCalendar();
     }
 
     // -------------- METODOS---------------
@@ -106,6 +109,10 @@ public class Alquiler implements Serializable {
 
     public int getN_ejemplares() {
         return n_ejemplares;
+    }
+
+    public GregorianCalendar getFecha_creacion() {
+        return fecha_creacion;
     }
 
 }

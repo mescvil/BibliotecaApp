@@ -11,7 +11,7 @@ import java.awt.Dimension;
  */
 public class Colores_Dimensiones {
 
-    public static final Dimension DIMENSION_EXTRA = new Dimension(700, 400);
+    public static final Dimension DIMENSION_EXTRA = new Dimension(800, 400);
     public static final Dimension DIMENSION_GRANDE = new Dimension(500, 350);
     public static final Dimension DIMENSION_PEQUENIA = new Dimension(500, 300);
 

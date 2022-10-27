@@ -7,6 +7,8 @@ import javax.swing.table.AbstractTableModel;
 import modelo.Alquiler;
 import static extras.Utilidades.gregorianCalendarToString;
 import static extras.Utilidades.aniadeDiasFecha;
+import java.time.temporal.ChronoUnit;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -15,8 +17,8 @@ import static extras.Utilidades.aniadeDiasFecha;
 public class ModeloAlquiler extends AbstractTableModel {
 
     private Object[][] datos_alquileres = {};
-    private final String[] nombre_columnas = {"DNI", "Nombre", "ISBN", "Título", "Devolución", "Creación"};
-    private final boolean[] isEditable = {false, false, false, false, false, false};
+    private final String[] nombre_columnas = {"DNI", "Nombre", "ISBN", "Título", "Entrega", "Creación", "Restantes"};
+    private final boolean[] isEditable = {false, false, false, false, false, false, false};
 
     //  --------------------- METODOS HEREDADOS  ---------------------
     @Override
@@ -70,6 +72,10 @@ public class ModeloAlquiler extends AbstractTableModel {
     }
 
     private void addRow(Alquiler alquiler, int fila) {
+        GregorianCalendar fecha_devolucion = alquiler.getFecha_limite();
+        GregorianCalendar fecha_creacion = alquiler.getFecha_creacion();
+        long dias_entreFechas = ChronoUnit.DAYS.between(fecha_creacion.toInstant(), fecha_devolucion.toInstant());
+
         // DNI 
         datos_alquileres[fila][0] = alquiler.getPersona().getDni();
         // NOMBRE COMPLETO
@@ -79,16 +85,18 @@ public class ModeloAlquiler extends AbstractTableModel {
         // TITULO
         datos_alquileres[fila][3] = alquiler.getLibro().getTitulo();
         // FECHA DEVOLUCION
-        datos_alquileres[fila][4] = gregorianCalendarToString(alquiler.getFecha_limite());
+        datos_alquileres[fila][4] = gregorianCalendarToString(fecha_devolucion);
         // FECHA CREACION
-        datos_alquileres[fila][5] = gregorianCalendarToString(aniadeDiasFecha(alquiler.getFecha_limite(), -15));
+        datos_alquileres[fila][5] = gregorianCalendarToString(fecha_creacion);
+        // DIFERENCIA ENTRE HOY Y LA DEVOLUCION
+        datos_alquileres[fila][6] = dias_entreFechas + " dia(s)";
         // ALQUILER TRAMPEADO
-        datos_alquileres[fila][6] = alquiler;
+        datos_alquileres[fila][nombre_columnas.length] = alquiler;
 
         fireTableRowsInserted(fila, fila);
     }
 
     public Alquiler getAlquiler(int fila) {
-        return (Alquiler) datos_alquileres[fila][6];
+        return (Alquiler) datos_alquileres[fila][nombre_columnas.length];
     }
 }

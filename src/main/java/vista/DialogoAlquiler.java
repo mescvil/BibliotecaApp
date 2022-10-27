@@ -2,20 +2,21 @@
  */
 package vista;
 
+import static extras.Colores_Dimensiones.DIMENSION_EXTRA;
 import extras.ModeloAlquiler;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.TableColumnModel;
 import modelo.Alquiler;
-import modelo.Libro;
 
 /**
  *
  * @author Escoz
  */
 public class DialogoAlquiler extends javax.swing.JDialog {
-
+    
     private VistaPrincipal vista_padre;
     private ModeloAlquiler modelo_tabla;
     private ModeloAlquiler modelo_busqueda;
@@ -25,25 +26,34 @@ public class DialogoAlquiler extends javax.swing.JDialog {
      */
     public DialogoAlquiler(VistaPrincipal padre, boolean modal) {
         super(padre, modal);
-
+        
         this.vista_padre = padre;
         this.modelo_tabla = new ModeloAlquiler();
         this.modelo_busqueda = new ModeloAlquiler();
-
+        
         initComponents();
+        ajustaTabla();
+        setMinimumSize(DIMENSION_EXTRA);
     }
-
+    
     public void muestraAlquileres(ArrayList<Alquiler> alquileres) {
-
+        
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         modelo.addAlquileres(alquileres);
-
+        
         boton_limpiarActionPerformed(null);
-
+        
         panel_busqueda.requestFocus();
         setLocationRelativeTo(vista_padre);
-        pack();
         setVisible(true);
+    }
+    
+    private void ajustaTabla() {
+        TableColumnModel modelo_columna = tabla_alquileres.getColumnModel();
+        
+        modelo_columna.getColumn(1).setMinWidth(150);
+        modelo_columna.getColumn(3).setMinWidth(180);
+        
     }
 
     /**
@@ -93,6 +103,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
         panel_busqueda.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 0, 10));
+        panel_busqueda.setMaximumSize(new java.awt.Dimension(2147483647, 32));
         panel_busqueda.setLayout(new javax.swing.BoxLayout(panel_busqueda, javax.swing.BoxLayout.LINE_AXIS));
 
         campo_busqueda.setText("Introduce tu busqueda...");
@@ -185,10 +196,10 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     }//GEN-LAST:event_boton_busquedamouseFuera
 
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
-
+        
         String texto = campo_busqueda.getText();
         ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
-
+        
         if (alquileres_encontrados.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Sin resultados",
                     "Busqueda de alquileres", JOptionPane.INFORMATION_MESSAGE);
@@ -198,7 +209,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             boton_busqueda.setVisible(false);
             boton_limpiar.setVisible(true);
             pack();
-
+            
         }
 
     }//GEN-LAST:event_boton_busquedaActionPerformed
@@ -230,7 +241,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         int fila = tabla_alquileres.getSelectedRow();
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         Alquiler alquiler_seleccionado = modelo.getAlquiler(fila);
-
+        
         vista_padre.abreDialogoVerLibros(alquiler_seleccionado.getLibro());
     }//GEN-LAST:event_popMenu_verLibroActionPerformed
 
@@ -238,7 +249,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         int fila = tabla_alquileres.getSelectedRow();
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         Alquiler alquiler_seleccionado = modelo.getAlquiler(fila);
-
+        
         vista_padre.abreDialogoVerUsuarios(alquiler_seleccionado.getPersona());
     }//GEN-LAST:event_popMenu_verUsuarioActionPerformed
 

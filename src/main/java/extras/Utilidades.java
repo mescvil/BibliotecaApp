@@ -22,7 +22,8 @@ public class Utilidades {
     }
 
     public static GregorianCalendar aniadeDiasFecha(GregorianCalendar fecha, int n_dias) {
-        fecha.add(GregorianCalendar.DAY_OF_MONTH, n_dias);
-        return fecha;
+        GregorianCalendar nueva_fecha = (GregorianCalendar) fecha.clone();
+        nueva_fecha.add(GregorianCalendar.DAY_OF_MONTH, n_dias);
+        return nueva_fecha;
     }
 }
