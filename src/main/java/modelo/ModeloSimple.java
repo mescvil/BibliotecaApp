@@ -73,19 +73,17 @@ public class ModeloSimple implements Modelo {
 
     @Override
     public void guardaLibros(Map libros) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO
     }
 
     @Override
     public void guardaPersonas(Map libros) {
-        for (Object object : libros.values()) {
-            System.out.println(object);
-        }
+        // TODO
     }
 
     @Override
     public void guardaAlquileres(ArrayList<Alquiler> alquileres) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // TODO
     }
 
 }
