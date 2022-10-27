@@ -53,13 +53,14 @@ public class DialogoLibro extends javax.swing.JDialog {
 
         setPreferredSize(DIMENSION_GRANDE);
         setLocationRelativeTo(vista_padre);
+        rellenaDatosLibros(new Libro());
         pack();
         setVisible(true);
 
     }
 
     public void muestraModoVer() {
-        this.setTitle("Usuarios registrados");
+        this.setTitle("Lista de libros");
 
         campo_titulo.setEditable(false);
         campo_autor.setEditable(false);
@@ -67,11 +68,36 @@ public class DialogoLibro extends javax.swing.JDialog {
 
         boton_multiple.setText("Cerrar");
         boton_multiple.setBackground(ROJO);
+        spiner_ejemplares.setEnabled(false);
+        yearChooser_anio.setEnabled(false);
 
         lista_libros.setEnabled(true);
 
         setPreferredSize(DIMENSION_GRANDE);
         setLocationRelativeTo(vista_padre);
+        rellenaDatosLibros(new Libro());
+        pack();
+        setVisible(true);
+
+    }
+
+    public void muestraModoVer(Libro libro) {
+        this.setTitle("Lista de libros");
+
+        campo_titulo.setEditable(false);
+        campo_autor.setEditable(false);
+        campo_isbn.setEditable(false);
+
+        boton_multiple.setText("Cerrar");
+        boton_multiple.setBackground(ROJO);
+        spiner_ejemplares.setEnabled(false);
+        yearChooser_anio.setEnabled(false);
+
+        lista_libros.setEnabled(true);
+
+        setPreferredSize(DIMENSION_GRANDE);
+        setLocationRelativeTo(vista_padre);
+        rellenaDatosLibros(libro);
         pack();
         setVisible(true);
 
@@ -128,6 +154,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         getContentPane().add(label_isbn, gridBagConstraints);
 
         campo_isbn.setEditable(false);
+        campo_isbn.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -155,6 +182,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         getContentPane().add(label_ejemplares, gridBagConstraints);
 
         campo_autor.setEditable(false);
+        campo_autor.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -175,7 +203,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 10, 10);
         getContentPane().add(boton_multiple, gridBagConstraints);
 
@@ -198,6 +226,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         getContentPane().add(label_titulo, gridBagConstraints);
 
         campo_titulo.setEditable(false);
+        campo_titulo.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -302,6 +331,8 @@ public class DialogoLibro extends javax.swing.JDialog {
         if (lista.hasFocus()) {
             if (!lista.getValueIsAdjusting()) {
 
+                Libro libro_seleccionado = (Libro) lista.getSelectedValue();
+                rellenaDatosLibros(libro_seleccionado);
             }
         }
     }//GEN-LAST:event_lista_librosValueChanged

@@ -101,6 +101,37 @@ public class DialogoPersona extends javax.swing.JDialog {
 
     }
 
+    public void muestraModoVer(Usuario usuario) {
+        this.setTitle("Usuarios registrados");
+
+        campo_nombre.setEditable(false);
+        campo_segApellido.setEditable(false);
+        campo_priApellido.setEditable(false);
+        campo_dni.setEditable(false);
+        campo_email.setEditable(false);
+        campo_telefono.setEditable(false);
+        dateChooser_nacimiento.setEnabled(false);
+
+        boton_multiple.setText("Cerrar");
+        boton_multiple.setBackground(ROJO);
+
+        lista_Usuarios.setEnabled(true);
+        panel_busqueda.setVisible(true);
+
+        boton_limpiar.setVisible(false);
+        boton_busqueda.setVisible(true);
+        lista_Usuarios.setModel(modelo_lista);
+        campo_busqueda.setText("Introduce tu busqueda...");
+
+        setPreferredSize(DIMENSION_GRANDE);
+        setLocationRelativeTo(vista_padre);
+        panel_lista.requestFocus();
+        rellenaDatosPersona(usuario);
+        pack();
+        setVisible(true);
+
+    }
+
     public void rellenaDatosPersona(Usuario usuario) {
         String nombre = usuario.getNombre();
         String pri_apellido = usuario.getApellido_1();

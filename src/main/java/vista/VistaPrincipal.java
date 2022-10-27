@@ -9,6 +9,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import controlador.Controlador;
 import excepciones.GuardaDatosException;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -243,6 +244,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
         boton_listaLibros.setFocusable(false);
         boton_listaLibros.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton_listaLibros.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        boton_listaLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_listaLibrosActionPerformed(evt);
+            }
+        });
         toolBar.add(boton_listaLibros);
 
         boton_aniadeLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/add_libro.png"))); // NOI18N
@@ -684,13 +690,15 @@ public class VistaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menu_aniadeUsuarioActionPerformed
 
     private void menu_verUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_verUsuariosActionPerformed
-        abreDialogoVerUsuarios(null);
+        abreDialogoVerUsuarios(new Usuario());
     }//GEN-LAST:event_menu_verUsuariosActionPerformed
 
     private void abreDialogoVerUsuarios(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abreDialogoVerUsuarios
         dialogoPersona.muestraModoVer();
     }//GEN-LAST:event_abreDialogoVerUsuarios
-
+    public void abreDialogoVerUsuarios(Usuario usuario) {
+        dialogoPersona.muestraModoVer(usuario);
+    }
     private void boton_aniadeLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_aniadeLibroActionPerformed
         dialogoLibro.muestraModoAniadir();
     }//GEN-LAST:event_boton_aniadeLibroActionPerformed
@@ -698,6 +706,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private void menu_aniadeLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_aniadeLibroActionPerformed
         boton_aniadeLibroActionPerformed(null);
     }//GEN-LAST:event_menu_aniadeLibroActionPerformed
+
+    public void abreDialogoVerLibros(Libro libro) {
+        dialogoLibro.muestraModoVer(libro);
+    }
 
     private void boton_nuevoPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_nuevoPrestamoActionPerformed
         JList lista = lista_libros;
@@ -758,6 +770,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
         JTextField campo = (JTextField) evt.getSource();
         campo.setText("");
     }//GEN-LAST:event_campo_busquedaLibroFocusGained
+
+    private void boton_listaLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_listaLibrosActionPerformed
+        dialogoLibro.muestraModoVer();
+    }//GEN-LAST:event_boton_listaLibrosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;

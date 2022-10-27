@@ -89,6 +89,6 @@ public class ModeloAlquiler extends AbstractTableModel {
     }
 
     public Alquiler getAlquiler(int fila) {
-        return (Alquiler) datos_alquileres[6][fila];
+        return (Alquiler) datos_alquileres[fila][6];
     }
 }
