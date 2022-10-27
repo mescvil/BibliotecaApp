@@ -4,7 +4,9 @@
  */
 package modelo;
 
+import excepciones.SinEjemplaresException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,98 +16,59 @@ import java.util.Map;
  */
 public class ModeloSimple implements Modelo {
 
+    private HashMap<String, Libro> libros;
+    private HashMap<String, Usuario> personas;
+
     @Override
-    public Map cargaLibros() {
+    public HashMap<String, Libro> cargaLibros() {
         Libro libro;
-        Map detalles_libros = new HashMap();
-        Map mapa_libros = new HashMap();
+        HashMap<String, Libro> mapa_libros = new HashMap();
 
-        detalles_libros.put("isbn", "0000000");
-        detalles_libros.put("titulo", "El libro troll");
-        detalles_libros.put("autor", "El Rubius");
-        detalles_libros.put("fecha_publicacion", "2014");
-        detalles_libros.put("n_ejemplares", 1);
+        libro = new Libro("0000000", "La Fortaleza Digital", "Dan Brown", "1998", 1);
+        mapa_libros.put(libro.getIsbn(), libro);
 
-        libro = new Libro(detalles_libros);
-        mapa_libros.put(detalles_libros.get("isbn"), libro);
+        libro = new Libro("0000001", "Métodos computacionales en álgebra", "Juan Francisco Ruiz",
+                "2020", 4);
+        mapa_libros.put(libro.getIsbn(), libro);
 
-        detalles_libros = new HashMap();
-        detalles_libros.put("isbn", "0000001");
-        detalles_libros.put("titulo", "Métodos computacionales en álgebra");
-        detalles_libros.put("autor", "Juan Francisco Ruiz");
-        detalles_libros.put("fecha_publicacion", "2020");
-        detalles_libros.put("n_ejemplares", 1);
+        libro = new Libro("0000002", "El Símbolo Perdido", "Dan Brown", "2009",
+                3);
+        mapa_libros.put(libro.getIsbn(), libro);
 
-        libro = new Libro(detalles_libros);
-        mapa_libros.put(detalles_libros.get("isbn"), libro);
-
-        detalles_libros = new HashMap();
-        detalles_libros.put("isbn", "0000002");
-        detalles_libros.put("titulo", "Wigetta: un viaje mágico");
-        detalles_libros.put("autor", "Samuel de Luque Batuecas");
-        detalles_libros.put("fecha_publicacion", "2016");
-        detalles_libros.put("n_ejemplares", 1);
-
-        libro = new Libro(detalles_libros);
-        mapa_libros.put(detalles_libros.get("isbn"), libro);
-
-        return mapa_libros;
+        return this.libros = mapa_libros;
     }
 
     @Override
-    public Map cargaPersonas() {
+    public HashMap<String, Usuario> cargaPersonas() {
 
-        Persona persona;
-        Map detalles_persona = new HashMap();
-        Map mapa_personas = new HashMap();
+        Usuario persona;
+        HashMap<String, Usuario> mapa_personas = new HashMap();
 
-        detalles_persona.put("dni", "26512969H");
-        detalles_persona.put("nombre", "Miguel");
-        detalles_persona.put("apellido_1", "Escoz");
-        detalles_persona.put("apellido_2", "Vilches");
-        detalles_persona.put("telefono", "630919015");
-        detalles_persona.put("correo", "mescvil@gmail.com");
-        detalles_persona.put("fecha_nacimiento", "28/04/1997");
+        persona = new Usuario("26512969H", "Miguel", "Escoz", "Vilches", "630919015",
+                "mescvil@gmail.com", new GregorianCalendar(1997, 4, 28));
+        mapa_personas.put(persona.getDni(), persona);
 
-        persona = new Persona(detalles_persona);
-        mapa_personas.put(detalles_persona.get("dni"), persona);
+        persona = new Usuario("00000000A", "Jose Luis", "Torre", "Alva", "953000000",
+                "admin@google.es", new GregorianCalendar(1900, 1, 1));
+        mapa_personas.put(persona.getDni(), persona);
 
-        detalles_persona = new HashMap();
-        detalles_persona.put("dni", "00000000A");
-        detalles_persona.put("nombre", "Ramón");
-        detalles_persona.put("apellido_1", "Escoz");
-        detalles_persona.put("apellido_2", "Moreno");
-        detalles_persona.put("telefono", "000000000");
-        detalles_persona.put("correo", "rescmor@gmail.com");
-        detalles_persona.put("fecha_nacimiento", "23/06/1964");
-
-        persona = new Persona(detalles_persona);
-        mapa_personas.put(detalles_persona.get("dni"), persona);
-
-        return mapa_personas;
+        return this.personas = mapa_personas;
     }
 
     @Override
     public ArrayList cargaAlquileres() {
+        try {
+            ArrayList<Alquiler> alquileres = new ArrayList<>();
 
-        ArrayList<Alquiler> lista_alquileres = new ArrayList<>();
-        Map detalles_alquiler = new HashMap();
-        Alquiler alquiler;
+            alquileres.add(new Alquiler(libros.get("0000001"), personas.get("26512969H")));
+            alquileres.add(new Alquiler(libros.get("0000000"), personas.get("00000000A")));
 
-        detalles_alquiler.put("dni", "26512969H");
-        detalles_alquiler.put("isbn", "0000001");
+            return alquileres;
 
-        alquiler = new Alquiler(detalles_alquiler);
-        lista_alquileres.add(alquiler);
-        
-        detalles_alquiler = new HashMap();
-        detalles_alquiler.put("dni", "00000000A");
-        detalles_alquiler.put("isbn", "0000000");
-
-        alquiler = new Alquiler(detalles_alquiler);
-        lista_alquileres.add(alquiler);
-
-        return lista_alquileres;
+        } catch (SinEjemplaresException ex) {
+            ex.printStackTrace();
+        }
+        return new ArrayList();
     }
 
     @Override
@@ -115,7 +78,9 @@ public class ModeloSimple implements Modelo {
 
     @Override
     public void guardaPersonas(Map libros) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (Object object : libros.values()) {
+            System.out.println(object);
+        }
     }
 
     @Override

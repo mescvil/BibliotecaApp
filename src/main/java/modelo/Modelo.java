@@ -4,6 +4,7 @@
  */
 package modelo;
 
+import excepciones.SinEjemplaresException;
 import java.util.ArrayList;
 import java.util.Map;
 

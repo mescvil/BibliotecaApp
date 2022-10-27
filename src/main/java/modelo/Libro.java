@@ -4,8 +4,7 @@
  */
 package modelo;
 
-import java.util.HashMap;
-import java.util.Map;
+import excepciones.SinEjemplaresException;
 
 /**
  *
@@ -13,31 +12,94 @@ import java.util.Map;
  */
 public class Libro {
 
-    /* --------------- ATRIBUTOS ---------------
-    - titulo 
-    - isbn 
-    - autor
-    - fecha_publicacion
-    - n_ejemplares
-     */
-    private Map detalles_libro;
+    // --------------- ATRIBUTOS --------------- 
+    private String isbn;
+    private String titulo;
+    private String autor;
+    private String anio_publicacion;
+    private int n_ejemplares;
 
     // --------------- CONSTRUCTORES ---------------
-    public Libro() {
-        detalles_libro = new HashMap();
+    public Libro(String isbn, String titulo, String autor, String anio_publicacion, int n_ejemplares) {
+        setIsbn(isbn);
+        setTitulo(titulo);
+        setAutor(autor);
+        setAnio_publicacion(anio_publicacion);
+        setN_ejemplares(n_ejemplares);
+
     }
 
-    public Libro(Map detalles_libro) {
-        this.detalles_libro = detalles_libro;
+    public Libro(String isbn) {
+        setIsbn(isbn);
+    }
+
+    public Libro() {
+        n_ejemplares = 0;
+        anio_publicacion = "2022";
+    }
+
+    // --------------- METODOS ---------------
+    @Override
+    public String toString() {
+        return String.format("%s - %s", isbn, titulo);
     }
 
     @Override
-    public String toString() {
-        return (String) detalles_libro.get("titulo");
+    public boolean equals(Object obj) {
+        return this.getIsbn().equalsIgnoreCase(((Libro) obj).getIsbn());
     }
 
-    public Map getDetalles_libro() {
-        return detalles_libro;
+    public void aniadeEjemplar(int n) {
+        n_ejemplares += n;
+    }
+
+    public void eliminaEjemplar(int n) throws SinEjemplaresException {
+        if ((n_ejemplares - n) <= -1) {
+            throw new SinEjemplaresException(titulo);
+        } else {
+            n_ejemplares -= n;
+        }
+    }
+
+    // --------------- GETTERS & SETTERS ---------------
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
+    public String getAnio_publicacion() {
+        return anio_publicacion;
+    }
+
+    public void setAnio_publicacion(String anio_publicacion) {
+        this.anio_publicacion = anio_publicacion;
+    }
+
+    public int getN_ejemplares() {
+        return n_ejemplares;
+    }
+
+    public void setN_ejemplares(int n_ejemplares) {
+        this.n_ejemplares = n_ejemplares;
     }
 
 }

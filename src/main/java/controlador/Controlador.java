@@ -10,8 +10,7 @@ import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Modelo;
 import modelo.ModeloSimple;
-import modelo.ModeloArchivo;
-import modelo.Persona;
+import modelo.Usuario;
 import vista.VistaPrincipal;
 
 /**
@@ -39,6 +38,11 @@ public class Controlador {
 
     }
 
+    public void guardaUsuario(Usuario usuario) {
+        mapa_personas.put(usuario.getDni(), usuario);
+        modelo.guardaPersonas(mapa_personas);
+    }
+
     public ArrayList getLibros() {
         ArrayList<Libro> libros = new ArrayList<>();
 
@@ -57,7 +61,7 @@ public class Controlador {
 
         for (Object object : mapa_libros.values()) {
             Libro libro_object = (Libro) object;
-            String titulo = (String) libro_object.getDetalles_libro().get("titulo");
+            String titulo = libro_object.getTitulo();
 
             if ((titulo.toLowerCase()).contains(busqueda.toLowerCase())) {
                 libros_encontrados.add(libro_object);
@@ -72,29 +76,51 @@ public class Controlador {
 
         for (Object object : mapa_libros.values()) {
             Libro libro_object = (Libro) object;
-            String nombre = (String) libro_object.getDetalles_libro().get("titulo");
+            String nombre = libro_object.getTitulo();
 
             if (nombre.equals(titulo)) {
                 libro = libro_object;
             }
         }
-        System.out.println(ModeloArchivo.mapToCsv(libro.getDetalles_libro()));
+
         return libro;
     }
 
-    public Persona getInfoAlquileres(String isbn_buscado) {
-        Persona persona = null;
+    public ArrayList<Alquiler> getInfoAlquileres(String isbn_buscado) {
+        ArrayList<Alquiler> alquileres_libro = new ArrayList<>();
+        Libro libro_buscado = new Libro(isbn_buscado);
 
         for (Alquiler alquiler : lista_alquileres) {
-            String isbn_alquiler = (String) alquiler.getDetalles_alquileres().get("isbn");
-            String dni_alquilado = (String) alquiler.getDetalles_alquileres().get("dni");
-
-            if (isbn_alquiler.equals(isbn_buscado)) {
-                persona = (Persona) mapa_personas.get(dni_alquilado);
-                return persona;
+            if (alquiler.getLibro().equals(libro_buscado)) {
+                alquileres_libro.add(alquiler);
             }
         }
-        return persona;
+
+        return alquileres_libro;
+    }
+
+    public ArrayList<Usuario> getPersonas() {
+
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        for (Object o : mapa_personas.values()) {
+            usuarios.add((Usuario) o);
+        }
+
+        return usuarios;
+    }
+
+    public void guardaLibro(Libro libro) {
+        mapa_libros.put(libro.getIsbn(), libro);
+    }
+
+    public void guardaAlquiler(Alquiler alquiler) {
+        lista_alquileres.add(alquiler);
+    }
+
+    public void realizaDevolucion(Alquiler alquiler) {
+        alquiler.elimaAlquiler();
+        lista_alquileres.remove(alquiler);
+        alquiler = null;
     }
 
 }
