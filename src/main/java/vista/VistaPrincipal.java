@@ -72,7 +72,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         panel_toolBar.requestFocus();
     }
 
-    public void iconoAplicacion() {
+    private void iconoAplicacion() {
         Image icono = new ImageIcon(getClass().getResource("/icono_app.png")).getImage();
 
         this.setIconImage(icono);
@@ -95,6 +95,14 @@ public class VistaPrincipal extends javax.swing.JFrame {
         setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
         rellenaCamposLibro(alquiler.getLibro());
 
+    }
+
+    public ArrayList<Alquiler> buscaAlquileres(String busqueda) {
+        return controlador.buscaAlquileres(busqueda);
+    }
+
+    public ArrayList<Usuario> buscaUsuarios(String busqueda) {
+        return controlador.buscaUsuarios(busqueda);
     }
 
     private void modeloDefectoUsuarios() {
@@ -131,6 +139,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         if (!libros_encontrados.isEmpty()) {
             modelo_listaLibros.addAll(libros_encontrados);
         } else {
+            modeloDefectoLibros();
             JOptionPane.showMessageDialog(this, "Sin resultados",
                     "Busqueda de libros", JOptionPane.INFORMATION_MESSAGE);
         }

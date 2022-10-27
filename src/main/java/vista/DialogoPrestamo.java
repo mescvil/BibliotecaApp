@@ -74,6 +74,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
 
         setPreferredSize(DIMENSION_GRANDE);
 
+        setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
 
@@ -120,6 +121,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         getContentPane().add(label_isbn, gridBagConstraints);
 
         campo_isbn.setEditable(false);
+        campo_isbn.setColumns(15);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -172,6 +174,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         getContentPane().add(label_titulo, gridBagConstraints);
 
         campo_titulo.setEditable(false);
+        campo_titulo.setColumns(15);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;

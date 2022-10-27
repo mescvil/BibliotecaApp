@@ -2,7 +2,6 @@
  */
 package extras;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import modelo.Alquiler;
@@ -19,12 +18,11 @@ public class ModeloAlquiler extends AbstractTableModel {
     private final String[] nombre_columnas = {"DNI", "Nombre", "ISBN", "Título", "Devolución", "Creación"};
     private final boolean[] isEditable = {false, false, false, false, false, false};
 
-    private final SimpleDateFormat formato_fecha = new SimpleDateFormat("dd-MMM-yyyy");
-
     //  --------------------- METODOS HEREDADOS  ---------------------
     @Override
     public int getRowCount() {
         return datos_alquileres.length;
+
     }
 
     @Override

@@ -2,10 +2,11 @@
  */
 package vista;
 
-import static extras.Colores_Dimensiones.AZUL;
 import extras.ModeloAlquiler;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import modelo.Alquiler;
 
 /**
@@ -13,27 +14,33 @@ import modelo.Alquiler;
  * @author Escoz
  */
 public class DialogoAlquiler extends javax.swing.JDialog {
-    
-    private VistaPrincipal padre;
+
+    private VistaPrincipal vista_padre;
     private ModeloAlquiler modelo_tabla;
+    private ModeloAlquiler modelo_busqueda;
 
     /**
      * Creates new form DialogoAlquiler
      */
     public DialogoAlquiler(VistaPrincipal padre, boolean modal) {
         super(padre, modal);
-        
-        this.padre = padre;
+
+        this.vista_padre = padre;
         this.modelo_tabla = new ModeloAlquiler();
-        
+        this.modelo_busqueda = new ModeloAlquiler();
+
         initComponents();
     }
-    
+
     public void muestraAlquileres(ArrayList<Alquiler> alquileres) {
-        
+
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         modelo.addAlquileres(alquileres);
-        
+
+        boton_limpiarActionPerformed(null);
+
+        panel_busqueda.requestFocus();
+        setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
     }
@@ -53,6 +60,8 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         campo_busqueda = new javax.swing.JTextField();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         boton_busqueda = new javax.swing.JButton();
+        boton_limpiar = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(250, 0), new java.awt.Dimension(5, 32767));
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_alquileres = new javax.swing.JTable();
 
@@ -76,18 +85,54 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         panel_busqueda.setLayout(new javax.swing.BoxLayout(panel_busqueda, javax.swing.BoxLayout.LINE_AXIS));
 
         campo_busqueda.setText("Introduce tu busqueda...");
+        campo_busqueda.setToolTipText("Busca un alquiler por un nombre ");
+        campo_busqueda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campo_busquedaMouseClicked(evt);
+            }
+        });
         panel_busqueda.add(campo_busqueda);
         panel_busqueda.add(filler1);
 
-        boton_busqueda.setBackground(AZUL);
-        boton_busqueda.setForeground(new java.awt.Color(255, 255, 255));
-        boton_busqueda.setText("Buscar");
+        boton_busqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buscar_pequenio.png"))); // NOI18N
+        boton_busqueda.setToolTipText("Buscar");
+        boton_busqueda.setBorderPainted(false);
+        boton_busqueda.setContentAreaFilled(false);
+        boton_busqueda.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        boton_busqueda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton_busquedamouseEncima(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton_busquedamouseFuera(evt);
+            }
+        });
         boton_busqueda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 boton_busquedaActionPerformed(evt);
             }
         });
         panel_busqueda.add(boton_busqueda);
+
+        boton_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
+        boton_limpiar.setToolTipText("Limpiar");
+        boton_limpiar.setBorderPainted(false);
+        boton_limpiar.setContentAreaFilled(false);
+        boton_limpiar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton_limpiarmouseEncima(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton_limpiarmouseFuera(evt);
+            }
+        });
+        boton_limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_limpiarActionPerformed(evt);
+            }
+        });
+        panel_busqueda.add(boton_limpiar);
+        panel_busqueda.add(filler2);
 
         getContentPane().add(panel_busqueda);
 
@@ -105,19 +150,68 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        setLocationRelativeTo(padre);
+        setLocationRelativeTo(vista_padre);
     }//GEN-LAST:event_formComponentShown
 
+    private void campo_busquedaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campo_busquedaMouseClicked
+        JTextField campo = (JTextField) evt.getSource();
+        campo.setText("");
+    }//GEN-LAST:event_campo_busquedaMouseClicked
+
+    private void boton_busquedamouseEncima(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_busquedamouseEncima
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(true);
+    }//GEN-LAST:event_boton_busquedamouseEncima
+
+    private void boton_busquedamouseFuera(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_busquedamouseFuera
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(false);
+    }//GEN-LAST:event_boton_busquedamouseFuera
+
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
-        JOptionPane.showMessageDialog(this, "En construcción...",
-                "", JOptionPane.WARNING_MESSAGE);
+
+        String texto = campo_busqueda.getText();
+        ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
+
+        if (alquileres_encontrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Sin resultados",
+                    "Busqueda de alquileres", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            modelo_busqueda.addAlquileres(alquileres_encontrados);
+            tabla_alquileres.setModel(modelo_busqueda);
+            boton_busqueda.setVisible(false);
+            boton_limpiar.setVisible(true);
+            pack();
+
+        }
+
     }//GEN-LAST:event_boton_busquedaActionPerformed
+
+    private void boton_limpiarmouseEncima(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_limpiarmouseEncima
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(true);
+    }//GEN-LAST:event_boton_limpiarmouseEncima
+
+    private void boton_limpiarmouseFuera(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_limpiarmouseFuera
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(false);
+    }//GEN-LAST:event_boton_limpiarmouseFuera
+
+    private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed
+        boton_limpiar.setVisible(false);
+        boton_busqueda.setVisible(true);
+        campo_busqueda.setText("Introduce tu busqueda...");
+        tabla_alquileres.setModel(modelo_tabla);
+        pack();
+    }//GEN-LAST:event_boton_limpiarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_busqueda;
+    private javax.swing.JButton boton_limpiar;
     private javax.swing.JTextField campo_busqueda;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panel_busqueda;
     private javax.swing.JMenuItem popMenu_verLibro;

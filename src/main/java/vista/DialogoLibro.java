@@ -52,7 +52,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         lista_libros.setEnabled(false);
 
         setPreferredSize(DIMENSION_GRANDE);
-
+        setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
 
@@ -71,7 +71,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         lista_libros.setEnabled(true);
 
         setPreferredSize(DIMENSION_GRANDE);
-
+        setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
 

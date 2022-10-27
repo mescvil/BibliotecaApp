@@ -94,6 +94,42 @@ public class Controlador {
         return libro;
     }
 
+    public ArrayList<Usuario> buscaUsuarios(String busqueda) {
+        ArrayList<Usuario> usuarios_encontrados = new ArrayList<>();
+
+        if (busqueda.isEmpty()) {
+            return usuarios_encontrados;
+        }
+
+        for (Object o : mapa_personas.values()) {
+            Usuario usuario = (Usuario) o;
+
+            if (usuario.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
+                usuarios_encontrados.add(usuario);
+            }
+        }
+
+        return usuarios_encontrados;
+    }
+
+    public ArrayList<Alquiler> buscaAlquileres(String busqueda) {
+        ArrayList<Alquiler> alquileres_encontrados = new ArrayList<>();
+
+        if (busqueda.isBlank()) {
+            return alquileres_encontrados;
+        }
+
+        for (Alquiler alquiler : lista_alquileres) {
+            Usuario usuario = alquiler.getPersona();
+
+            if (usuario.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
+                alquileres_encontrados.add(alquiler);
+            }
+        }
+
+        return alquileres_encontrados;
+    }
+
     public ArrayList<Alquiler> getInfoAlquileres(String isbn_buscado) {
         ArrayList<Alquiler> alquileres_libro = new ArrayList<>();
         Libro libro_buscado = new Libro(isbn_buscado);

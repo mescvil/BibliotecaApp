@@ -13,9 +13,11 @@ import javax.swing.JList;
 import modelo.Usuario;
 import static extras.Colores_Dimensiones.ROJO;
 import static extras.Colores_Dimensiones.VERDE;
-import static extras.Colores_Dimensiones.AZUL;
 import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
 import static extras.Colores_Dimensiones.DIMENSION_PEQUENIA;
+import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 
 /**
  *
@@ -26,6 +28,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     private VistaPrincipal vista_padre;
 
     private DefaultListModel modelo_lista;
+    private DefaultListModel modelo_busqueda;
 
     /**
      * Creates new form DialogoPersona
@@ -36,6 +39,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         initComponents();
         this.lista_Usuarios.setModel(this.modelo_lista = modelo_lista);
+        modelo_busqueda = new DefaultListModel();
 
     }
 
@@ -61,6 +65,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         lista_Usuarios.clearSelection();
         rellenaDatosPersona(new Usuario());
 
+        setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
 
@@ -83,8 +88,14 @@ public class DialogoPersona extends javax.swing.JDialog {
         lista_Usuarios.setEnabled(true);
         panel_busqueda.setVisible(true);
 
-        setPreferredSize(DIMENSION_GRANDE);
+        boton_limpiar.setVisible(false);
+        boton_busqueda.setVisible(true);
+        lista_Usuarios.setModel(modelo_lista);
+        campo_busqueda.setText("Introduce tu busqueda...");
 
+        setPreferredSize(DIMENSION_GRANDE);
+        setLocationRelativeTo(vista_padre);
+        panel_lista.requestFocus();
         pack();
         setVisible(true);
 
@@ -138,15 +149,11 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_busqueda = new javax.swing.JTextField();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         boton_busqueda = new javax.swing.JButton();
+        boton_limpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos de usuario");
         setResizable(false);
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
-            }
-        });
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         label_dni.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -159,6 +166,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         getContentPane().add(label_dni, gridBagConstraints);
 
         campo_dni.setEditable(false);
+        campo_dni.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -186,6 +194,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         getContentPane().add(label_telefono, gridBagConstraints);
 
         campo_priApellido.setEditable(false);
+        campo_priApellido.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -195,6 +204,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         getContentPane().add(campo_priApellido, gridBagConstraints);
 
         campo_telefono.setEditable(false);
+        campo_telefono.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
@@ -222,6 +232,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         getContentPane().add(label_fechNacimiento, gridBagConstraints);
 
         campo_email.setEditable(false);
+        campo_email.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
@@ -255,6 +266,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         getContentPane().add(label_segApellido, gridBagConstraints);
 
         campo_segApellido.setEditable(false);
+        campo_segApellido.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
@@ -273,6 +285,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         getContentPane().add(label_nombre, gridBagConstraints);
 
         campo_nombre.setEditable(false);
+        campo_nombre.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
@@ -318,19 +331,53 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         panel_busqueda.setLayout(new javax.swing.BoxLayout(panel_busqueda, javax.swing.BoxLayout.LINE_AXIS));
 
-        campo_busqueda.setText("Introduce un nombre...");
+        campo_busqueda.setText("Introduce tu busqueda...");
+        campo_busqueda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campo_busquedaMouseClicked(evt);
+            }
+        });
         panel_busqueda.add(campo_busqueda);
         panel_busqueda.add(filler1);
 
-        boton_busqueda.setBackground(AZUL);
-        boton_busqueda.setForeground(new java.awt.Color(255, 255, 255));
-        boton_busqueda.setText("Buscar");
+        boton_busqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buscar_pequenio.png"))); // NOI18N
+        boton_busqueda.setToolTipText("Buscar");
+        boton_busqueda.setBorderPainted(false);
+        boton_busqueda.setContentAreaFilled(false);
+        boton_busqueda.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        boton_busqueda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                mouseEncima(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                mouseFuera(evt);
+            }
+        });
         boton_busqueda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 boton_busquedaActionPerformed(evt);
             }
         });
         panel_busqueda.add(boton_busqueda);
+
+        boton_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
+        boton_limpiar.setToolTipText("Limpiar");
+        boton_limpiar.setBorderPainted(false);
+        boton_limpiar.setContentAreaFilled(false);
+        boton_limpiar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                mouseEncima(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                mouseFuera(evt);
+            }
+        });
+        boton_limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_limpiarActionPerformed(evt);
+            }
+        });
+        panel_busqueda.add(boton_limpiar);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -344,10 +391,6 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        setLocationRelativeTo(vista_padre);
-    }//GEN-LAST:event_formComponentShown
 
     private void boton_multipleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_multipleActionPerformed
         String texto_boton = boton_multiple.getText();
@@ -406,12 +449,52 @@ public class DialogoPersona extends javax.swing.JDialog {
     }//GEN-LAST:event_lista_UsuariosValueChanged
 
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
-        JOptionPane.showMessageDialog(this, "En construcción...",
-                "", JOptionPane.WARNING_MESSAGE);
+
+        String texto = campo_busqueda.getText();
+        ArrayList<Usuario> usuarios_encontrados = vista_padre.buscaUsuarios(texto);
+
+        if (usuarios_encontrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Sin resultados",
+                    "Busqueda de usuarios", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            modelo_busqueda.clear();
+            modelo_busqueda.addAll(usuarios_encontrados);
+            lista_Usuarios.setModel(modelo_busqueda);
+            boton_busqueda.setVisible(false);
+            boton_limpiar.setVisible(true);
+            pack();
+
+        }
+
+
     }//GEN-LAST:event_boton_busquedaActionPerformed
+
+    private void mouseEncima(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseEncima
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(true);
+    }//GEN-LAST:event_mouseEncima
+
+    private void mouseFuera(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseFuera
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(false);
+    }//GEN-LAST:event_mouseFuera
+
+    private void campo_busquedaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campo_busquedaMouseClicked
+        JTextField campo = (JTextField) evt.getSource();
+        campo.setText("");
+    }//GEN-LAST:event_campo_busquedaMouseClicked
+
+    private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed
+        boton_limpiar.setVisible(false);
+        boton_busqueda.setVisible(true);
+        lista_Usuarios.setModel(modelo_lista);
+        campo_busqueda.setText("Introduce tu busqueda...");
+        pack();
+    }//GEN-LAST:event_boton_limpiarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_busqueda;
+    private javax.swing.JButton boton_limpiar;
     private javax.swing.JButton boton_multiple;
     private javax.swing.JTextField campo_busqueda;
     private javax.swing.JTextField campo_dni;
