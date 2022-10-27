@@ -7,8 +7,8 @@ vista\VistaPrincipal.class
 modelo\Libro.class
 vista\VistaPrincipal$2.class
 modelo\Alquiler.class
-modelo\ModeloTxt.class
 vista\DialogoPersona$2.class
+modelo\ModeloArchivo.class
 modelo\Persona.class
 vista\DialogoPersona$1.class
 com\hyperion\biblioteca\BibliotecaApp.class
