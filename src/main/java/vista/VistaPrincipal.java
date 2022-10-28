@@ -113,11 +113,11 @@ public class VistaPrincipal extends javax.swing.JFrame {
                     setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
                 }
             }
-            JOptionPane.showMessageDialog(this, "Operación realizada con éxito",
+            JOptionPane.showMessageDialog(dialogoAlquileres, "Operación realizada con éxito",
                     "Devolución", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (GuardaDatosException ex) {
-            JOptionPane.showMessageDialog(this, "No ha sido posible realizar la devolución",
+            JOptionPane.showMessageDialog(dialogoAlquileres, "No ha sido posible realizar la devolución",
                     "Devolución", JOptionPane.ERROR_MESSAGE);
         }
     }
