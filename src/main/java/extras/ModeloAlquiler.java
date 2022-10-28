@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import modelo.Alquiler;
 import static extras.Utilidades.gregorianCalendarToString;
-import static extras.Utilidades.aniadeDiasFecha;
 import java.time.temporal.ChronoUnit;
 import java.util.GregorianCalendar;
 
@@ -74,7 +73,8 @@ public class ModeloAlquiler extends AbstractTableModel {
     private void addRow(Alquiler alquiler, int fila) {
         GregorianCalendar fecha_devolucion = alquiler.getFecha_limite();
         GregorianCalendar fecha_creacion = alquiler.getFecha_creacion();
-        long dias_entreFechas = ChronoUnit.DAYS.between(fecha_creacion.toInstant(), fecha_devolucion.toInstant());
+        GregorianCalendar fecha_hoy = new GregorianCalendar();
+        long dias_entreFechas = ChronoUnit.DAYS.between(fecha_hoy.toInstant(), fecha_devolucion.toInstant());
 
         // DNI 
         datos_alquileres[fila][0] = alquiler.getPersona().getDni();
