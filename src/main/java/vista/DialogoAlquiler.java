@@ -16,7 +16,7 @@ import modelo.Alquiler;
  * @author Escoz
  */
 public class DialogoAlquiler extends javax.swing.JDialog {
-    
+
     private VistaPrincipal vista_padre;
     private ModeloAlquiler modelo_tabla;
     private ModeloAlquiler modelo_busqueda;
@@ -26,34 +26,46 @@ public class DialogoAlquiler extends javax.swing.JDialog {
      */
     public DialogoAlquiler(VistaPrincipal padre, boolean modal) {
         super(padre, modal);
-        
+
         this.vista_padre = padre;
         this.modelo_tabla = new ModeloAlquiler();
         this.modelo_busqueda = new ModeloAlquiler();
-        
+
         initComponents();
         ajustaTabla();
         setMinimumSize(DIMENSION_EXTRA);
     }
-    
+
     public void muestraAlquileres(ArrayList<Alquiler> alquileres) {
-        
+
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
+        tabla_alquileres.getRowSorter().setSortKeys(null);
         modelo.addAlquileres(alquileres);
-        
+
         boton_limpiarActionPerformed(null);
-        
+
         panel_busqueda.requestFocus();
         setLocationRelativeTo(vista_padre);
+        ajustaTabla();
         setVisible(true);
     }
-    
+
     private void ajustaTabla() {
+
         TableColumnModel modelo_columna = tabla_alquileres.getColumnModel();
-        
+
         modelo_columna.getColumn(1).setMinWidth(150);
         modelo_columna.getColumn(3).setMinWidth(180);
-        
+
+    }
+
+    public void actualizaTabla(ArrayList<Alquiler> alquileres) {
+        if (this.isVisible()) {
+            ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
+            tabla_alquileres.getRowSorter().setSortKeys(null);
+            modelo.addAlquileres(alquileres);
+            ajustaTabla();
+        }
     }
 
     /**
@@ -65,6 +77,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void initComponents() {
 
         pop_alquileres = new javax.swing.JPopupMenu();
+        popMenu_devolucion = new javax.swing.JMenuItem();
         popMenu_verLibro = new javax.swing.JMenuItem();
         popMenu_verUsuario = new javax.swing.JMenuItem();
         panel_busqueda = new javax.swing.JPanel();
@@ -76,7 +89,15 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_alquileres = new javax.swing.JTable();
 
-        popMenu_verLibro.setText("Datos del libro");
+        popMenu_devolucion.setText("Devolver");
+        popMenu_devolucion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popMenu_devolucionActionPerformed(evt);
+            }
+        });
+        pop_alquileres.add(popMenu_devolucion);
+
+        popMenu_verLibro.setText("Datos del libro...");
         popMenu_verLibro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 popMenu_verLibroActionPerformed(evt);
@@ -84,7 +105,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         });
         pop_alquileres.add(popMenu_verLibro);
 
-        popMenu_verUsuario.setText("Datos del usuario");
+        popMenu_verUsuario.setText("Datos del usuario...");
         popMenu_verUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 popMenu_verUsuarioActionPerformed(evt);
@@ -98,6 +119,11 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
+            }
+        });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
             }
         });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -196,10 +222,10 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     }//GEN-LAST:event_boton_busquedamouseFuera
 
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
-        
+
         String texto = campo_busqueda.getText();
         ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
-        
+
         if (alquileres_encontrados.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Sin resultados",
                     "Busqueda de alquileres", JOptionPane.INFORMATION_MESSAGE);
@@ -209,7 +235,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             boton_busqueda.setVisible(false);
             boton_limpiar.setVisible(true);
             pack();
-            
+
         }
 
     }//GEN-LAST:event_boton_busquedaActionPerformed
@@ -241,7 +267,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         int fila = tabla_alquileres.getSelectedRow();
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         Alquiler alquiler_seleccionado = modelo.getAlquiler(fila);
-        
+
         vista_padre.abreDialogoVerLibros(alquiler_seleccionado.getLibro());
     }//GEN-LAST:event_popMenu_verLibroActionPerformed
 
@@ -249,9 +275,21 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         int fila = tabla_alquileres.getSelectedRow();
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         Alquiler alquiler_seleccionado = modelo.getAlquiler(fila);
-        
+
         vista_padre.abreDialogoVerUsuarios(alquiler_seleccionado.getPersona());
     }//GEN-LAST:event_popMenu_verUsuarioActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+
+    }//GEN-LAST:event_formWindowClosed
+
+    private void popMenu_devolucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popMenu_devolucionActionPerformed
+        int fila = tabla_alquileres.getSelectedRow();
+        ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
+        Alquiler alquiler_seleccionado = modelo.getAlquiler(fila);
+        
+        vista_padre.realizaDevolucion(alquiler_seleccionado);
+    }//GEN-LAST:event_popMenu_devolucionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -262,6 +300,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panel_busqueda;
+    private javax.swing.JMenuItem popMenu_devolucion;
     private javax.swing.JMenuItem popMenu_verLibro;
     private javax.swing.JMenuItem popMenu_verUsuario;
     private javax.swing.JPopupMenu pop_alquileres;

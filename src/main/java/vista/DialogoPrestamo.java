@@ -237,6 +237,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         if (fecha_devolucion.before(new Date())) {
             JOptionPane.showMessageDialog(this, "Error en la fecha de devolución",
                     "Nuevo prestamo", JOptionPane.ERROR_MESSAGE);
+            return;
 
         }
         if (lista_Usuarios.getSelectedIndex() == -1) {

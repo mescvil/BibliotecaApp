@@ -11,6 +11,8 @@ import excepciones.GuardaDatosException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
@@ -96,6 +98,28 @@ public class VistaPrincipal extends javax.swing.JFrame {
         setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
         rellenaCamposLibro(alquiler.getLibro());
 
+    }
+
+    public void realizaDevolucion(Alquiler alquiler) {
+        try {
+            controlador.realizaDevolucion(alquiler);
+            dialogoAlquileres.actualizaTabla(controlador.getAlquileres());
+
+            if (lista_libros.getSelectedIndex() != -1) {
+                JList lista = lista_libros;
+                Libro libro_seleccionado = (Libro) lista.getSelectedValue();
+
+                if (libro_seleccionado == alquiler.getLibro()) {
+                    setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Operación realizada con éxito",
+                    "Devolución", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (GuardaDatosException ex) {
+            JOptionPane.showMessageDialog(this, "No ha sido posible realizar la devolución",
+                    "Devolución", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public ArrayList<Alquiler> buscaAlquileres(String busqueda) {
@@ -220,6 +244,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         menu_verUsuarios = new javax.swing.JMenuItem();
         menu_libros = new javax.swing.JMenu();
         menu_aniadeLibro = new javax.swing.JMenuItem();
+        menu_listaLibros = new javax.swing.JMenuItem();
         menu_alquileres = new javax.swing.JMenu();
         menu_listaAlquileres = new javax.swing.JMenuItem();
         menu_ajustes = new javax.swing.JMenu();
@@ -227,7 +252,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         menu_salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca App 1.2");
+        setTitle("Biblioteca App 1.2 - Hyperion");
         setMinimumSize(new java.awt.Dimension(700, 425));
         setPreferredSize(new java.awt.Dimension(600, 500));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -575,11 +600,24 @@ public class VistaPrincipal extends javax.swing.JFrame {
         });
         menu_libros.add(menu_aniadeLibro);
 
+        menu_listaLibros.setText("Ver libros...");
+        menu_listaLibros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_listaLibrosActionPerformed(evt);
+            }
+        });
+        menu_libros.add(menu_listaLibros);
+
         menu_archivo.add(menu_libros);
 
         menu_alquileres.setText("Alquileres");
 
         menu_listaAlquileres.setText("Listado de alquileres...");
+        menu_listaAlquileres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_listaAlquileresActionPerformed(evt);
+            }
+        });
         menu_alquileres.add(menu_listaAlquileres);
 
         menu_archivo.add(menu_alquileres);
@@ -665,6 +703,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
             SwingUtilities.updateComponentTreeUI(dialogoLibro);
             SwingUtilities.updateComponentTreeUI(dialogoPersona);
             SwingUtilities.updateComponentTreeUI(dialogoPrestamo);
+            SwingUtilities.updateComponentTreeUI(dialogoAlquileres);
 
         } catch (UnsupportedLookAndFeelException e) {
             JOptionPane.showMessageDialog(this, "Error al cambiar de aspecto",
@@ -725,6 +764,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
                 setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
                 rellenaCamposLibro(alquiler.getLibro());
                 boton_devolucion.setEnabled(false);
+                dialogoAlquileres.actualizaTabla(controlador.getAlquileres());
 
                 JOptionPane.showMessageDialog(this, "Operación realizada con éxito",
                         "Devolución", JOptionPane.INFORMATION_MESSAGE);
@@ -761,6 +801,14 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private void boton_listaLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_listaLibrosActionPerformed
         dialogoLibro.muestraModoVer();
     }//GEN-LAST:event_boton_listaLibrosActionPerformed
+
+    private void menu_listaAlquileresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_listaAlquileresActionPerformed
+        dialogoAlquileres.muestraAlquileres(controlador.getAlquileres());
+    }//GEN-LAST:event_menu_listaAlquileresActionPerformed
+
+    private void menu_listaLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_listaLibrosActionPerformed
+        dialogoLibro.muestraModoVer();
+     }//GEN-LAST:event_menu_listaLibrosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
@@ -800,6 +848,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menu_archivo;
     private javax.swing.JMenu menu_libros;
     private javax.swing.JMenuItem menu_listaAlquileres;
+    private javax.swing.JMenuItem menu_listaLibros;
     private javax.swing.JMenu menu_salir;
     private javax.swing.JMenu menu_usuarios;
     private javax.swing.JMenuItem menu_verUsuarios;
