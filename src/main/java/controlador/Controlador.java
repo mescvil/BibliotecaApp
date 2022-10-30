@@ -112,7 +112,7 @@ public class Controlador {
         return usuarios_encontrados;
     }
 
-    public ArrayList<Alquiler> buscaAlquileres(String busqueda) {
+    public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscaLibro) {
         ArrayList<Alquiler> alquileres_encontrados = new ArrayList<>();
 
         if (busqueda.isBlank()) {
@@ -120,10 +120,19 @@ public class Controlador {
         }
 
         for (Alquiler alquiler : lista_alquileres) {
-            Usuario usuario = alquiler.getPersona();
 
-            if (usuario.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
-                alquileres_encontrados.add(alquiler);
+            if (!buscaLibro) {
+                Usuario usuario = alquiler.getPersona();
+
+                if (usuario.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
+                    alquileres_encontrados.add(alquiler);
+                }
+            } else {
+                Libro libro = alquiler.getLibro();
+
+                if (libro.getTitulo().toLowerCase().contains(busqueda.toLowerCase())) {
+                    alquileres_encontrados.add(alquiler);
+                }
             }
         }
 

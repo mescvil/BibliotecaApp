@@ -9,10 +9,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import controlador.Controlador;
 import excepciones.GuardaDatosException;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
@@ -122,8 +119,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         }
     }
 
-    public ArrayList<Alquiler> buscaAlquileres(String busqueda) {
-        return controlador.buscaAlquileres(busqueda);
+    public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscarLibro) {
+        return controlador.buscaAlquileres(busqueda, buscarLibro);
     }
 
     public ArrayList<Usuario> buscaUsuarios(String busqueda) {
@@ -212,7 +209,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JToolBar.Separator();
         boton_alquileres = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        logo_camara = new javax.swing.JLabel();
+        logo = new javax.swing.JLabel();
         panel_buscador = new javax.swing.JPanel();
         campo_busquedaLibro = new javax.swing.JTextField();
         boton_buscarLibro = new javax.swing.JButton();
@@ -252,7 +249,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         menu_salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca App 1.2 - Hyperion");
+        setTitle("Biblioteca App 1.2.1 - Hyperion");
         setMinimumSize(new java.awt.Dimension(700, 425));
         setPreferredSize(new java.awt.Dimension(600, 500));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -329,8 +326,8 @@ public class VistaPrincipal extends javax.swing.JFrame {
         toolBar.add(boton_alquileres);
         toolBar.add(filler1);
 
-        logo_camara.setIcon(new javax.swing.ImageIcon(getClass().getResource("/camara.png"))); // NOI18N
-        toolBar.add(logo_camara);
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
+        toolBar.add(logo);
 
         panel_toolBar.add(toolBar);
 
@@ -840,7 +837,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel label_titulo;
     private javax.swing.JList<String> lista_alquileres;
     private javax.swing.JList<String> lista_libros;
-    private javax.swing.JLabel logo_camara;
+    private javax.swing.JLabel logo;
     private javax.swing.JMenu menu_ajustes;
     private javax.swing.JMenu menu_alquileres;
     private javax.swing.JMenuItem menu_aniadeLibro;

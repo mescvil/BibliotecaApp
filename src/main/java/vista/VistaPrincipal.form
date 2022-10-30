@@ -100,7 +100,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="Biblioteca App 1.2 - Hyperion"/>
+    <Property name="title" type="java.lang.String" value="Biblioteca App 1.2.1 - Hyperion"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[700, 425]"/>
     </Property>
@@ -248,10 +248,10 @@
                 <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JLabel" name="logo_camara">
+            <Component class="javax.swing.JLabel" name="logo">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/camara.png"/>
+                  <Image iconType="3" name="/logo.png"/>
                 </Property>
               </Properties>
             </Component>

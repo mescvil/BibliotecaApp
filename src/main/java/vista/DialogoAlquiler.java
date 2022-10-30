@@ -80,12 +80,15 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         popMenu_devolucion = new javax.swing.JMenuItem();
         popMenu_verLibro = new javax.swing.JMenuItem();
         popMenu_verUsuario = new javax.swing.JMenuItem();
+        grupo_buscador = new javax.swing.ButtonGroup();
         panel_busqueda = new javax.swing.JPanel();
         campo_busqueda = new javax.swing.JTextField();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         boton_busqueda = new javax.swing.JButton();
         boton_limpiar = new javax.swing.JButton();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(250, 0), new java.awt.Dimension(5, 32767));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 32767));
+        radial_persona = new javax.swing.JRadioButton();
+        radial_libro = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla_alquileres = new javax.swing.JTable();
 
@@ -180,7 +183,16 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             }
         });
         panel_busqueda.add(boton_limpiar);
-        panel_busqueda.add(filler2);
+        panel_busqueda.add(filler3);
+
+        grupo_buscador.add(radial_persona);
+        radial_persona.setSelected(true);
+        radial_persona.setText("Buscar personas");
+        panel_busqueda.add(radial_persona);
+
+        grupo_buscador.add(radial_libro);
+        radial_libro.setText("Buscar libros");
+        panel_busqueda.add(radial_libro);
 
         getContentPane().add(panel_busqueda);
 
@@ -224,7 +236,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
 
         String texto = campo_busqueda.getText();
-        ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
+        ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto, radial_libro.isSelected());
 
         if (alquileres_encontrados.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Sin resultados",
@@ -287,7 +299,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         int fila = tabla_alquileres.getSelectedRow();
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         Alquiler alquiler_seleccionado = modelo.getAlquiler(fila);
-        
+
         vista_padre.realizaDevolucion(alquiler_seleccionado);
     }//GEN-LAST:event_popMenu_devolucionActionPerformed
 
@@ -297,13 +309,16 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private javax.swing.JButton boton_limpiar;
     private javax.swing.JTextField campo_busqueda;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.ButtonGroup grupo_buscador;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panel_busqueda;
     private javax.swing.JMenuItem popMenu_devolucion;
     private javax.swing.JMenuItem popMenu_verLibro;
     private javax.swing.JMenuItem popMenu_verUsuario;
     private javax.swing.JPopupMenu pop_alquileres;
+    private javax.swing.JRadioButton radial_libro;
+    private javax.swing.JRadioButton radial_persona;
     private javax.swing.JTable tabla_alquileres;
     // End of variables declaration//GEN-END:variables
 }
