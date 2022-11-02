@@ -261,8 +261,12 @@ public class DialogoPrestamo extends javax.swing.JDialog {
             vista_padre.guardaAlquiler(alquiler);
             muestraDialogo(libro_aPrestar);
 
-            JOptionPane.showMessageDialog(this, "Prestamo realizado con exito",
-                    "Nuevo prestamo", JOptionPane.INFORMATION_MESSAGE);
+            int resultado = JOptionPane.showConfirmDialog(this, "Prestamo realizado con éxito, ¿Desea realiar más?",
+                    "", JOptionPane.YES_NO_OPTION);
+
+            if (resultado == 1) {
+                dispose();
+            }
 
         } catch (SinEjemplaresException ex) {
             JOptionPane.showMessageDialog(this, "Error faltan ejemplares",
