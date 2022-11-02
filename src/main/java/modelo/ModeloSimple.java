@@ -14,10 +14,18 @@ import java.util.Map;
  *
  * @author Escoz
  */
-public class ModeloSimple implements Modelo {
+public class ModeloSimple implements Modelo, InterfazModeloLibro {
 
     private HashMap<String, Libro> libros;
     private HashMap<String, Usuario> personas;
+
+    private ArrayList<ObservadorLibros> lista_observadoresLibro;
+
+    public ModeloSimple() {
+        libros = new HashMap<>();
+        personas = new HashMap<>();
+        lista_observadoresLibro = new ArrayList<>();
+    }
 
     @Override
     public HashMap<String, Libro> cargaLibros() {
@@ -73,7 +81,7 @@ public class ModeloSimple implements Modelo {
 
     @Override
     public void guardaLibros(Map libros) {
-        // TODO
+        notificaLibro();
     }
 
     @Override
@@ -84,6 +92,18 @@ public class ModeloSimple implements Modelo {
     @Override
     public void guardaAlquileres(ArrayList<Alquiler> alquileres) {
         // TODO
+    }
+
+    @Override
+    public void suscribirse(ObservadorLibros o) {
+        lista_observadoresLibro.add(o);
+    }
+
+    @Override
+    public void notificaLibro() {
+        for (ObservadorLibros observadorLibros : lista_observadoresLibro) {
+            observadorLibros.cambioLibro();
+        }
     }
 
 }

@@ -7,11 +7,13 @@ package vista;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import controlador.Controlador;
+import controlador.ObservadorAlquiler;
 import excepciones.GuardaDatosException;
 import java.awt.Image;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -26,19 +28,19 @@ import modelo.Usuario;
  *
  * @author Escoz
  */
-public class VistaPrincipal extends javax.swing.JFrame {
-
+public class VistaPrincipal extends JFrame implements ObservadorAlquiler {
+    
     private Controlador controlador;
-
+    
     private DefaultListModel modelo_listaLibros;
     private DefaultListModel modelo_listaAlquileres;
     private DefaultListModel modelo_listaUsuarios;
-
+    
     private DialogoPersona dialogoPersona;
     private DialogoLibro dialogoLibro;
     private DialogoPrestamo dialogoPrestamo;
     private DialogoAlquiler dialogoAlquileres;
-
+    
     private boolean tiene_alquileres;
 
     /**
@@ -46,118 +48,119 @@ public class VistaPrincipal extends javax.swing.JFrame {
      */
     public VistaPrincipal(Controlador controlador) {
         this.controlador = controlador;
+        controlador.suscribirse(this);
         this.modelo_listaLibros = new DefaultListModel();
         this.modelo_listaAlquileres = new DefaultListModel();
         this.modelo_listaUsuarios = new DefaultListModel();
-
+        
         this.dialogoLibro = new DialogoLibro(this, true, modelo_listaLibros);
         this.dialogoPersona = new DialogoPersona(this, true, modelo_listaUsuarios);
         this.dialogoPrestamo = new DialogoPrestamo(this, true, modelo_listaUsuarios);
         this.dialogoAlquileres = new DialogoAlquiler(this, false);
-
+        
         initComponents();
         iconoAplicacion();
-
+        
         lista_libros.setModel(modelo_listaLibros);
         lista_alquileres.setModel(modelo_listaAlquileres);
-
+        
         modeloDefectoLibros();
         modeloDefectoAlquileres();
         modeloDefectoUsuarios();
-
+        
         UIManager.put("OptionPane.yesButtonText", "Si");
         UIManager.put("OptionPane.noButtonText", "No");
 
         // UN POCO CHAPUZA PERO HACE EL APAÑO
         panel_toolBar.requestFocus();
     }
-
+    
     private void iconoAplicacion() {
         Image icono = new ImageIcon(getClass().getResource("/icono_app.png")).getImage();
-
+        
         this.setIconImage(icono);
         dialogoLibro.setIconImage(icono);
         dialogoPersona.setIconImage(icono);
         dialogoPrestamo.setIconImage(icono);
         dialogoAlquileres.setIconImage(icono);
     }
-
+    
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
         controlador.guardaUsuario(usuario);
     }
-
+    
     public void guardaLibro(Libro libro) throws GuardaDatosException {
         controlador.guardaLibro(libro);
     }
-
+    
     public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
         controlador.guardaAlquiler(alquiler);
         setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
         rellenaCamposLibro(alquiler.getLibro());
-
+        
     }
-
+    
     public void realizaDevolucion(Alquiler alquiler) {
         try {
             controlador.realizaDevolucion(alquiler);
             dialogoAlquileres.actualizaTabla(controlador.getAlquileres());
-
+            
             if (lista_libros.getSelectedIndex() != -1) {
                 JList lista = lista_libros;
                 Libro libro_seleccionado = (Libro) lista.getSelectedValue();
-
+                
                 if (libro_seleccionado == alquiler.getLibro()) {
                     setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
                 }
             }
             JOptionPane.showMessageDialog(dialogoAlquileres, "Operación realizada con éxito",
                     "Devolución", JOptionPane.INFORMATION_MESSAGE);
-
+            
         } catch (GuardaDatosException ex) {
             JOptionPane.showMessageDialog(dialogoAlquileres, "No ha sido posible realizar la devolución",
                     "Devolución", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscarLibro) {
         return controlador.buscaAlquileres(busqueda, buscarLibro);
     }
-
+    
     public ArrayList<Usuario> buscaUsuarios(String busqueda) {
         return controlador.buscaUsuarios(busqueda);
     }
-
+    
     private void modeloDefectoUsuarios() {
         modelo_listaUsuarios.clear();
         modelo_listaUsuarios.addAll(controlador.getPersonas());
     }
-
+    
     private void modeloDefectoLibros() {
         modelo_listaLibros.clear();
         ArrayList<Libro> libros = controlador.getLibros();
         modelo_listaLibros.addAll(libros);
     }
-
+    
     private void modeloDefectoAlquileres() {
         modelo_listaAlquileres.clear();
     }
-
+    
     private void setModeloListaAlquileres(ArrayList<Alquiler> alquileres) {
         modelo_listaAlquileres.clear();
-
+        
         if (!alquileres.isEmpty()) {
             modelo_listaAlquileres.addAll(alquileres);
             tiene_alquileres = true;
         } else {
             modelo_listaAlquileres.addElement("Sin alquileres");
             tiene_alquileres = false;
-
+            
         }
     }
-
+    
     private void setModeloListaLibros(ArrayList<Libro> libros_encontrados) {
         modelo_listaLibros.clear();
-
+        
         if (!libros_encontrados.isEmpty()) {
             modelo_listaLibros.addAll(libros_encontrados);
         } else {
@@ -166,9 +169,21 @@ public class VistaPrincipal extends javax.swing.JFrame {
                     "Busqueda de libros", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
+    
+    public void cambioEnListaLibros() {
+        ArrayList<Libro> libros = controlador.getLibros();
+        setModeloListaLibros(libros);
+    }
+    
+    @Override
+    public void cambioDeAlquiler() {
+        setModeloListaAlquileres(controlador.getAlquileres());
+        boton_devolucion.setEnabled(false);
+        dialogoAlquileres.actualizaTabla(controlador.getAlquileres());
+    }
+    
     private void rellenaCamposLibro(Libro libro) {
-
+        
         String isbn = libro.getIsbn();
         String titulo = libro.getTitulo();
         String autor = libro.getAutor();
@@ -181,7 +196,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
             fecha = "";
             n_ejemplares = "";
         }
-
+        
         campo_isbn.setText(isbn);
         campo_titulo.setText(titulo);
         campo_fecha.setText(fecha);
@@ -649,26 +664,26 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     private void libroSeleccionado(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_libroSeleccionado
         JList lista = (JList) evt.getSource();
-
+        
         if (lista.hasFocus()) {
             if (!lista.getValueIsAdjusting()) {
-
+                
                 Libro libro_seleccionado = (Libro) lista.getSelectedValue();
                 String isbn_libro = libro_seleccionado.getIsbn();
                 ArrayList<Alquiler> alquileres = controlador.getInfoAlquileres(isbn_libro);
-
+                
                 rellenaCamposLibro(libro_seleccionado);
                 setModeloListaAlquileres(alquileres);
                 boton_nuevoPrestamo.setEnabled(true);
                 boton_devolucion.setEnabled(false);
-
+                
             }
         }
     }//GEN-LAST:event_libroSeleccionado
 
     private void boton_buscarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_buscarLibroActionPerformed
         String busqueda = campo_busquedaLibro.getText();
-
+        
         ArrayList<Libro> libros_encontrados = controlador.buscaLibroTitulo(busqueda);
         setModeloListaLibros(libros_encontrados);
 
@@ -680,7 +695,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         boton_nuevoPrestamo.setEnabled(false);
         modelo_listaAlquileres.clear();
         boton_devolucion.setEnabled(false);
-
+        
         rellenaCamposLibro(new Libro());
     }//GEN-LAST:event_boton_limpiarBusquedaActionPerformed
 
@@ -692,7 +707,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
         try {
             if (checkMenu_modoOscuro.isSelected()) {
                 UIManager.setLookAndFeel(new FlatDarkLaf());
-
+                
             } else {
                 UIManager.setLookAndFeel(new FlatLightLaf());
             }
@@ -701,7 +716,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
             SwingUtilities.updateComponentTreeUI(dialogoPersona);
             SwingUtilities.updateComponentTreeUI(dialogoPrestamo);
             SwingUtilities.updateComponentTreeUI(dialogoAlquileres);
-
+            
         } catch (UnsupportedLookAndFeelException e) {
             JOptionPane.showMessageDialog(this, "Error al cambiar de aspecto",
                     "Modo oscuro", JOptionPane.ERROR_MESSAGE);
@@ -733,7 +748,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private void menu_aniadeLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_aniadeLibroActionPerformed
         boton_aniadeLibroActionPerformed(null);
     }//GEN-LAST:event_menu_aniadeLibroActionPerformed
-
+    
     public void abreDialogoVerLibros(Libro libro) {
         dialogoLibro.muestraModoVer(libro);
     }
@@ -741,7 +756,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private void boton_nuevoPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_nuevoPrestamoActionPerformed
         JList lista = lista_libros;
         Libro libro_seleccionado = (Libro) lista.getSelectedValue();
-
+        
         if (libro_seleccionado.getN_ejemplares() > 0) {
             dialogoPrestamo.muestraDialogo(libro_seleccionado);
         } else {
@@ -754,15 +769,12 @@ public class VistaPrincipal extends javax.swing.JFrame {
         if (lista_alquileres.getSelectedIndex() != -1) {
             try {
                 JList lista = lista_alquileres;
-
+                
                 Alquiler alquiler = (Alquiler) lista.getSelectedValue();
                 controlador.realizaDevolucion(alquiler);
-
-                setModeloListaAlquileres(controlador.getInfoAlquileres(alquiler.getLibro().getIsbn()));
-                rellenaCamposLibro(alquiler.getLibro());
-                boton_devolucion.setEnabled(false);
-                dialogoAlquileres.actualizaTabla(controlador.getAlquileres());
-
+                
+                rellenaCamposLibro(controlador.getInfoLibro(alquiler.getLibro().getTitulo()));
+                
                 JOptionPane.showMessageDialog(this, "Operación realizada con éxito",
                         "Devolución", JOptionPane.INFORMATION_MESSAGE);
             } catch (GuardaDatosException ex) {
@@ -774,13 +786,13 @@ public class VistaPrincipal extends javax.swing.JFrame {
 
     private void lista_alquileresValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lista_alquileresValueChanged
         JList lista = (JList) evt.getSource();
-
+        
         if (lista.hasFocus()) {
             if (!lista.getValueIsAdjusting()) {
                 if (tiene_alquileres) {
                     boton_devolucion.setEnabled(true);
                 }
-
+                
             }
         }
 
@@ -857,4 +869,5 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel panel_toolBar;
     private javax.swing.JToolBar toolBar;
     // End of variables declaration//GEN-END:variables
+
 }

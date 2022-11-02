@@ -306,8 +306,6 @@ public class DialogoLibro extends javax.swing.JDialog {
 
                 Libro libro = new Libro(isbn, titulo, autor, anio, n_ejemplares);
                 vista_padre.guardaLibro(libro);
-
-                modelo_lista.addElement(libro);
                 rellenaDatosLibros(new Libro());
 
                 int resultado = JOptionPane.showConfirmDialog(this, "Agregado con éxito, ¿Desea agregar más?",

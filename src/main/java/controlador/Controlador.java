@@ -12,6 +12,7 @@ import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Modelo;
 import modelo.ModeloSimple;
+import modelo.ObservadorLibros;
 import modelo.Usuario;
 import vista.VistaPrincipal;
 
@@ -19,7 +20,7 @@ import vista.VistaPrincipal;
  *
  * @author Escoz
  */
-public class Controlador {
+public class Controlador implements ObservadorLibros, EventoAlquiler {
 
     private final Modelo modelo;
     private final VistaPrincipal vista;
@@ -28,13 +29,17 @@ public class Controlador {
     private Map mapa_libros;
     private ArrayList<Alquiler> lista_alquileres;
 
+    private ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
+
     public Controlador() {
         modelo = new ModeloSimple();
+        ((ModeloSimple) modelo).suscribirse(this);
 
         try {
             mapa_personas = modelo.cargaPersonas();
             mapa_libros = modelo.cargaLibros();
             lista_alquileres = modelo.cargaAlquileres();
+            lista_observadoresAlquiler = new ArrayList<>();
 
         } catch (CargaDatosException ex) {
             // POR VER
@@ -170,16 +175,35 @@ public class Controlador {
     public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
         lista_alquileres.add(alquiler);
         modelo.guardaAlquileres(lista_alquileres);
+        notificaCambioAlquiler();
     }
 
     public void realizaDevolucion(Alquiler alquiler) throws GuardaDatosException {
         alquiler.elimaAlquiler();
         lista_alquileres.remove(alquiler);
         modelo.guardaAlquileres(lista_alquileres);
+        notificaCambioAlquiler();
     }
 
     public ArrayList<Alquiler> getAlquileres() {
         return lista_alquileres;
+    }
+
+    @Override
+    public void cambioLibro() {
+        vista.cambioEnListaLibros();
+    }
+
+    @Override
+    public void suscribirse(ObservadorAlquiler o) {
+        lista_observadoresAlquiler.add(o);
+    }
+
+    @Override
+    public void notificaCambioAlquiler() {
+        for (ObservadorAlquiler observadorAlquiler : lista_observadoresAlquiler) {
+            observadorAlquiler.cambioDeAlquiler();
+        }
     }
 
 }
