@@ -4,6 +4,7 @@
  */
 package controlador;
 
+import observer.ObservadorAlquiler;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Modelo;
 import modelo.ModeloSimple;
-import modelo.ObservadorLibros;
+import observer.ObservadorLibros;
 import modelo.Usuario;
 import vista.VistaPrincipal;
 
@@ -20,7 +21,7 @@ import vista.VistaPrincipal;
  *
  * @author Escoz
  */
-public class Controlador implements ObservadorLibros, EventoAlquiler {
+public class Controlador implements ObservadorLibros, ObservadorAlquiler {
 
     private final Modelo modelo;
     private final VistaPrincipal vista;
@@ -33,7 +34,8 @@ public class Controlador implements ObservadorLibros, EventoAlquiler {
 
     public Controlador() {
         modelo = new ModeloSimple();
-        ((ModeloSimple) modelo).suscribirse(this);
+        ((ModeloSimple) modelo).suscribirseLibro(this);
+        ((ModeloSimple) modelo).suscribirseAlquiler(this);
 
         try {
             mapa_personas = modelo.cargaPersonas();
@@ -144,6 +146,7 @@ public class Controlador implements ObservadorLibros, EventoAlquiler {
         return alquileres_encontrados;
     }
 
+    @Deprecated
     public ArrayList<Alquiler> getInfoAlquileres(String isbn_buscado) {
         ArrayList<Alquiler> alquileres_libro = new ArrayList<>();
         Libro libro_buscado = new Libro(isbn_buscado);
@@ -154,6 +157,17 @@ public class Controlador implements ObservadorLibros, EventoAlquiler {
             }
         }
 
+        return alquileres_libro;
+    }
+
+    public ArrayList<Alquiler> getInfoAlquileres(Libro libro) {
+        ArrayList<Alquiler> alquileres_libro = new ArrayList<>();
+
+        for (Alquiler alquiler : lista_alquileres) {
+            if (alquiler.getLibro().equals(libro)) {
+                alquileres_libro.add(alquiler);
+            }
+        }
         return alquileres_libro;
     }
 
@@ -175,14 +189,12 @@ public class Controlador implements ObservadorLibros, EventoAlquiler {
     public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
         lista_alquileres.add(alquiler);
         modelo.guardaAlquileres(lista_alquileres);
-        notificaCambioAlquiler();
     }
 
     public void realizaDevolucion(Alquiler alquiler) throws GuardaDatosException {
         alquiler.elimaAlquiler();
         lista_alquileres.remove(alquiler);
         modelo.guardaAlquileres(lista_alquileres);
-        notificaCambioAlquiler();
     }
 
     public ArrayList<Alquiler> getAlquileres() {
@@ -195,15 +207,8 @@ public class Controlador implements ObservadorLibros, EventoAlquiler {
     }
 
     @Override
-    public void suscribirse(ObservadorAlquiler o) {
-        lista_observadoresAlquiler.add(o);
-    }
-
-    @Override
-    public void notificaCambioAlquiler() {
-        for (ObservadorAlquiler observadorAlquiler : lista_observadoresAlquiler) {
-            observadorAlquiler.cambioDeAlquiler();
-        }
+    public void cambioAlquiler() {
+        vista.cambioDeAlquiler();
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  */
-package controlador;
+package observer;
 
 /**
  *
@@ -8,6 +8,6 @@ package controlador;
  */
 public interface ObservadorAlquiler {
 
-    public void cambioDeAlquiler();
+    public void cambioAlquiler();
 
 }

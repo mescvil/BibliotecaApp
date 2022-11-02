@@ -4,27 +4,33 @@
  */
 package modelo;
 
+import observer.ObservadorLibros;
+import observer.EventoLibro;
 import excepciones.SinEjemplaresException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import observer.EventoAlquiler;
+import observer.ObservadorAlquiler;
 
 /**
  *
  * @author Escoz
  */
-public class ModeloSimple implements Modelo, InterfazModeloLibro {
+public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
 
     private HashMap<String, Libro> libros;
     private HashMap<String, Usuario> personas;
 
     private ArrayList<ObservadorLibros> lista_observadoresLibro;
+    private ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
 
     public ModeloSimple() {
         libros = new HashMap<>();
         personas = new HashMap<>();
         lista_observadoresLibro = new ArrayList<>();
+        lista_observadoresAlquiler = new ArrayList<>();
     }
 
     @Override
@@ -81,7 +87,7 @@ public class ModeloSimple implements Modelo, InterfazModeloLibro {
 
     @Override
     public void guardaLibros(Map libros) {
-        notificaLibro();
+        notificaCambioLibro();
     }
 
     @Override
@@ -91,18 +97,30 @@ public class ModeloSimple implements Modelo, InterfazModeloLibro {
 
     @Override
     public void guardaAlquileres(ArrayList<Alquiler> alquileres) {
-        // TODO
+        notificaCambioAlquiler();
     }
 
     @Override
-    public void suscribirse(ObservadorLibros o) {
+    public void suscribirseLibro(ObservadorLibros o) {
         lista_observadoresLibro.add(o);
     }
 
     @Override
-    public void notificaLibro() {
+    public void notificaCambioLibro() {
         for (ObservadorLibros observadorLibros : lista_observadoresLibro) {
             observadorLibros.cambioLibro();
+        }
+    }
+
+    @Override
+    public void suscribirseAlquiler(ObservadorAlquiler o) {
+        lista_observadoresAlquiler.add(o);
+    }
+
+    @Override
+    public void notificaCambioAlquiler() {
+        for (ObservadorAlquiler observadorAlquiler : lista_observadoresAlquiler) {
+            observadorAlquiler.cambioAlquiler();
         }
     }
 

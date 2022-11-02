@@ -1,6 +1,6 @@
 /*
  */
-package controlador;
+package observer;
 
 /**
  *
@@ -8,7 +8,7 @@ package controlador;
  */
 public interface EventoAlquiler {
 
-    public void suscribirse(ObservadorAlquiler o);
+    public void suscribirseAlquiler(ObservadorAlquiler o);
 
     public void notificaCambioAlquiler();
 
