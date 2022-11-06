@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package modelo;
+package accesoDatos;
 
 import observer.ObservadorLibros;
 import observer.EventoLibro;
@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import modelo.Alquiler;
+import modelo.Libro;
+import modelo.Usuario;
 import observer.EventoAlquiler;
 import observer.ObservadorAlquiler;
 

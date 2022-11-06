@@ -10,6 +10,7 @@ import controlador.Controlador;
 import excepciones.GuardaDatosException;
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -119,6 +120,10 @@ public class VistaPrincipal extends JFrame {
         return controlador.buscaUsuarios(busqueda);
     }
 
+    public void buscaUsuarios(HashMap busqueda) {
+        controlador.buscaUsuarios(busqueda);
+    }
+
     private void modeloDefectoUsuarios() {
         modelo_listaUsuarios.clear();
         modelo_listaUsuarios.addAll(controlador.getPersonas());
@@ -196,6 +201,10 @@ public class VistaPrincipal extends JFrame {
         campo_nEjemplares.setText(n_ejemplares);
         setModeloListaAlquileres(lista_alquileres);
 
+    }
+
+    public void actualizaBusquedaUsuarios(ArrayList<Usuario> usuarios_econtrados) {
+        dialogoPersona.actualizaListaUsuarios(usuarios_econtrados);
     }
 
     /*

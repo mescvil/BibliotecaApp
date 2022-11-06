@@ -7,14 +7,18 @@ package controlador;
 import observer.ObservadorAlquiler;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
-import java.util.ArrayList;
 import java.util.Map;
 import modelo.Alquiler;
 import modelo.Libro;
-import modelo.Modelo;
-import modelo.ModeloSimple;
-import observer.ObservadorLibros;
+import accesoDatos.Modelo;
+import accesoDatos.ModeloSimple;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import modelo.Usuario;
+import observer.ObservadorLibros;
 import vista.VistaPrincipal;
 
 /**
@@ -26,11 +30,9 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     private final Modelo modelo;
     private final VistaPrincipal vista;
 
-    private Map mapa_personas;
+    private Map mapa_usuarios;
     private Map mapa_libros;
     private ArrayList<Alquiler> lista_alquileres;
-
-    private ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
 
     public Controlador() {
         modelo = new ModeloSimple();
@@ -38,10 +40,9 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         ((ModeloSimple) modelo).suscribirseAlquiler(this);
 
         try {
-            mapa_personas = modelo.cargaPersonas();
+            mapa_usuarios = modelo.cargaPersonas();
             mapa_libros = modelo.cargaLibros();
             lista_alquileres = modelo.cargaAlquileres();
-            lista_observadoresAlquiler = new ArrayList<>();
 
         } catch (CargaDatosException ex) {
             // POR VER
@@ -54,8 +55,8 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     }
 
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
-        mapa_personas.put(usuario.getDni(), usuario);
-        modelo.guardaPersonas(mapa_personas);
+        mapa_usuarios.put(usuario.getDni(), usuario);
+        modelo.guardaPersonas(mapa_usuarios);
     }
 
     public ArrayList getLibros() {
@@ -108,7 +109,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             return usuarios_encontrados;
         }
 
-        for (Object o : mapa_personas.values()) {
+        for (Object o : mapa_usuarios.values()) {
             Usuario usuario = (Usuario) o;
 
             if (usuario.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
@@ -117,6 +118,51 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         }
 
         return usuarios_encontrados;
+    }
+
+    public void buscaUsuarios(HashMap busqueda) {
+        BusquedaUsuarios contexto;
+
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        ArrayList<Usuario> usuarios_aux = new ArrayList<>();
+        ArrayList<Usuario> usuarios_econtrados = new ArrayList<>();
+
+        for (Object o : mapa_usuarios.values()) {
+            Usuario u = (Usuario) o;
+            usuarios.add(u);
+        }
+        usuarios_aux.addAll(usuarios);
+
+        for (Object key : busqueda.keySet()) {
+
+            switch ((String) key) {
+                case "nombre" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioNombre());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "apellidos" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioApellidos());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "telefono" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioTelf());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "anio" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioAnio());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "simple" -> {
+                    usuarios_econtrados = buscaUsuarios((String) busqueda.get(key));
+                }
+                default ->
+                    throw new AssertionError();
+            }
+            usuarios_aux.clear();
+            usuarios_aux.addAll(usuarios_econtrados);
+        }
+
+        vista.actualizaBusquedaUsuarios(usuarios_econtrados);
     }
 
     public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscaLibro) {
@@ -174,7 +220,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     public ArrayList<Usuario> getPersonas() {
 
         ArrayList<Usuario> usuarios = new ArrayList<>();
-        for (Object o : mapa_personas.values()) {
+        for (Object o : mapa_usuarios.values()) {
             usuarios.add((Usuario) o);
         }
 

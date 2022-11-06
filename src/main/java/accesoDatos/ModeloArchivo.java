@@ -1,6 +1,6 @@
 /*
  */
-package modelo;
+package accesoDatos;
 
 import excepciones.CargaDatosException;
 import java.io.EOFException;
@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelo.Alquiler;
+import modelo.Libro;
+import modelo.Usuario;
 
 /**
  *
