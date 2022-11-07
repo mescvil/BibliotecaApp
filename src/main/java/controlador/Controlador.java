@@ -4,6 +4,11 @@
  */
 package controlador;
 
+import strategy.BusquedaUsuarios;
+import strategy.BuscaUsuarioApellidos;
+import strategy.BuscaUsuarioAnio;
+import strategy.BuscaUsuarioNombre;
+import strategy.BuscaUsuarioTelf;
 import observer.ObservadorAlquiler;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
@@ -12,11 +17,8 @@ import modelo.Alquiler;
 import modelo.Libro;
 import accesoDatos.Modelo;
 import accesoDatos.ModeloSimple;
-import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import modelo.Usuario;
 import observer.ObservadorLibros;
 import vista.VistaPrincipal;
@@ -165,6 +167,51 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         vista.actualizaBusquedaUsuarios(usuarios_econtrados);
     }
 
+    public void buscaLibros(HashMap busqueda) {
+        BusquedaUsuarios contexto;
+
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        ArrayList<Usuario> usuarios_aux = new ArrayList<>();
+        ArrayList<Usuario> usuarios_econtrados = new ArrayList<>();
+
+        for (Object o : mapa_usuarios.values()) {
+            Usuario u = (Usuario) o;
+            usuarios.add(u);
+        }
+        usuarios_aux.addAll(usuarios);
+
+        for (Object key : busqueda.keySet()) {
+
+            switch ((String) key) {
+                case "nombre" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioNombre());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "apellidos" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioApellidos());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "telefono" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioTelf());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "anio" -> {
+                    contexto = new BusquedaUsuarios(new BuscaUsuarioAnio());
+                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                }
+                case "simple" -> {
+                    usuarios_econtrados = buscaUsuarios((String) busqueda.get(key));
+                }
+                default ->
+                    throw new AssertionError();
+            }
+            usuarios_aux.clear();
+            usuarios_aux.addAll(usuarios_econtrados);
+        }
+
+        vista.actualizaBusquedaLibros(null);
+    }
+
     public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscaLibro) {
         ArrayList<Alquiler> alquileres_encontrados = new ArrayList<>();
 
@@ -192,7 +239,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         return alquileres_encontrados;
     }
 
-    @Deprecated
     public ArrayList<Alquiler> getInfoAlquileres(String isbn_buscado) {
         ArrayList<Alquiler> alquileres_libro = new ArrayList<>();
         Libro libro_buscado = new Libro(isbn_buscado);

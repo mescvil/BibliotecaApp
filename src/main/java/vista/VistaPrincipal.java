@@ -124,6 +124,10 @@ public class VistaPrincipal extends JFrame {
         controlador.buscaUsuarios(busqueda);
     }
 
+    public void buscaLibros(HashMap busqueda) {
+        controlador.buscaLibros(busqueda);
+    }
+
     private void modeloDefectoUsuarios() {
         modelo_listaUsuarios.clear();
         modelo_listaUsuarios.addAll(controlador.getPersonas());
@@ -205,6 +209,10 @@ public class VistaPrincipal extends JFrame {
 
     public void actualizaBusquedaUsuarios(ArrayList<Usuario> usuarios_econtrados) {
         dialogoPersona.actualizaListaUsuarios(usuarios_econtrados);
+    }
+
+    public void actualizaBusquedaLibros(ArrayList<Libro> libros_encontrados) {
+        dialogoLibro.actualizaListaLibros(libros_encontrados);
     }
 
     /*
