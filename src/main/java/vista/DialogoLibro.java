@@ -364,7 +364,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         panel_busquedaAvanzada.setLayout(new java.awt.GridBagLayout());
 
         campo_busquedaTitulo.setText("Introduce un titulo...");
-        campo_busquedaTitulo.setToolTipText("Busca un usuario por nombre");
+        campo_busquedaTitulo.setToolTipText("Busca un usuario por titulo");
         campo_busquedaTitulo.setPreferredSize(new java.awt.Dimension(250, 22));
         campo_busquedaTitulo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -381,7 +381,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         panel_busquedaAvanzada.add(campo_busquedaTitulo, gridBagConstraints);
 
         campo_busquedaAutor.setText("Introduce un autor...");
-        campo_busquedaAutor.setToolTipText("Busca un usuario por apellidos");
+        campo_busquedaAutor.setToolTipText("Busca un libro por titulo");
         campo_busquedaAutor.setPreferredSize(new java.awt.Dimension(250, 22));
         campo_busquedaAutor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -436,7 +436,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         panel_busquedaAvanzada.add(chek_titulo, gridBagConstraints);
 
-        dateChooser_busqueda.setToolTipText("Busca un usuario por año de nacimiento");
+        dateChooser_busqueda.setToolTipText("Busca un libro por año de publicacion");
         dateChooser_busqueda.setMaximum(Calendar.getInstance().get(Calendar.YEAR));
         dateChooser_busqueda.setPreferredSize(new java.awt.Dimension(100, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -469,7 +469,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         panel_busquedaSimple.add(filler2);
 
         campo_busquedaSimple.setText("Introduce tu buqueda...");
-        campo_busquedaSimple.setToolTipText("Busca un usuario por nombre o apellidos");
+        campo_busquedaSimple.setToolTipText("Busca un libro por titulo");
         campo_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 27));
         campo_busquedaSimple.setMinimumSize(new java.awt.Dimension(64, 27));
         campo_busquedaSimple.setPreferredSize(new java.awt.Dimension(200, 20));
