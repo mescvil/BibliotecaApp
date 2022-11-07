@@ -175,6 +175,7 @@ public class VistaPrincipal extends JFrame {
 
     public void cambioDeAlquiler() {
         JList lista = (JList) lista_libros;
+        Libro libro = (Libro) lista.getSelectedValue();
 
         rellenaCamposLibro((Libro) lista.getSelectedValue());
         boton_devolucion.setEnabled(false);
@@ -183,28 +184,29 @@ public class VistaPrincipal extends JFrame {
 
     private void rellenaCamposLibro(Libro libro) {
 
-        String isbn = libro.getIsbn();
-        String titulo = libro.getTitulo();
-        String autor = libro.getAutor();
-        String n_ejemplares;
-        String fecha;
-        ArrayList<Alquiler> lista_alquileres = controlador.getInfoAlquileres(libro);
+        if (libro != null) {
+            String isbn = libro.getIsbn();
+            String titulo = libro.getTitulo();
+            String autor = libro.getAutor();
+            String n_ejemplares;
+            String fecha;
+            ArrayList<Alquiler> lista_alquileres = controlador.getInfoAlquileres(libro);
 
-        if (isbn != null) {
-            fecha = libro.getAnio_publicacion();
-            n_ejemplares = String.valueOf(libro.getN_ejemplares());
-        } else {
-            fecha = "";
-            n_ejemplares = "";
+            if (isbn != null) {
+                fecha = libro.getAnio_publicacion();
+                n_ejemplares = String.valueOf(libro.getN_ejemplares());
+            } else {
+                fecha = "";
+                n_ejemplares = "";
+            }
+
+            campo_isbn.setText(isbn);
+            campo_titulo.setText(titulo);
+            campo_fecha.setText(fecha);
+            campo_autor.setText(autor);
+            campo_nEjemplares.setText(n_ejemplares);
+            setModeloListaAlquileres(lista_alquileres);
         }
-
-        campo_isbn.setText(isbn);
-        campo_titulo.setText(titulo);
-        campo_fecha.setText(fecha);
-        campo_autor.setText(autor);
-        campo_nEjemplares.setText(n_ejemplares);
-        setModeloListaAlquileres(lista_alquileres);
-
     }
 
     public void actualizaBusquedaUsuarios(ArrayList<Usuario> usuarios_econtrados) {
