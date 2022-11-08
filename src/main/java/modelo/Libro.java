@@ -9,7 +9,6 @@ import excepciones.SinEjemplaresException;
 import java.io.Serializable;
 
 /**
- *
  * @author Escoz
  */
 public class Libro implements Serializable {
@@ -40,7 +39,7 @@ public class Libro implements Serializable {
         anio_publicacion = "2022";
     }
 
-    // --------------- METODOS ---------------
+    // --------------- MÉTODOS ---------------
     @Override
     public String toString() {
         return String.format("%s - %s", isbn, titulo);
@@ -48,6 +47,9 @@ public class Libro implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        if (!(obj instanceof Libro)) {
+            return false;
+        }
         return this.getIsbn().equalsIgnoreCase(((Libro) obj).getIsbn());
     }
 

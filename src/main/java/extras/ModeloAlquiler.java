@@ -1,5 +1,3 @@
-/*
- */
 package extras;
 
 import modelo.Alquiler;
@@ -12,7 +10,6 @@ import java.util.GregorianCalendar;
 import static extras.Utilidades.gregorianCalendarToString;
 
 /**
- *
  * @author Escoz
  */
 public class ModeloAlquiler extends AbstractTableModel {
@@ -21,7 +18,7 @@ public class ModeloAlquiler extends AbstractTableModel {
     private final String[] nombre_columnas = {"DNI", "Nombre", "ISBN", "Título", "Entrega", "Creación", "Restantes"};
     private final boolean[] isEditable = {false, false, false, false, false, false, false};
 
-    //  --------------------- METODOS HEREDADOS  ---------------------
+    //  --------------------- MÉTODOS HEREDADOS  ---------------------
     @Override
     public int getRowCount() {
         return datos_alquileres.length;
@@ -54,12 +51,6 @@ public class ModeloAlquiler extends AbstractTableModel {
         fireTableCellUpdated(row, col);
     }
 
-    //  --------------------- METODOS ---------------------
-    public void clean() {
-        datos_alquileres = new Object[][]{};
-        fireTableDataChanged();
-    }
-
     public void addAlquileres(ArrayList<Alquiler> alquileres) {
 
         // UNA COLUMNA MAS PARA TRAMPEAR EL ALQUILER
@@ -86,12 +77,12 @@ public class ModeloAlquiler extends AbstractTableModel {
         datos_alquileres[fila][2] = alquiler.getLibro().getIsbn();
         // TITULO
         datos_alquileres[fila][3] = alquiler.getLibro().getTitulo();
-        // FECHA DEVOLUCION
+        // FECHA DEVOLUCIÓN
         datos_alquileres[fila][4] = gregorianCalendarToString(fecha_devolucion);
-        // FECHA CREACION
+        // FECHA CREACIÓN
         datos_alquileres[fila][5] = gregorianCalendarToString(fecha_creacion);
-        // DIFERENCIA ENTRE HOY Y LA DEVOLUCION
-        datos_alquileres[fila][6] = dias_entreFechas + " dia(s)";
+        // DIFERENCIA ENTRE HOY Y LA DEVOLUCIÓN
+        datos_alquileres[fila][6] = dias_entreFechas + " día(s)";
         // ALQUILER TRAMPEADO
         datos_alquileres[fila][nombre_columnas.length] = alquiler;
 

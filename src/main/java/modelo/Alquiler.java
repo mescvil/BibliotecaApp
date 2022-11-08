@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 /**
- *
  * @author Escoz
  */
 public class Alquiler implements Serializable {
@@ -16,7 +15,7 @@ public class Alquiler implements Serializable {
     private Libro libro;
     private Usuario persona;
     private GregorianCalendar fecha_limite;
-    private GregorianCalendar fecha_creacion;
+    private final GregorianCalendar fecha_creacion;
     private int n_ejemplares;
 
     // -------------- CONSTRUCTORES ---------------
@@ -39,7 +38,7 @@ public class Alquiler implements Serializable {
         fecha_creacion = new GregorianCalendar();
     }
 
-    // -------------- METODOS---------------
+    // -------------- MÉTODOS---------------
     @Override
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -61,8 +60,11 @@ public class Alquiler implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        Alquiler comparado = (Alquiler) obj;
+        if (!(obj instanceof Alquiler)) {
+            return false;
+        }
 
+        Alquiler comparado = (Alquiler) obj;
         if (!comparado.getLibro().equals(libro)) {
             return false;
         }
@@ -72,11 +74,7 @@ public class Alquiler implements Serializable {
         if (!comparado.getFecha_limite().equals(getFecha_limite())) {
             return false;
         }
-        if (comparado.getN_ejemplares() != getN_ejemplares()) {
-            return false;
-        }
-
-        return true;
+        return comparado.getN_ejemplares() == getN_ejemplares();
     }
 
     // -------------- GETTERS & SETTERS ---------------

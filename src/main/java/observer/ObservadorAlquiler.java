@@ -3,11 +3,10 @@
 package observer;
 
 /**
- *
  * @author Escoz
  */
 public interface ObservadorAlquiler {
 
-    public void cambioAlquiler();
+    void cambioAlquiler();
 
 }

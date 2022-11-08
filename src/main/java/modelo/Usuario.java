@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 /**
- *
  * @author Escoz
  */
 public class Usuario implements Serializable {
@@ -23,8 +22,7 @@ public class Usuario implements Serializable {
     private GregorianCalendar fecha_nacimiento;
 
     // --------------- CONSTRUCTORES ---------------
-    public Usuario(String dni, String nombre, String apellido_1, String apellido_2, String telefono,
-            String correo, GregorianCalendar fecha_nacimiento) {
+    public Usuario(String dni, String nombre, String apellido_1, String apellido_2, String telefono, String correo, GregorianCalendar fecha_nacimiento) {
         setDni(dni);
         setNombre(nombre);
         setApellido_1(apellido_1);
@@ -39,9 +37,12 @@ public class Usuario implements Serializable {
         setFecha_nacimiento(new GregorianCalendar());
     }
 
-    // --------------- METODOS ---------------
+    // --------------- MÉTODOS ---------------
     @Override
     public boolean equals(Object obj) {
+        if (!(obj instanceof Usuario)) {
+            return false;
+        }
         return this.getDni().equalsIgnoreCase(((Usuario) obj).getDni());
     }
 

@@ -1,14 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package extras;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 /**
- *
  * @author theky
  */
 public class Utilidades {
@@ -17,8 +12,7 @@ public class Utilidades {
 
     public static String gregorianCalendarToString(GregorianCalendar fecha) {
         formato_fecha.setCalendar(fecha);
-        String fecha_string = formato_fecha.format(fecha.getTime());
-        return fecha_string;
+        return formato_fecha.format(fecha.getTime());
     }
 
     public static GregorianCalendar aniadeDiasFecha(GregorianCalendar fecha, int n_dias) {

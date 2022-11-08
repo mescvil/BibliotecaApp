@@ -74,20 +74,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         return libros_encontrados;
     }
 
-    public Libro getInfoLibro(String titulo) {
-        Libro libro = null;
-
-        for (Libro object : mapa_libros.values()) {
-            String nombre = object.getTitulo();
-
-            if (nombre.equals(titulo)) {
-                libro = object;
-            }
-        }
-
-        return libro;
-    }
-
     public ArrayList<Usuario> buscaUsuarios(String busqueda) {
         ArrayList<Usuario> usuarios_encontrados = new ArrayList<>();
 
@@ -132,8 +118,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                     contexto = new BusquedaUsuarios(new BuscaUsuarioAnio());
                     usuarios_econtrados = contexto.busca(usuarios_aux, busqueda.get(key));
                 }
-                case "simple" ->
-                    usuarios_econtrados = buscaUsuarios(busqueda.get(key));
+                case "simple" -> usuarios_econtrados = buscaUsuarios(busqueda.get(key));
             }
             usuarios_aux.clear();
             usuarios_aux.addAll(usuarios_econtrados);
@@ -169,8 +154,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                     contexto = new BusquedaLibros(new BuscaLibroPublicacion());
                     libros_econtrados = contexto.busca(libros_aux, busqueda.get(key));
                 }
-                case "simple" ->
-                    libros_econtrados = buscaLibroTitulo(busqueda.get(key));
+                case "simple" -> libros_econtrados = buscaLibroTitulo(busqueda.get(key));
             }
             libros_aux.clear();
             libros_aux.addAll(libros_econtrados);
