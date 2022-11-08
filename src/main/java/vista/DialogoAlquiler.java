@@ -13,7 +13,6 @@ import static extras.Colores_Dimensiones.DIMENSION_EXTRA_BUSQUEDA;
 import java.awt.Component;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * @author Escoz
@@ -140,7 +139,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         campo_busquedaAutor.setText("Introduce un autor...");
         dateChooser_busquedaLibro.setYear(Calendar.getInstance().get(Calendar.YEAR));
 
-        campo_busquedaSimple.setText("Introduce tu buque da...");
+        campo_busquedaSimple.setText("Introduce tu búsqueda...");
 
         boton_limpiar.setVisible(false);
         boton_busqueda.setVisible(true);
@@ -230,7 +229,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         panel_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 32));
         panel_busquedaSimple.setLayout(new javax.swing.BoxLayout(panel_busquedaSimple, javax.swing.BoxLayout.LINE_AXIS));
 
-        campo_busquedaSimple.setText("Introduce tu búsqueda...");
+        campo_busquedaSimple.setText("Introduce tu busqueda...");
         campo_busquedaSimple.setToolTipText("Busca un alquiler por un usuario o libro");
         campo_busquedaSimple.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -240,7 +239,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         panel_busquedaSimple.add(campo_busquedaSimple);
         panel_busquedaSimple.add(filler1);
 
-        boton_busqueda.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/buscar_pequenio.png")))); // NOI18N
+        boton_busqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buscar_pequenio.png"))); // NOI18N
         boton_busqueda.setToolTipText("Buscar");
         boton_busqueda.setBorderPainted(false);
         boton_busqueda.setContentAreaFilled(false);
@@ -249,7 +248,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 boton_busquedamouseEncima(evt);
             }
-
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 boton_busquedamouseFuera(evt);
             }
@@ -261,7 +259,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         });
         panel_busquedaSimple.add(boton_busqueda);
 
-        boton_limpiar.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/limpiar_pequenio.png")))); // NOI18N
+        boton_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
         boton_limpiar.setToolTipText("Limpiar");
         boton_limpiar.setBorderPainted(false);
         boton_limpiar.setContentAreaFilled(false);
@@ -269,7 +267,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 boton_limpiarmouseEncima(evt);
             }
-
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 boton_limpiarmouseFuera(evt);
             }
@@ -284,7 +281,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         panel_busquedaSimple.add(filler4);
 
         check_avanzada.setText("Avanzada");
-        check_avanzada.setToolTipText("Despliega el menu de búsqueda avanzada");
+        check_avanzada.setToolTipText("Despliega el menu de busqueda avanzada");
         check_avanzada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 check_avanzadaActionPerformed(evt);
@@ -314,7 +311,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         panel_busquedaUsuario.add(campo_busquedaNombre, gridBagConstraints);
 
-        campo_busquedaTelefono.setText("Introduce un teléfono...");
+        campo_busquedaTelefono.setText("Introduce un telefono...");
         campo_busquedaTelefono.setToolTipText("Busca un alquiler por teléfono");
         campo_busquedaTelefono.setPreferredSize(new java.awt.Dimension(250, 22));
         campo_busquedaTelefono.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -489,7 +486,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         panel_busquedaLibro.add(chek_titulo, gridBagConstraints);
 
-        dateChooser_busquedaLibro.setToolTipText("Busca un alquiler por año de publication");
+        dateChooser_busquedaLibro.setToolTipText("Busca un alquiler por año de publicacion");
         dateChooser_busquedaLibro.setMaximum(Calendar.getInstance().get(Calendar.YEAR));
         dateChooser_busquedaLibro.setPreferredSize(new java.awt.Dimension(100, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
