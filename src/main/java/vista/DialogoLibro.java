@@ -136,6 +136,8 @@ public class DialogoLibro extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Sin resultados",
                     "Busqueda de libros", JOptionPane.INFORMATION_MESSAGE);
         }
+        pack();
+        repaint();
     }
 
     public void rellenaDatosLibros(Libro libro) {
@@ -632,6 +634,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         resetaFiltrosBusquedaDuro();
         lista_libros.setModel(modelo_lista);
         pack();
+        repaint();
     }//GEN-LAST:event_boton_limpiarActionPerformed
 
     private void check_filtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_filtrosActionPerformed
@@ -647,6 +650,7 @@ public class DialogoLibro extends javax.swing.JDialog {
             filler_busqueda.setVisible(true);
         }
         pack();
+        repaint();
     }//GEN-LAST:event_check_filtrosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

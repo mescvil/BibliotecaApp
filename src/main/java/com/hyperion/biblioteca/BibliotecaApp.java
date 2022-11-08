@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
- */
 package com.hyperion.biblioteca;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -21,6 +17,7 @@ public class BibliotecaApp {
             UIManager.put("Component.arc", 10);
             UIManager.put("TextComponent.arc", 10);
             UIManager.setLookAndFeel(new FlatLightLaf());
+
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         }

@@ -18,9 +18,9 @@ import static extras.Colores_Dimensiones.*;
  * @author Escoz
  */
 public class DialogoPersona extends javax.swing.JDialog {
-    
+
     private VistaPrincipal vista_padre;
-    
+
     private DefaultListModel modelo_lista;
     private DefaultListModel modelo_busqueda;
 
@@ -30,13 +30,13 @@ public class DialogoPersona extends javax.swing.JDialog {
     public DialogoPersona(VistaPrincipal parent, boolean modal, DefaultListModel modelo_lista) {
         super(parent, modal);
         this.vista_padre = parent;
-        
+
         initComponents();
         this.lista_Usuarios.setModel(this.modelo_lista = modelo_lista);
         modelo_busqueda = new DefaultListModel();
-        
+
     }
-    
+
     public void muestraModoAniadir() {
 
         // Campos del usuario
@@ -67,13 +67,13 @@ public class DialogoPersona extends javax.swing.JDialog {
         // General 
         setPreferredSize(DIMENSION_GRANDE);
         this.setTitle("Nuevo usuario");
-        
+
         setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
-        
+
     }
-    
+
     public void muestraModoVer() {
 
         // Campos del usuario
@@ -111,61 +111,62 @@ public class DialogoPersona extends javax.swing.JDialog {
         setPreferredSize(DIMENSION_GRANDE);
         setLocationRelativeTo(vista_padre);
         lista_Usuarios.requestFocus();
-        
+
         pack();
         setVisible(true);
     }
-    
+
     public void muestraModoVer(Usuario usuario) {
         muestraModoVer();
         rellenaDatosPersona(usuario);
     }
-    
+
     private void reseteaPanelFiltros() {
         check_filtros.setSelected(false);
         resetaFiltrosBusquedaDuro();
-        
+
     }
-    
+
     public void resetaFiltrosBusquedaDuro() {
         // Reseteamos todos los componentes de tipo JCheckBox dentro del panel de busqueda
         for (Component component : panel_busquedaAvanzada.getComponents()) {
             if (component instanceof JCheckBox) {
                 ((JCheckBox) component).setSelected(false);
-                
+
             }
             if (component instanceof JTextField) {
                 component.setEnabled(false);
             }
         }
         dateChooser_busqueda.setEnabled(false);
-        
+
         campo_busquedaNombre.setText("Introduce un nombre...");
         campo_busquedaApellidos.setText("Introduce un apellido...");
         campo_busquedaTelefono.setText("Introduce un telefono...");
         dateChooser_busqueda.setYear(Calendar.getInstance().get(Calendar.YEAR));
-        
+
         campo_busquedaSimple.setText("Introduce tu buqueda...");
-        
+
         boton_limpiar.setVisible(false);
         boton_busqueda.setVisible(true);
-        
     }
-    
+
     public void actualizaListaUsuarios(ArrayList<Usuario> usuarios_encontrados) {
-        
+
         if (!usuarios_encontrados.isEmpty()) {
             modelo_busqueda.clear();
             modelo_busqueda.addAll(usuarios_encontrados);
             lista_Usuarios.setModel(modelo_busqueda);
             boton_limpiar.setVisible(true);
-            
+
         } else {
             JOptionPane.showMessageDialog(this, "Sin resultados",
                     "Busqueda de usuarios", JOptionPane.INFORMATION_MESSAGE);
         }
+        pack();
+        repaint();
     }
-    
+
     public void rellenaDatosPersona(Usuario usuario) {
         String nombre = usuario.getNombre();
         String pri_apellido = usuario.getApellido_1();
@@ -174,7 +175,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         String telefono = usuario.getTelefono();
         String email = usuario.getCorreo();
         Date nacimiento = usuario.getFecha_nacimiento().getTime();
-        
+
         campo_nombre.setText(nombre);
         campo_segApellido.setText(seg_apellido);
         campo_priApellido.setText(pri_apellido);
@@ -183,7 +184,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_telefono.setText(telefono);
         dateChooser_nacimiento.setDate(nacimiento);
     }
-    
+
     private void guardaUsuario() {
         try {
             String nombre = campo_nombre.getText();
@@ -200,18 +201,18 @@ public class DialogoPersona extends javax.swing.JDialog {
                         "Nuevo usuario", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            
+
             f_nacimiento.setTime(dateChooser_nacimiento.getDate());
             Usuario u = new Usuario(dni, nombre, apellido_1, apellido_2, telf, correo, f_nacimiento);
-            
+
             vista_padre.guardaUsuario(u);
             modelo_lista.addElement(u);
-            
+
             rellenaDatosPersona(new Usuario());
-            
+
             int resultado = JOptionPane.showConfirmDialog(this, "Agregado con éxito, ¿Desea agregar más?",
                     "", JOptionPane.YES_NO_OPTION);
-            
+
             if (resultado == 1) {
                 dispose();
             }
@@ -642,7 +643,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
     private void boton_multipleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_multipleActionPerformed
         String texto_boton = boton_multiple.getText();
-        
+
         if (texto_boton.equals("Guardar")) {
             guardaUsuario();
         } else {
@@ -654,7 +655,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         JList lista = (JList) evt.getSource();
         if (lista.hasFocus()) {
             if (!lista.getValueIsAdjusting()) {
-                
+
                 Usuario usuario_seleccionado = (Usuario) lista.getSelectedValue();
                 rellenaDatosPersona(usuario_seleccionado);
             }
@@ -665,6 +666,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         resetaFiltrosBusquedaDuro();
         lista_Usuarios.setModel(modelo_lista);
         pack();
+        repaint();
     }//GEN-LAST:event_boton_limpiarActionPerformed
 
     private void campoBusquedaClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoBusquedaClicked
@@ -685,6 +687,7 @@ public class DialogoPersona extends javax.swing.JDialog {
             campo_busquedaSimple.setVisible(true);
             filler_busqueda.setVisible(true);
         }
+        repaint();
         pack();
     }//GEN-LAST:event_check_filtrosActionPerformed
 
@@ -706,7 +709,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
     private void busquedaUsuarios(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaUsuarios
         HashMap<String, String> busqueda = new HashMap<>();
-        
+
         if (panel_busquedaAvanzada.isVisible()) {
             if (chek_nombre.isSelected()) {
                 busqueda.put("nombre", campo_busquedaNombre.getText());
@@ -723,7 +726,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         } else if (campo_busquedaSimple.isVisible()) {
             busqueda.put("simple", campo_busquedaSimple.getText());
         }
-        
+
         vista_padre.buscaUsuarios(busqueda);
     }//GEN-LAST:event_busquedaUsuarios
 

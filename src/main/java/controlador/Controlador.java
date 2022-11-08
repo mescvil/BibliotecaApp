@@ -40,7 +40,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
 
         } catch (CargaDatosException ex) {
             // POR VER
-            ex.printStackTrace();
         }
 
         vista = new VistaPrincipal(this);
@@ -133,9 +132,11 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                     contexto = new BusquedaUsuarios(new BuscaUsuarioAnio());
                     usuarios_econtrados = contexto.busca(usuarios_aux, busqueda.get(key));
                 }
-                case "simple" -> usuarios_econtrados = buscaUsuarios(busqueda.get(key));
+                case "simple" ->
+                    usuarios_econtrados = buscaUsuarios(busqueda.get(key));
 
-                default -> throw new AssertionError();
+                default ->
+                    throw new AssertionError();
             }
             usuarios_aux.clear();
             usuarios_aux.addAll(usuarios_econtrados);
@@ -167,9 +168,11 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                     contexto = new BusquedaLibros(new BuscaLibroPublicacion());
                     libros_econtrados = contexto.busca(libros_aux, busqueda.get(key));
                 }
-                case "simple" -> libros_econtrados = buscaLibroTitulo(busqueda.get(key));
+                case "simple" ->
+                    libros_econtrados = buscaLibroTitulo(busqueda.get(key));
 
-                default -> throw new AssertionError();
+                default ->
+                    throw new AssertionError();
             }
             libros_aux.clear();
             libros_aux.addAll(libros_econtrados);
