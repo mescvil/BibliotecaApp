@@ -6,17 +6,16 @@ package vista;
 
 import excepciones.GuardaDatosException;
 import excepciones.SinEjemplaresException;
-import javax.swing.DefaultListModel;
+import modelo.Alquiler;
+import modelo.Libro;
+import modelo.Usuario;
+
+import javax.swing.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
-import modelo.Alquiler;
-import modelo.Libro;
-import modelo.Usuario;
+
 import static extras.Colores_Dimensiones.AZUL;
 import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
 

@@ -2,14 +2,14 @@
  */
 package vista;
 
-import static extras.Colores_Dimensiones.DIMENSION_EXTRA;
 import extras.ModeloAlquiler;
-import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.table.TableColumnModel;
 import modelo.Alquiler;
+
+import javax.swing.*;
+import javax.swing.table.TableColumnModel;
+import java.util.ArrayList;
+
+import static extras.Colores_Dimensiones.DIMENSION_EXTRA;
 
 /**
  *

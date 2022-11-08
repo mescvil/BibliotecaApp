@@ -3,22 +3,16 @@
 package accesoDatos;
 
 import excepciones.CargaDatosException;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import modelo.Alquiler;
+import modelo.Libro;
+import modelo.Usuario;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.Alquiler;
-import modelo.Libro;
-import modelo.Usuario;
 
 /**
  *

@@ -4,8 +4,9 @@
  */
 package strategy;
 
-import java.util.ArrayList;
 import modelo.Usuario;
+
+import java.util.ArrayList;
 
 /**
  *

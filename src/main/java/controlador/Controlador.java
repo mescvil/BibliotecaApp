@@ -4,28 +4,21 @@
  */
 package controlador;
 
-import strategy.BusquedaUsuarios;
-import strategy.BuscaUsuarioApellidos;
-import strategy.BuscaUsuarioAnio;
-import strategy.BuscaUsuarioNombre;
-import strategy.BuscaUsuarioTelf;
-import observer.ObservadorAlquiler;
-import excepciones.CargaDatosException;
-import excepciones.GuardaDatosException;
-import java.util.Map;
-import modelo.Alquiler;
-import modelo.Libro;
 import accesoDatos.Modelo;
 import accesoDatos.ModeloSimple;
+import excepciones.CargaDatosException;
+import excepciones.GuardaDatosException;
+import modelo.Alquiler;
+import modelo.Libro;
+import modelo.Usuario;
+import observer.ObservadorAlquiler;
+import observer.ObservadorLibros;
+import strategy.*;
+import vista.VistaPrincipal;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import modelo.Usuario;
-import observer.ObservadorLibros;
-import strategy.BuscaLibroAutor;
-import strategy.BuscaLibroPublicacion;
-import strategy.BuscaLibroTitulo;
-import strategy.BusquedaLibros;
-import vista.VistaPrincipal;
+import java.util.Map;
 
 /**
  *

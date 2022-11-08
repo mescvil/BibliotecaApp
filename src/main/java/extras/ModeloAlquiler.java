@@ -2,12 +2,14 @@
  */
 package extras;
 
-import java.util.ArrayList;
-import javax.swing.table.AbstractTableModel;
 import modelo.Alquiler;
-import static extras.Utilidades.gregorianCalendarToString;
+
+import javax.swing.table.AbstractTableModel;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+
+import static extras.Utilidades.gregorianCalendarToString;
 
 /**
  *

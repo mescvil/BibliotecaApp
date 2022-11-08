@@ -5,22 +5,13 @@
 package vista;
 
 import excepciones.GuardaDatosException;
-import java.util.GregorianCalendar;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-import java.util.Date;
-import javax.swing.JList;
 import modelo.Usuario;
-import static extras.Colores_Dimensiones.ROJO;
-import static extras.Colores_Dimensiones.VERDE;
-import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
-import static extras.Colores_Dimensiones.DIMENSION_GRANDE_BUSQUEDA;
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import javax.swing.JCheckBox;
-import javax.swing.JTextField;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+
+import static extras.Colores_Dimensiones.*;
 
 /**
  *
