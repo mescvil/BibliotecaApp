@@ -105,8 +105,8 @@ public class VistaPrincipal extends JFrame {
         }
     }
 
-    public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscarLibro) {
-        return controlador.buscaAlquileres(busqueda, buscarLibro);
+    public ArrayList<Alquiler> buscaAlquileres(String busqueda) {
+        return controlador.buscaAlquileres(busqueda);
     }
 
     public ArrayList<Usuario> buscaUsuarios(String busqueda) {
@@ -121,8 +121,8 @@ public class VistaPrincipal extends JFrame {
         controlador.buscaLibros(busqueda);
     }
 
-    public void buscaAlquileres(HashMap<String, String> busqueda, int tipo) {
-        controlador.buscaAlquileres(busqueda, tipo);
+    public void buscaAlquileres(HashMap<String, String> busqueda) {
+        controlador.buscaAlquileres(busqueda);
     }
 
     private void modeloDefectoUsuarios() {

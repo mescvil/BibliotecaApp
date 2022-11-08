@@ -22,7 +22,7 @@ public class Alquiler implements Serializable {
     // -------------- CONSTRUCTORES ---------------
     public Alquiler(Libro libro, Usuario persona) throws SinEjemplaresException {
         setLibro(libro);
-        setPersona(persona);
+        setUsuario(persona);
         creaAlquiler(n_ejemplares = 1);
 
         fecha_creacion = new GregorianCalendar();
@@ -32,7 +32,7 @@ public class Alquiler implements Serializable {
 
     public Alquiler(Libro libro, Usuario persona, GregorianCalendar fecha_limite, int n_ejemplares) throws SinEjemplaresException {
         setLibro(libro);
-        setPersona(persona);
+        setUsuario(persona);
         setFecha_limite(fecha_limite);
         creaAlquiler(n_ejemplares);
         setN_ejemplares(n_ejemplares);
@@ -66,7 +66,7 @@ public class Alquiler implements Serializable {
         if (!comparado.getLibro().equals(libro)) {
             return false;
         }
-        if (!comparado.getPersona().equals(persona)) {
+        if (!comparado.getUsuario().equals(persona)) {
             return false;
         }
         if (!comparado.getFecha_limite().equals(getFecha_limite())) {
@@ -88,11 +88,11 @@ public class Alquiler implements Serializable {
         this.libro = libro;
     }
 
-    public Usuario getPersona() {
+    public Usuario getUsuario() {
         return persona;
     }
 
-    public void setPersona(Usuario persona) {
+    public void setUsuario(Usuario persona) {
         this.persona = persona;
     }
 

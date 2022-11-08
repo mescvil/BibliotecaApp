@@ -28,9 +28,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     private Map<String, Libro> mapa_libros;
     private ArrayList<Alquiler> lista_alquileres;
 
-    public static final int BUSQUEDA_ALQUILER_LIBRO = 0;
-    public static final int BUSQUEDA_ALQUILER_PERSONA = 1;
-
     public Controlador() {
         modelo = new ModeloSimple();
         ((ModeloSimple) modelo).suscribirseLibro(this);
@@ -137,9 +134,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                 }
                 case "simple" ->
                     usuarios_econtrados = buscaUsuarios(busqueda.get(key));
-
-                default ->
-                    throw new AssertionError();
             }
             usuarios_aux.clear();
             usuarios_aux.addAll(usuarios_econtrados);
@@ -177,9 +171,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                 }
                 case "simple" ->
                     libros_econtrados = buscaLibroTitulo(busqueda.get(key));
-
-                default ->
-                    throw new AssertionError();
             }
             libros_aux.clear();
             libros_aux.addAll(libros_econtrados);
@@ -191,36 +182,32 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         vista.actualizaBusquedaLibros(buscaLibrosArray(busqueda));
     }
 
-    public void buscaAlquileres(HashMap<String, String> busqueda, int tipo) {
+    public void buscaAlquileres(HashMap<String, String> busqueda) {
         ArrayList<Alquiler> alquileres_encontrados = new ArrayList<>();
+        ArrayList<Libro> libros_econtrados = buscaLibrosArray(busqueda);
+        ArrayList<Usuario> usuarios_encontrados = buscaUsuariosArray(busqueda);
 
-        switch (tipo) {
-            case BUSQUEDA_ALQUILER_LIBRO -> {
-                for (Libro libro : buscaLibrosArray(busqueda)) {
-                    for (Alquiler alquiler : lista_alquileres) {
-                        if (alquiler.getLibro().equals(libro)) {
-                            alquileres_encontrados.add(alquiler);
-                        }
-                    }
+        for (Alquiler alquiler : lista_alquileres) {
+            Libro libro = alquiler.getLibro();
+            Usuario usuario = alquiler.getUsuario();
+
+            for (Usuario u : usuarios_encontrados) {
+                if (u.equals(usuario) && !alquileres_encontrados.contains(alquiler)) {
+                    alquileres_encontrados.add(alquiler);
                 }
             }
-            case BUSQUEDA_ALQUILER_PERSONA -> {
-                for (Usuario usuario : buscaUsuariosArray(busqueda)) {
-                    for (Alquiler alquiler : lista_alquileres) {
-                        if (alquiler.getPersona().equals(usuario)) {
-                            alquileres_encontrados.add(alquiler);
-                        }
-                    }
+
+            for (Libro l : libros_econtrados) {
+                if (l.equals(libro) && !alquileres_encontrados.contains(alquiler)) {
+                    alquileres_encontrados.add(alquiler);
                 }
             }
-            default ->
-                throw new AssertionError();
         }
 
         vista.actualizaBusquedaAlquiler(alquileres_encontrados);
     }
 
-    public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscaLibro) {
+    public ArrayList<Alquiler> buscaAlquileres(String busqueda) {
         ArrayList<Alquiler> alquileres_encontrados = new ArrayList<>();
 
         if (busqueda.isBlank()) {
@@ -228,19 +215,15 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         }
 
         for (Alquiler alquiler : lista_alquileres) {
+            String libro = alquiler.getLibro().toString();
+            String usuario = alquiler.getUsuario().toString();
 
-            if (!buscaLibro) {
-                Usuario usuario = alquiler.getPersona();
+            if (libro.toLowerCase().contains(busqueda) && !alquileres_encontrados.contains(alquiler)) {
+                alquileres_encontrados.add(alquiler);
+            }
 
-                if (usuario.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
-                    alquileres_encontrados.add(alquiler);
-                }
-            } else {
-                Libro libro = alquiler.getLibro();
-
-                if (libro.getTitulo().toLowerCase().contains(busqueda.toLowerCase())) {
-                    alquileres_encontrados.add(alquiler);
-                }
+            if (usuario.toLowerCase().contains(busqueda) && !alquileres_encontrados.contains(alquiler)) {
+                alquileres_encontrados.add(alquiler);
             }
         }
 

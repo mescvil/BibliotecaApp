@@ -79,9 +79,9 @@ public class ModeloAlquiler extends AbstractTableModel {
         long dias_entreFechas = ChronoUnit.DAYS.between(fecha_hoy.toInstant(), fecha_devolucion.toInstant());
 
         // DNI 
-        datos_alquileres[fila][0] = alquiler.getPersona().getDni();
+        datos_alquileres[fila][0] = alquiler.getUsuario().getDni();
         // NOMBRE COMPLETO
-        datos_alquileres[fila][1] = alquiler.getPersona().getNombreCompleto();
+        datos_alquileres[fila][1] = alquiler.getUsuario().getNombreCompleto();
         // ISBN
         datos_alquileres[fila][2] = alquiler.getLibro().getIsbn();
         // TITULO

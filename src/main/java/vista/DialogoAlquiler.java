@@ -168,8 +168,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         boton_busqueda = new javax.swing.JButton();
         boton_limpiar = new javax.swing.JButton();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(32767, 0));
-        radial_persona = new javax.swing.JRadioButton();
-        radial_libro = new javax.swing.JRadioButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
         check_avanzada = new javax.swing.JCheckBox();
         panel_busquedaUsuario = new javax.swing.JPanel();
@@ -283,25 +281,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         });
         panel_busquedaSimple.add(boton_limpiar);
         panel_busquedaSimple.add(filler5);
-
-        grupo_buscador.add(radial_persona);
-        radial_persona.setSelected(true);
-        radial_persona.setText("Buscar personas");
-        radial_persona.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radial_personaActionPerformed(evt);
-            }
-        });
-        panel_busquedaSimple.add(radial_persona);
-
-        grupo_buscador.add(radial_libro);
-        radial_libro.setText("Buscar libros");
-        radial_libro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                radial_libroActionPerformed(evt);
-            }
-        });
-        panel_busquedaSimple.add(radial_libro);
         panel_busquedaSimple.add(filler4);
 
         check_avanzada.setText("Avanzada");
@@ -563,7 +542,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
         if (!check_avanzada.isSelected()) {
             String texto = campo_busquedaSimple.getText();
-            ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto, radial_libro.isSelected());
+            ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
 
             if (alquileres_encontrados.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Sin resultados",
@@ -575,41 +554,30 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             }
         } else {
             HashMap<String, String> busqueda = new HashMap<>();
-            int tipo = 0;
 
-            if (radial_libro.isSelected()) {
-
-                if (chek_titulo.isSelected()) {
-                    busqueda.put("titulo", campo_busquedaTitulo.getText());
-                }
-                if (check_autor.isSelected()) {
-                    busqueda.put("autor", campo_busquedaAutor.getText());
-                }
-                if (check_publicacion.isSelected()) {
-                    busqueda.put("publicacion", String.valueOf(dateChooser_busquedaLibro.getYear()));
-                }
-
-                tipo = controlador.Controlador.BUSQUEDA_ALQUILER_LIBRO;
-
-            } else if (radial_persona.isSelected()) {
-
-                if (chek_nombre.isSelected()) {
-                    busqueda.put("nombre", campo_busquedaNombre.getText());
-                }
-                if (check_apellidos.isSelected()) {
-                    busqueda.put("apellidos", campo_busquedaApellidos.getText());
-                }
-                if (check_telefono.isSelected()) {
-                    busqueda.put("telefono", campo_busquedaTelefono.getText());
-                }
-                if (check_nacimiento.isSelected()) {
-                    busqueda.put("anio", String.valueOf(dateChooser_busquedaUsuario.getYear()));
-                }
-
-                tipo = controlador.Controlador.BUSQUEDA_ALQUILER_PERSONA;
+            if (chek_titulo.isSelected()) {
+                busqueda.put("titulo", campo_busquedaTitulo.getText());
+            }
+            if (check_autor.isSelected()) {
+                busqueda.put("autor", campo_busquedaAutor.getText());
+            }
+            if (check_publicacion.isSelected()) {
+                busqueda.put("publicacion", String.valueOf(dateChooser_busquedaLibro.getYear()));
+            }
+            if (chek_nombre.isSelected()) {
+                busqueda.put("nombre", campo_busquedaNombre.getText());
+            }
+            if (check_apellidos.isSelected()) {
+                busqueda.put("apellidos", campo_busquedaApellidos.getText());
+            }
+            if (check_telefono.isSelected()) {
+                busqueda.put("telefono", campo_busquedaTelefono.getText());
+            }
+            if (check_nacimiento.isSelected()) {
+                busqueda.put("anio", String.valueOf(dateChooser_busquedaUsuario.getYear()));
             }
 
-            vista_padre.buscaAlquileres(busqueda, tipo);
+            vista_padre.buscaAlquileres(busqueda);
         }
     }//GEN-LAST:event_boton_busquedaActionPerformed
 
@@ -651,7 +619,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         ModeloAlquiler modelo = (ModeloAlquiler) tabla_alquileres.getModel();
         Alquiler alquiler_seleccionado = modelo.getAlquiler(fila);
 
-        vista_padre.abreDialogoVerUsuarios(alquiler_seleccionado.getPersona());
+        vista_padre.abreDialogoVerUsuarios(alquiler_seleccionado.getUsuario());
     }//GEN-LAST:event_popMenu_verUsuarioActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -704,8 +672,8 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         if (check_avanzada.isSelected()) {
             this.setPreferredSize(DIMENSION_EXTRA_BUSQUEDA);
             campo_busquedaSimple.setVisible(false);
-            panel_busquedaUsuario.setVisible(radial_persona.isSelected());
-            panel_busquedaLibro.setVisible(radial_libro.isSelected());
+            panel_busquedaUsuario.setVisible(true);
+            panel_busquedaLibro.setVisible(true);
 
         } else {
             panel_busquedaUsuario.setVisible(false);
@@ -731,7 +699,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     }//GEN-LAST:event_campo_busquedaAutorcampoBusquedaClicked
 
     private void check_publicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_publicacionActionPerformed
-        dateChooser_busquedaUsuario.setEnabled(check_publicacion.isSelected());
+        dateChooser_busquedaLibro.setEnabled(check_publicacion.isSelected());
     }//GEN-LAST:event_check_publicacionActionPerformed
 
     private void check_autorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_autorActionPerformed
@@ -741,19 +709,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void chek_tituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chek_tituloActionPerformed
         campo_busquedaTitulo.setEnabled(chek_titulo.isSelected());
     }//GEN-LAST:event_chek_tituloActionPerformed
-
-    private void radial_personaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radial_personaActionPerformed
-        if (check_avanzada.isSelected()) {
-            panel_busquedaLibro.setVisible(false);
-            panel_busquedaUsuario.setVisible(true);
-        }
-    }//GEN-LAST:event_radial_personaActionPerformed
-
-    private void radial_libroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radial_libroActionPerformed
-        if (check_avanzada.isSelected()) {
-            panel_busquedaLibro.setVisible(true);
-            panel_busquedaUsuario.setVisible(false);
-        }    }//GEN-LAST:event_radial_libroActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -787,8 +742,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private javax.swing.JMenuItem popMenu_verLibro;
     private javax.swing.JMenuItem popMenu_verUsuario;
     private javax.swing.JPopupMenu pop_alquileres;
-    private javax.swing.JRadioButton radial_libro;
-    private javax.swing.JRadioButton radial_persona;
     private javax.swing.JTable tabla_alquileres;
     // End of variables declaration//GEN-END:variables
 }
