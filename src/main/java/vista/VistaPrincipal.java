@@ -278,7 +278,7 @@ public class VistaPrincipal extends JFrame {
         menu_salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca App 1.2.1 - Hyperion");
+        setTitle("Biblioteca App 1.3 - Hyperion");
         setMinimumSize(new java.awt.Dimension(700, 425));
         setPreferredSize(new java.awt.Dimension(600, 500));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
