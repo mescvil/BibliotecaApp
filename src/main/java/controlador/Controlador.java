@@ -22,6 +22,7 @@ import java.util.HashMap;
 import modelo.Usuario;
 import observer.ObservadorLibros;
 import strategy.BuscaLibroAutor;
+import strategy.BuscaLibroPublicacion;
 import strategy.BuscaLibroTitulo;
 import strategy.BusquedaLibros;
 import vista.VistaPrincipal;
@@ -195,8 +196,8 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                     libros_econtrados = contexto.busca(libros_aux, (String) busqueda.get(key));
                 }
                 case "publicacion" -> {
-                    // Contexto
-                    //libros_econtrados = contexto.busca(libros_aux, (String) busqueda.get(key));
+                    contexto = new BusquedaLibros(new BuscaLibroPublicacion());
+                    libros_econtrados = contexto.busca(libros_aux, (String) busqueda.get(key));
                 }
                 case "simple" -> {
                     libros_econtrados = buscaLibroTitulo((String) busqueda.get(key));
