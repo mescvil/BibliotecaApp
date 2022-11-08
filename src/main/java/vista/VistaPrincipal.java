@@ -113,12 +113,16 @@ public class VistaPrincipal extends JFrame {
         return controlador.buscaUsuarios(busqueda);
     }
 
-    public void buscaUsuarios(HashMap busqueda) {
+    public void buscaUsuarios(HashMap<String, String> busqueda) {
         controlador.buscaUsuarios(busqueda);
     }
 
-    public void buscaLibros(HashMap busqueda) {
+    public void buscaLibros(HashMap<String, String> busqueda) {
         controlador.buscaLibros(busqueda);
+    }
+
+    public void buscaAlquileres(HashMap<String, String> busqueda, int tipo) {
+        controlador.buscaAlquileres(busqueda, tipo);
     }
 
     private void modeloDefectoUsuarios() {
@@ -208,6 +212,10 @@ public class VistaPrincipal extends JFrame {
 
     public void actualizaBusquedaLibros(ArrayList<Libro> libros_encontrados) {
         dialogoLibro.actualizaListaLibros(libros_encontrados);
+    }
+
+    public void actualizaBusquedaAlquiler(ArrayList<Alquiler> alquileres_econtrados) {
+        dialogoAlquileres.actualizaTablaBusqueda(alquileres_econtrados);
     }
 
     /*

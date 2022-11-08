@@ -28,6 +28,9 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     private Map<String, Libro> mapa_libros;
     private ArrayList<Alquiler> lista_alquileres;
 
+    public static final int BUSQUEDA_ALQUILER_LIBRO = 0;
+    public static final int BUSQUEDA_ALQUILER_PERSONA = 1;
+
     public Controlador() {
         modelo = new ModeloSimple();
         ((ModeloSimple) modelo).suscribirseLibro(this);
@@ -105,7 +108,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         return usuarios_encontrados;
     }
 
-    public void buscaUsuarios(HashMap<String, String> busqueda) {
+    private ArrayList<Usuario> buscaUsuariosArray(HashMap<String, String> busqueda) {
         BusquedaUsuarios contexto;
 
         ArrayList<Usuario> usuarios_econtrados = new ArrayList<>();
@@ -140,12 +143,16 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             }
             usuarios_aux.clear();
             usuarios_aux.addAll(usuarios_econtrados);
-        }
 
-        vista.actualizaBusquedaUsuarios(usuarios_econtrados);
+        }
+        return usuarios_econtrados;
     }
 
-    public void buscaLibros(HashMap<String, String> busqueda) {
+    public void buscaUsuarios(HashMap<String, String> busqueda) {
+        vista.actualizaBusquedaUsuarios(buscaUsuariosArray(busqueda));
+    }
+
+    private ArrayList<Libro> buscaLibrosArray(HashMap<String, String> busqueda) {
         BusquedaLibros contexto;
 
         ArrayList<Libro> libros_econtrados = new ArrayList<>();
@@ -177,8 +184,40 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             libros_aux.clear();
             libros_aux.addAll(libros_econtrados);
         }
+        return libros_econtrados;
+    }
 
-        vista.actualizaBusquedaLibros(libros_econtrados);
+    public void buscaLibros(HashMap<String, String> busqueda) {
+        vista.actualizaBusquedaLibros(buscaLibrosArray(busqueda));
+    }
+
+    public void buscaAlquileres(HashMap<String, String> busqueda, int tipo) {
+        ArrayList<Alquiler> alquileres_encontrados = new ArrayList<>();
+
+        switch (tipo) {
+            case BUSQUEDA_ALQUILER_LIBRO -> {
+                for (Libro libro : buscaLibrosArray(busqueda)) {
+                    for (Alquiler alquiler : lista_alquileres) {
+                        if (alquiler.getLibro().equals(libro)) {
+                            alquileres_encontrados.add(alquiler);
+                        }
+                    }
+                }
+            }
+            case BUSQUEDA_ALQUILER_PERSONA -> {
+                for (Usuario usuario : buscaUsuariosArray(busqueda)) {
+                    for (Alquiler alquiler : lista_alquileres) {
+                        if (alquiler.getPersona().equals(usuario)) {
+                            alquileres_encontrados.add(alquiler);
+                        }
+                    }
+                }
+            }
+            default ->
+                throw new AssertionError();
+        }
+
+        vista.actualizaBusquedaAlquiler(alquileres_encontrados);
     }
 
     public ArrayList<Alquiler> buscaAlquileres(String busqueda, boolean buscaLibro) {
