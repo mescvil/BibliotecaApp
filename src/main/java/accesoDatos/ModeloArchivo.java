@@ -15,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Escoz
  */
 public class ModeloArchivo implements Modelo {
@@ -25,7 +24,7 @@ public class ModeloArchivo implements Modelo {
     private final static String RUTA_ALQUILER = "DatosBiblioteca\\alquileres.dat";
 
     @Override
-    public Map cargaLibros() throws CargaDatosException {
+    public Map<String, Libro> cargaLibros() throws CargaDatosException {
         HashMap<String, Libro> mapa_libros = new HashMap<>();
         FileInputStream inputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -49,7 +48,7 @@ public class ModeloArchivo implements Modelo {
                 Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex1);
             }
 
-        } catch (EOFException ex) {
+        } catch (EOFException ignored) {
         } catch (IOException | ClassNotFoundException ex) {
             throw new CargaDatosException("LIBRO");
 
@@ -70,7 +69,7 @@ public class ModeloArchivo implements Modelo {
     }
 
     @Override
-    public Map cargaPersonas() throws CargaDatosException {
+    public Map<String, Usuario> cargaPersonas() throws CargaDatosException {
         HashMap<String, Usuario> mapa_usuario = new HashMap<>();
         FileInputStream inputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -94,7 +93,7 @@ public class ModeloArchivo implements Modelo {
                 Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex1);
             }
 
-        } catch (EOFException ex) {
+        } catch (EOFException ignored) {
         } catch (IOException | ClassNotFoundException ex) {
             throw new CargaDatosException("USUARIO");
 
@@ -114,7 +113,7 @@ public class ModeloArchivo implements Modelo {
     }
 
     @Override
-    public ArrayList cargaAlquileres() throws CargaDatosException {
+    public ArrayList<Alquiler> cargaAlquileres() throws CargaDatosException {
         ArrayList<Alquiler> lista_alquileres = new ArrayList<>();
         FileInputStream inputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -134,7 +133,7 @@ public class ModeloArchivo implements Modelo {
                 Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex1);
             }
 
-        } catch (EOFException ex) {
+        } catch (EOFException ignored) {
         } catch (IOException | ClassNotFoundException ex) {
             throw new CargaDatosException("ALQUILER");
 
@@ -154,8 +153,7 @@ public class ModeloArchivo implements Modelo {
     }
 
     @Override
-    public void guardaLibros(Map libros) {
-        ArrayList<Libro> lista_libros = new ArrayList<>();
+    public void guardaLibros(Map<String, Libro> libros) {
         FileOutputStream outputStream = null;
         ObjectOutputStream objectOutputStream = null;
 
@@ -163,9 +161,7 @@ public class ModeloArchivo implements Modelo {
             outputStream = new FileOutputStream(RUTA_LIBROS);
             objectOutputStream = new ObjectOutputStream(outputStream);
 
-            for (Object o : libros.values()) {
-                lista_libros.add((Libro) o);
-            }
+            ArrayList<Libro> lista_libros = new ArrayList<>(libros.values());
 
             objectOutputStream.writeObject(lista_libros);
 
@@ -188,8 +184,7 @@ public class ModeloArchivo implements Modelo {
     }
 
     @Override
-    public void guardaPersonas(Map personas) {
-        ArrayList<Usuario> lista_usuarios = new ArrayList<>();
+    public void guardaPersonas(Map<String, Usuario> personas) {
         FileOutputStream outputStream = null;
         ObjectOutputStream objectOutputStream = null;
 
@@ -197,14 +192,10 @@ public class ModeloArchivo implements Modelo {
             outputStream = new FileOutputStream(RUTA_USUARIOS);
             objectOutputStream = new ObjectOutputStream(outputStream);
 
-            for (Object o : personas.values()) {
-                lista_usuarios.add((Usuario) o);
-            }
+            ArrayList<Usuario> lista_usuarios = new ArrayList<>(personas.values());
 
             objectOutputStream.writeObject(lista_usuarios);
 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -232,8 +223,6 @@ public class ModeloArchivo implements Modelo {
 
             objectOutputStream.writeObject(alquileres);
 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -250,14 +239,11 @@ public class ModeloArchivo implements Modelo {
         }
     }
 
-    private boolean creaCarpetaDatos() {
+    private void creaCarpetaDatos() {
         File carpeta_datos = new File("DatosBiblioteca");
 
         if (!carpeta_datos.exists()) {
             carpeta_datos.mkdir();
-            return true;
-        } else {
-            return false;
         }
     }
 }

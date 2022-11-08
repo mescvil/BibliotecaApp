@@ -10,7 +10,6 @@ import controlador.Controlador;
 import javax.swing.*;
 
 /**
- *
  * @author Escoz
  */
 public class BibliotecaApp {
@@ -26,7 +25,7 @@ public class BibliotecaApp {
             ex.printStackTrace();
         }
 
-        Controlador controlador = new Controlador();
+        new Controlador();
 
     }
 }

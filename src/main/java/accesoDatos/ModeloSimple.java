@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package accesoDatos;
 
 import excepciones.SinEjemplaresException;
@@ -13,13 +9,9 @@ import observer.EventoLibro;
 import observer.ObservadorAlquiler;
 import observer.ObservadorLibros;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- *
  * @author Escoz
  */
 public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
@@ -27,8 +19,8 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
     private HashMap<String, Libro> libros;
     private HashMap<String, Usuario> personas;
 
-    private ArrayList<ObservadorLibros> lista_observadoresLibro;
-    private ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
+    private final ArrayList<ObservadorLibros> lista_observadoresLibro;
+    private final ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
 
     public ModeloSimple() {
         libros = new HashMap<>();
@@ -38,9 +30,9 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
     }
 
     @Override
-    public HashMap<String, Libro> cargaLibros() {
+    public Map<String, Libro> cargaLibros() {
         Libro libro;
-        HashMap<String, Libro> mapa_libros = new HashMap();
+        HashMap<String, Libro> mapa_libros = new HashMap<>();
 
         libro = new Libro("0000000", "La Fortaleza Digital", "Dan Brown", "1998", 1);
         mapa_libros.put(libro.getIsbn(), libro);
@@ -60,21 +52,21 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
     public HashMap<String, Usuario> cargaPersonas() {
 
         Usuario persona;
-        HashMap<String, Usuario> mapa_personas = new HashMap();
+        HashMap<String, Usuario> mapa_personas = new HashMap<>();
 
         persona = new Usuario("26512969H", "Miguel", "Escoz", "Vilches", "630919015",
-                "mescvil@gmail.com", new GregorianCalendar(1997, 4, 28));
+                "mescvil@gmail.com", new GregorianCalendar(1997, Calendar.MAY, 28));
         mapa_personas.put(persona.getDni(), persona);
 
         persona = new Usuario("00000000A", "Jose Luis", "Torre", "Alva", "953000000",
-                "admin@google.es", new GregorianCalendar(1900, 1, 1));
+                "admin@google.es", new GregorianCalendar(1900, Calendar.FEBRUARY, 1));
         mapa_personas.put(persona.getDni(), persona);
 
         return this.personas = mapa_personas;
     }
 
     @Override
-    public ArrayList cargaAlquileres() {
+    public ArrayList<Alquiler> cargaAlquileres() {
         try {
             ArrayList<Alquiler> alquileres = new ArrayList<>();
 
@@ -86,16 +78,16 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
         } catch (SinEjemplaresException ex) {
             ex.printStackTrace();
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override
-    public void guardaLibros(Map libros) {
+    public void guardaLibros(Map<String, Libro> libros) {
         notificaCambioLibro();
     }
 
     @Override
-    public void guardaPersonas(Map libros) {
+    public void guardaPersonas(Map<String, Usuario> usuario) {
         // TODO
     }
 

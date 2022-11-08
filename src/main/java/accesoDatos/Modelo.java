@@ -1,31 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package accesoDatos;
 
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
 import modelo.Alquiler;
+import modelo.Libro;
+import modelo.Usuario;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
- *
  * @author Escoz
  */
-public abstract interface Modelo {
+public interface Modelo {
 
-    public abstract Map cargaLibros() throws CargaDatosException;
+    Map<String, Libro> cargaLibros() throws CargaDatosException;
 
-    public abstract Map cargaPersonas() throws CargaDatosException;
+    Map<String, Usuario> cargaPersonas() throws CargaDatosException;
 
-    public abstract ArrayList cargaAlquileres() throws CargaDatosException;
+    ArrayList<Alquiler> cargaAlquileres() throws CargaDatosException;
 
-    public abstract void guardaLibros(Map libros) throws GuardaDatosException;
+    void guardaLibros(Map<String, Libro> libros) throws GuardaDatosException;
 
-    public abstract void guardaPersonas(Map personas) throws GuardaDatosException;
+    void guardaPersonas(Map<String, Usuario> personas) throws GuardaDatosException;
 
-    public abstract void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException;
+    void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException;
 }

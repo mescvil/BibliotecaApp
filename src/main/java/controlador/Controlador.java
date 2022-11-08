@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controlador;
 
 import accesoDatos.Modelo;
@@ -21,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Escoz
  */
 public class Controlador implements ObservadorLibros, ObservadorAlquiler {
@@ -29,8 +24,8 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     private final Modelo modelo;
     private final VistaPrincipal vista;
 
-    private Map mapa_usuarios;
-    private Map mapa_libros;
+    private Map<String, Usuario> mapa_usuarios;
+    private Map<String, Libro> mapa_libros;
     private ArrayList<Alquiler> lista_alquileres;
 
     public Controlador() {
@@ -58,13 +53,8 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         modelo.guardaPersonas(mapa_usuarios);
     }
 
-    public ArrayList getLibros() {
-        ArrayList<Libro> libros = new ArrayList<>();
-
-        for (Object object : mapa_libros.values()) {
-            libros.add((Libro) object);
-        }
-        return libros;
+    public ArrayList<Libro> getLibros() {
+        return new ArrayList<>(mapa_libros.values());
     }
 
     public ArrayList<Libro> buscaLibroTitulo(String busqueda) {
@@ -74,12 +64,11 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             return libros_encontrados;
         }
 
-        for (Object object : mapa_libros.values()) {
-            Libro libro_object = (Libro) object;
-            String titulo = libro_object.getTitulo();
+        for (Libro object : mapa_libros.values()) {
+            String titulo = object.getTitulo();
 
             if ((titulo.toLowerCase()).contains(busqueda.toLowerCase())) {
-                libros_encontrados.add(libro_object);
+                libros_encontrados.add(object);
             }
         }
 
@@ -89,12 +78,11 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     public Libro getInfoLibro(String titulo) {
         Libro libro = null;
 
-        for (Object object : mapa_libros.values()) {
-            Libro libro_object = (Libro) object;
-            String nombre = libro_object.getTitulo();
+        for (Libro object : mapa_libros.values()) {
+            String nombre = object.getTitulo();
 
             if (nombre.equals(titulo)) {
-                libro = libro_object;
+                libro = object;
             }
         }
 
@@ -108,54 +96,46 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             return usuarios_encontrados;
         }
 
-        for (Object o : mapa_usuarios.values()) {
-            Usuario usuario = (Usuario) o;
+        for (Usuario o : mapa_usuarios.values()) {
 
-            if (usuario.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
-                usuarios_encontrados.add(usuario);
+            if (o.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
+                usuarios_encontrados.add(o);
             }
         }
 
         return usuarios_encontrados;
     }
 
-    public void buscaUsuarios(HashMap busqueda) {
+    public void buscaUsuarios(HashMap<String, String> busqueda) {
         BusquedaUsuarios contexto;
 
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-        ArrayList<Usuario> usuarios_aux = new ArrayList<>();
         ArrayList<Usuario> usuarios_econtrados = new ArrayList<>();
 
-        for (Object o : mapa_usuarios.values()) {
-            Usuario u = (Usuario) o;
-            usuarios.add(u);
-        }
-        usuarios_aux.addAll(usuarios);
+        ArrayList<Usuario> usuarios = new ArrayList<>(mapa_usuarios.values());
+        ArrayList<Usuario> usuarios_aux = new ArrayList<>(usuarios);
 
-        for (Object key : busqueda.keySet()) {
+        for (String key : busqueda.keySet()) {
 
-            switch ((String) key) {
+            switch (key) {
                 case "nombre" -> {
                     contexto = new BusquedaUsuarios(new BuscaUsuarioNombre());
-                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                    usuarios_econtrados = contexto.busca(usuarios_aux, busqueda.get(key));
                 }
                 case "apellidos" -> {
                     contexto = new BusquedaUsuarios(new BuscaUsuarioApellidos());
-                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                    usuarios_econtrados = contexto.busca(usuarios_aux, busqueda.get(key));
                 }
                 case "telefono" -> {
                     contexto = new BusquedaUsuarios(new BuscaUsuarioTelf());
-                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                    usuarios_econtrados = contexto.busca(usuarios_aux, busqueda.get(key));
                 }
                 case "anio" -> {
                     contexto = new BusquedaUsuarios(new BuscaUsuarioAnio());
-                    usuarios_econtrados = contexto.busca(usuarios_aux, (String) busqueda.get(key));
+                    usuarios_econtrados = contexto.busca(usuarios_aux, busqueda.get(key));
                 }
-                case "simple" -> {
-                    usuarios_econtrados = buscaUsuarios((String) busqueda.get(key));
-                }
-                default ->
-                    throw new AssertionError();
+                case "simple" -> usuarios_econtrados = buscaUsuarios(busqueda.get(key));
+
+                default -> throw new AssertionError();
             }
             usuarios_aux.clear();
             usuarios_aux.addAll(usuarios_econtrados);
@@ -164,39 +144,32 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         vista.actualizaBusquedaUsuarios(usuarios_econtrados);
     }
 
-    public void buscaLibros(HashMap busqueda) {
+    public void buscaLibros(HashMap<String, String> busqueda) {
         BusquedaLibros contexto;
 
-        ArrayList<Libro> libros = new ArrayList<>();
-        ArrayList<Libro> libros_aux = new ArrayList<>();
         ArrayList<Libro> libros_econtrados = new ArrayList<>();
 
-        for (Object o : mapa_libros.values()) {
-            Libro l = (Libro) o;
-            libros.add(l);
-        }
-        libros_aux.addAll(libros);
+        ArrayList<Libro> libros = new ArrayList<>(mapa_libros.values());
+        ArrayList<Libro> libros_aux = new ArrayList<>(libros);
 
-        for (Object key : busqueda.keySet()) {
+        for (String key : busqueda.keySet()) {
 
-            switch ((String) key) {
+            switch (key) {
                 case "titulo" -> {
                     contexto = new BusquedaLibros(new BuscaLibroTitulo());
-                    libros_econtrados = contexto.busca(libros_aux, (String) busqueda.get(key));
+                    libros_econtrados = contexto.busca(libros_aux, busqueda.get(key));
                 }
                 case "autor" -> {
                     contexto = new BusquedaLibros(new BuscaLibroAutor());
-                    libros_econtrados = contexto.busca(libros_aux, (String) busqueda.get(key));
+                    libros_econtrados = contexto.busca(libros_aux, busqueda.get(key));
                 }
                 case "publicacion" -> {
                     contexto = new BusquedaLibros(new BuscaLibroPublicacion());
-                    libros_econtrados = contexto.busca(libros_aux, (String) busqueda.get(key));
+                    libros_econtrados = contexto.busca(libros_aux, busqueda.get(key));
                 }
-                case "simple" -> {
-                    libros_econtrados = buscaLibroTitulo((String) busqueda.get(key));
-                }
-                default ->
-                    throw new AssertionError();
+                case "simple" -> libros_econtrados = buscaLibroTitulo(busqueda.get(key));
+
+                default -> throw new AssertionError();
             }
             libros_aux.clear();
             libros_aux.addAll(libros_econtrados);
@@ -257,13 +230,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     }
 
     public ArrayList<Usuario> getPersonas() {
-
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-        for (Object o : mapa_usuarios.values()) {
-            usuarios.add((Usuario) o);
-        }
-
-        return usuarios;
+        return new ArrayList<>(mapa_usuarios.values());
     }
 
     public void guardaLibro(Libro libro) throws GuardaDatosException {
