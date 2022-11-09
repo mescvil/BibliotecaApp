@@ -245,7 +245,7 @@ public class VistaPrincipal extends JFrame {
         panel_datos = new javax.swing.JPanel();
         panel_listadoLibros = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lista_libros = new JList<Libro>();
+        lista_libros = new javax.swing.JList<>();
         panel_detallesLibro = new javax.swing.JPanel();
         label_isbn = new javax.swing.JLabel();
         campo_isbn = new javax.swing.JTextField();
@@ -260,7 +260,7 @@ public class VistaPrincipal extends JFrame {
         label_fecha = new javax.swing.JLabel();
         panel_datosUsuario = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lista_alquileres = new JList<Object>();
+        lista_alquileres = new javax.swing.JList<>();
         boton_devolucion = new javax.swing.JButton();
         barraMenu = new javax.swing.JMenuBar();
         menu_archivo = new javax.swing.JMenu();
@@ -289,7 +289,7 @@ public class VistaPrincipal extends JFrame {
         toolBar.setRollover(true);
         toolBar.setMinimumSize(new java.awt.Dimension(137, 44));
 
-        boton_listaLibros.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/lista_libros.png")))); // NOI18N
+        boton_listaLibros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lista_libros.png"))); // NOI18N
         boton_listaLibros.setToolTipText("Listado de libros");
         boton_listaLibros.setFocusable(false);
         boton_listaLibros.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -301,7 +301,7 @@ public class VistaPrincipal extends JFrame {
         });
         toolBar.add(boton_listaLibros);
 
-        boton_aniadeLibro.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/add_libro.png")))); // NOI18N
+        boton_aniadeLibro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/add_libro.png"))); // NOI18N
         boton_aniadeLibro.setToolTipText("Añadir un libro");
         boton_aniadeLibro.setFocusable(false);
         boton_aniadeLibro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -316,7 +316,7 @@ public class VistaPrincipal extends JFrame {
         jSeparator1.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 5, 0, 5));
         toolBar.add(jSeparator1);
 
-        boton_verUsuarios.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/lista_usuarios.png")))); // NOI18N
+        boton_verUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lista_usuarios.png"))); // NOI18N
         boton_verUsuarios.setToolTipText("Lista de usuarios");
         boton_verUsuarios.setFocusable(false);
         boton_verUsuarios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -328,7 +328,7 @@ public class VistaPrincipal extends JFrame {
         });
         toolBar.add(boton_verUsuarios);
 
-        boton_aniadeUsuario.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/add_usuario.png")))); // NOI18N
+        boton_aniadeUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/add_usuario.png"))); // NOI18N
         boton_aniadeUsuario.setToolTipText("Añadir un usuario");
         boton_aniadeUsuario.setFocusable(false);
         boton_aniadeUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -341,7 +341,7 @@ public class VistaPrincipal extends JFrame {
         toolBar.add(boton_aniadeUsuario);
         toolBar.add(jSeparator2);
 
-        boton_alquileres.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/lista_alquileres.png")))); // NOI18N
+        boton_alquileres.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lista_alquileres.png"))); // NOI18N
         boton_alquileres.setToolTipText("Listado de alquileres");
         boton_alquileres.setFocusable(false);
         boton_alquileres.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -354,7 +354,7 @@ public class VistaPrincipal extends JFrame {
         toolBar.add(boton_alquileres);
         toolBar.add(filler1);
 
-        logo.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/logo.png")))); // NOI18N
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
         toolBar.add(logo);
 
         panel_toolBar.add(toolBar);
@@ -509,7 +509,7 @@ public class VistaPrincipal extends JFrame {
 
         boton_nuevoPrestamo.setBackground(new java.awt.Color(51, 153, 255));
         boton_nuevoPrestamo.setForeground(new java.awt.Color(255, 255, 255));
-        boton_nuevoPrestamo.setText("Nuevo préstamo");
+        boton_nuevoPrestamo.setText("Nuevo prestamo");
         boton_nuevoPrestamo.setEnabled(false);
         boton_nuevoPrestamo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -857,8 +857,8 @@ public class VistaPrincipal extends JFrame {
     private javax.swing.JLabel label_fecha;
     private javax.swing.JLabel label_isbn;
     private javax.swing.JLabel label_titulo;
-    private JList<Object> lista_alquileres;
-    private JList<Libro> lista_libros;
+    private javax.swing.JList<Object> lista_alquileres;
+    private javax.swing.JList<Libro> lista_libros;
     private javax.swing.JLabel logo;
     private javax.swing.JMenu menu_ajustes;
     private javax.swing.JMenu menu_alquileres;

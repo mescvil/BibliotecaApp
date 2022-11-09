@@ -8,6 +8,8 @@ import java.awt.*;
 import java.util.*;
 
 import static extras.Colores_Dimensiones.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * @author Escoz
@@ -30,6 +32,15 @@ public class DialogoPersona extends javax.swing.JDialog {
         this.lista_Usuarios.setModel(this.modelo_lista = modelo_lista);
         modelo_busqueda = new DefaultListModel<>();
 
+        aniadeListeners();
+    }
+
+    private void aniadeListeners() {
+        for (Component component : panel_busquedaAvanzada.getComponents()) {
+            if (component instanceof JTextField) {
+                ((JTextField) component).getDocument().addDocumentListener(new listenerCampos());
+            }
+        }
     }
 
     public void muestraModoAniadir() {
@@ -147,6 +158,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     }
 
     public void actualizaListaUsuarios(ArrayList<Usuario> usuarios_encontrados) {
+        modelo_busqueda.clear();
 
         if (!usuarios_encontrados.isEmpty()) {
             modelo_busqueda.clear();
@@ -154,10 +166,8 @@ public class DialogoPersona extends javax.swing.JDialog {
             lista_Usuarios.setModel(modelo_busqueda);
             boton_limpiar.setVisible(true);
 
-        } else {
-            JOptionPane.showMessageDialog(this, "Sin resultados",
-                    "Búsqueda de usuarios", JOptionPane.INFORMATION_MESSAGE);
         }
+
         pack();
         repaint();
     }
@@ -241,7 +251,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_nombre = new javax.swing.JTextField();
         dateChooser_nacimiento = new com.toedter.calendar.JDateChooser();
         panel_lista = new javax.swing.JScrollPane();
-        lista_Usuarios = new JList<Usuario>();
+        lista_Usuarios = new javax.swing.JList<>();
         panel_busquedaAvanzada = new javax.swing.JPanel();
         campo_busquedaNombre = new javax.swing.JTextField();
         campo_busquedaTelefono = new javax.swing.JTextField();
@@ -353,7 +363,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         getContentPane().add(campo_email, gridBagConstraints);
 
         boton_multiple.setForeground(new java.awt.Color(51, 51, 51));
-        boton_multiple.setText("Botón");
+        boton_multiple.setText("Boton");
         boton_multiple.setPreferredSize(new java.awt.Dimension(72, 25));
         boton_multiple.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -419,17 +429,8 @@ public class DialogoPersona extends javax.swing.JDialog {
         panel_lista.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios"));
         panel_lista.setPreferredSize(new java.awt.Dimension(100, 146));
 
-        lista_Usuarios.setModel(new AbstractListModel<>() {
-            Usuario[] strings = {};
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public Usuario getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        lista_Usuarios.setModel(new DefaultListModel<Usuario>()
+        );
         lista_Usuarios.setMinimumSize(new java.awt.Dimension(50, 90));
         lista_Usuarios.setPreferredSize(new java.awt.Dimension(50, 90));
         lista_Usuarios.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -469,7 +470,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         panel_busquedaAvanzada.add(campo_busquedaNombre, gridBagConstraints);
 
-        campo_busquedaTelefono.setText("Introduce un teléfono...");
+        campo_busquedaTelefono.setText("Introduce un telefono...");
         campo_busquedaTelefono.setToolTipText("Busca un usuario por teléfono");
         campo_busquedaTelefono.setPreferredSize(new java.awt.Dimension(250, 22));
         campo_busquedaTelefono.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -580,7 +581,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         panel_busquedaSimple.setLayout(new javax.swing.BoxLayout(panel_busquedaSimple, javax.swing.BoxLayout.LINE_AXIS));
         panel_busquedaSimple.add(filler2);
 
-        campo_busquedaSimple.setText("Introduce tu búsqueda...");
+        campo_busquedaSimple.setText("Introduce tu buqueda...");
         campo_busquedaSimple.setToolTipText("Busca un usuario por nombre o apellidos");
         campo_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 27));
         campo_busquedaSimple.setMinimumSize(new java.awt.Dimension(64, 27));
@@ -593,7 +594,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         panel_busquedaSimple.add(campo_busquedaSimple);
         panel_busquedaSimple.add(filler_busqueda);
 
-        boton_busqueda.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/buscar_pequenio.png")))); // NOI18N
+        boton_busqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buscar_pequenio.png"))); // NOI18N
         boton_busqueda.setText("Buscar");
         boton_busqueda.setToolTipText("Buscar");
         boton_busqueda.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -607,7 +608,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         panel_busquedaSimple.add(boton_busqueda);
         panel_busquedaSimple.add(filler5);
 
-        boton_limpiar.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/limpiar_pequenio.png")))); // NOI18N
+        boton_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
         boton_limpiar.setText("Limpiar");
         boton_limpiar.setToolTipText("Limpiar");
         boton_limpiar.setFocusPainted(false);
@@ -620,7 +621,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         panel_busquedaSimple.add(boton_limpiar);
         panel_busquedaSimple.add(filler1);
 
-        check_filtros.setText("Búsqueda avanzada");
+        check_filtros.setText("Busqueda avanzada");
         check_filtros.setToolTipText("Despliega la busqueda avanzada");
         check_filtros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -730,6 +731,25 @@ public class DialogoPersona extends javax.swing.JDialog {
         vista_padre.buscaUsuarios(busqueda);
     }//GEN-LAST:event_busquedaUsuarios
 
+    private class listenerCampos implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            busquedaUsuarios(null);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            // De momento no hace nada
+        }
+
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_busqueda;
     private javax.swing.JButton boton_limpiar;
@@ -763,7 +783,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     private javax.swing.JLabel label_priApellido;
     private javax.swing.JLabel label_segApellido;
     private javax.swing.JLabel label_telefono;
-    private JList<Usuario> lista_Usuarios;
+    private javax.swing.JList<Usuario> lista_Usuarios;
     private javax.swing.JPanel panel_busquedaAvanzada;
     private javax.swing.JPanel panel_busquedaSimple;
     private javax.swing.JScrollPane panel_lista;
