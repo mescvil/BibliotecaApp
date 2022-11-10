@@ -161,16 +161,16 @@ public class DialogoPersona extends javax.swing.JDialog {
 
     public void actualizaListaUsuarios(ArrayList<Usuario> usuarios_encontrados) {
         modelo_busqueda.clear();
+        boton_limpiar.setVisible(!panel_busquedaAvanzada.isVisible());
 
         if (!usuarios_encontrados.isEmpty()) {
             modelo_busqueda.addAll(usuarios_encontrados);
             lista_Usuarios.setModel(modelo_busqueda);
-            boton_limpiar.setVisible(true);
 
         } else if (this.isVisible()) {
             modelo_busqueda.addAll(usuarios_encontrados);
             lista_Usuarios.setModel(modelo_busqueda);
-            boton_limpiar.setVisible(true);
+
         }
 
         pack();
@@ -266,7 +266,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        boton_limpiar1 = new javax.swing.JButton();
+        boton_limpiarAvanzado = new javax.swing.JButton();
         panel_busquedaSimple = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         campo_busquedaSimple = new javax.swing.JTextField();
@@ -563,21 +563,22 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panel_busquedaAvanzada.add(jLabel3, gridBagConstraints);
 
-        boton_limpiar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
-        boton_limpiar1.setToolTipText("Limpiar");
-        boton_limpiar1.setFocusPainted(false);
-        boton_limpiar1.setMaximumSize(new java.awt.Dimension(0, 0));
-        boton_limpiar1.setMinimumSize(new java.awt.Dimension(0, 0));
-        boton_limpiar1.setPreferredSize(new java.awt.Dimension(0, 0));
-        boton_limpiar1.addActionListener(new java.awt.event.ActionListener() {
+        boton_limpiarAvanzado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
+        boton_limpiarAvanzado.setText("Limpiar");
+        boton_limpiarAvanzado.setToolTipText("Limpiar");
+        boton_limpiarAvanzado.setFocusPainted(false);
+        boton_limpiarAvanzado.setPreferredSize(new java.awt.Dimension(94, 25));
+        boton_limpiarAvanzado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boton_limpiar1ActionPerformed(evt);
+                boton_limpiarAvanzadoActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
-        panel_busquedaAvanzada.add(boton_limpiar1, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        panel_busquedaAvanzada.add(boton_limpiarAvanzado, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -701,6 +702,11 @@ public class DialogoPersona extends javax.swing.JDialog {
             campo_busquedaSimple.setVisible(true);
             filler_busqueda.setVisible(true);
         }
+
+        if (!campo_busquedaSimple.getText().equals(texto_simple)) {
+            boton_limpiar.setVisible(!panel_busquedaAvanzada.isVisible());
+        }
+
         repaint();
         pack();
     }//GEN-LAST:event_check_filtrosActionPerformed
@@ -734,14 +740,14 @@ public class DialogoPersona extends javax.swing.JDialog {
         vista_padre.buscaUsuarios(busqueda);
     }//GEN-LAST:event_busquedaUsuarios
 
-    private void boton_limpiar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_boton_limpiar1ActionPerformed
-
     private void dateChooser_busquedaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaPropertyChange
         if (check_nacimiento.isSelected())
             busquedaUsuarios(null);
     }//GEN-LAST:event_dateChooser_busquedaPropertyChange
+
+    private void boton_limpiarAvanzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarAvanzadoActionPerformed
+        boton_limpiarActionPerformed(null);
+    }//GEN-LAST:event_boton_limpiarAvanzadoActionPerformed
 
     private class listenerCampos implements DocumentListener {
 
@@ -765,7 +771,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_busqueda;
     private javax.swing.JButton boton_limpiar;
-    private javax.swing.JButton boton_limpiar1;
+    private javax.swing.JButton boton_limpiarAvanzado;
     private javax.swing.JButton boton_multiple;
     private javax.swing.JTextField campo_busquedaApellidos;
     private javax.swing.JTextField campo_busquedaNombre;
