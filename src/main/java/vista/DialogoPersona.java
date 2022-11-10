@@ -21,6 +21,11 @@ public class DialogoPersona extends javax.swing.JDialog {
     private final DefaultListModel<Usuario> modelo_lista;
     private final DefaultListModel<Usuario> modelo_busqueda;
 
+    private final String texto_nombre = "Introduce un nombre...";
+    private final String texto_apellido = "Introduce un apellido...";
+    private final String texto_telefono = "Introduce un teléfono...";
+    private final String texto_simple = "Introduce tu búsqueda...";
+
     /**
      * Creates new form DialogoPersona
      */
@@ -41,6 +46,8 @@ public class DialogoPersona extends javax.swing.JDialog {
                 ((JTextField) component).getDocument().addDocumentListener(new listenerCampos());
             }
         }
+        campo_busquedaSimple.getDocument().addDocumentListener(new listenerCampos());
+
     }
 
     public void muestraModoAniadir() {
@@ -105,7 +112,6 @@ public class DialogoPersona extends javax.swing.JDialog {
         // Busqueda y filtros
         panel_busquedaSimple.setVisible(true);
         boton_limpiar.setVisible(false);
-        boton_busqueda.setVisible(true);
         panel_busquedaAvanzada.setVisible(false);
         filler_busqueda.setVisible(true);
         check_filtros.setVisible(true);
@@ -138,34 +144,33 @@ public class DialogoPersona extends javax.swing.JDialog {
         for (Component component : panel_busquedaAvanzada.getComponents()) {
             if (component instanceof JCheckBox) {
                 ((JCheckBox) component).setSelected(false);
+            }
 
-            }
-            if (component instanceof JTextField) {
-                component.setEnabled(false);
-            }
         }
         dateChooser_busqueda.setEnabled(false);
 
-        campo_busquedaNombre.setText("Introduce un nombre...");
-        campo_busquedaApellidos.setText("Introduce un apellido...");
-        campo_busquedaTelefono.setText("Introduce un teléfono...");
+        campo_busquedaNombre.setText(texto_nombre);
+        campo_busquedaApellidos.setText(texto_apellido);
+        campo_busquedaTelefono.setText(texto_telefono);
         dateChooser_busqueda.setYear(Calendar.getInstance().get(Calendar.YEAR));
 
-        campo_busquedaSimple.setText("Introduce tu búsqueda...");
+        campo_busquedaSimple.setText(texto_simple);
 
         boton_limpiar.setVisible(false);
-        boton_busqueda.setVisible(true);
     }
 
     public void actualizaListaUsuarios(ArrayList<Usuario> usuarios_encontrados) {
         modelo_busqueda.clear();
 
         if (!usuarios_encontrados.isEmpty()) {
-            modelo_busqueda.clear();
             modelo_busqueda.addAll(usuarios_encontrados);
             lista_Usuarios.setModel(modelo_busqueda);
             boton_limpiar.setVisible(true);
 
+        } else if (this.isVisible()) {
+            modelo_busqueda.addAll(usuarios_encontrados);
+            lista_Usuarios.setModel(modelo_busqueda);
+            boton_limpiar.setVisible(true);
         }
 
         pack();
@@ -257,10 +262,11 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_busquedaTelefono = new javax.swing.JTextField();
         campo_busquedaApellidos = new javax.swing.JTextField();
         check_nacimiento = new javax.swing.JCheckBox();
-        check_telefono = new javax.swing.JCheckBox();
-        check_apellidos = new javax.swing.JCheckBox();
-        chek_nombre = new javax.swing.JCheckBox();
         dateChooser_busqueda = new com.toedter.calendar.JYearChooser();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        boton_limpiar1 = new javax.swing.JButton();
         panel_busquedaSimple = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         campo_busquedaSimple = new javax.swing.JTextField();
@@ -268,7 +274,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         boton_busqueda = new javax.swing.JButton();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(10, 32767));
         boton_limpiar = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
         check_filtros = new javax.swing.JCheckBox();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
 
@@ -517,48 +523,14 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         panel_busquedaAvanzada.add(check_nacimiento, gridBagConstraints);
 
-        check_telefono.setText("Teléfono");
-        check_telefono.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_telefonoActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
-        panel_busquedaAvanzada.add(check_telefono, gridBagConstraints);
-
-        check_apellidos.setText("Apellidos");
-        check_apellidos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_apellidosActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
-        panel_busquedaAvanzada.add(check_apellidos, gridBagConstraints);
-
-        chek_nombre.setText("Nombre");
-        chek_nombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chek_nombreActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
-        panel_busquedaAvanzada.add(chek_nombre, gridBagConstraints);
-
         dateChooser_busqueda.setToolTipText("Busca un usuario por año de nacimiento");
         dateChooser_busqueda.setMaximum(Calendar.getInstance().get(Calendar.YEAR));
         dateChooser_busqueda.setPreferredSize(new java.awt.Dimension(100, 22));
+        dateChooser_busqueda.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateChooser_busquedaPropertyChange(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -566,6 +538,46 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         panel_busquedaAvanzada.add(dateChooser_busqueda, gridBagConstraints);
+
+        jLabel1.setText("Nombre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panel_busquedaAvanzada.add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Apellidos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panel_busquedaAvanzada.add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Teléfono");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panel_busquedaAvanzada.add(jLabel3, gridBagConstraints);
+
+        boton_limpiar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
+        boton_limpiar1.setToolTipText("Limpiar");
+        boton_limpiar1.setFocusPainted(false);
+        boton_limpiar1.setMaximumSize(new java.awt.Dimension(0, 0));
+        boton_limpiar1.setMinimumSize(new java.awt.Dimension(0, 0));
+        boton_limpiar1.setPreferredSize(new java.awt.Dimension(0, 0));
+        boton_limpiar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_limpiar1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        panel_busquedaAvanzada.add(boton_limpiar1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -585,7 +597,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_busquedaSimple.setToolTipText("Busca un usuario por nombre o apellidos");
         campo_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 27));
         campo_busquedaSimple.setMinimumSize(new java.awt.Dimension(64, 27));
-        campo_busquedaSimple.setPreferredSize(new java.awt.Dimension(200, 20));
+        campo_busquedaSimple.setPreferredSize(new java.awt.Dimension(200, 22));
         campo_busquedaSimple.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 campoBusquedaClicked(evt);
@@ -606,6 +618,7 @@ public class DialogoPersona extends javax.swing.JDialog {
             }
         });
         panel_busquedaSimple.add(boton_busqueda);
+        boton_busqueda.setVisible(false);
         panel_busquedaSimple.add(filler5);
 
         boton_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
@@ -692,18 +705,6 @@ public class DialogoPersona extends javax.swing.JDialog {
         pack();
     }//GEN-LAST:event_check_filtrosActionPerformed
 
-    private void chek_nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chek_nombreActionPerformed
-        campo_busquedaNombre.setEnabled(chek_nombre.isSelected());
-    }//GEN-LAST:event_chek_nombreActionPerformed
-
-    private void check_apellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_apellidosActionPerformed
-        campo_busquedaApellidos.setEnabled(check_apellidos.isSelected());
-    }//GEN-LAST:event_check_apellidosActionPerformed
-
-    private void check_telefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_telefonoActionPerformed
-        campo_busquedaTelefono.setEnabled(check_telefono.isSelected());
-    }//GEN-LAST:event_check_telefonoActionPerformed
-
     private void check_nacimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_nacimientoActionPerformed
         dateChooser_busqueda.setEnabled(check_nacimiento.isSelected());
     }//GEN-LAST:event_check_nacimientoActionPerformed
@@ -712,24 +713,35 @@ public class DialogoPersona extends javax.swing.JDialog {
         HashMap<String, String> busqueda = new HashMap<>();
 
         if (panel_busquedaAvanzada.isVisible()) {
-            if (chek_nombre.isSelected()) {
+
+            if (!campo_busquedaNombre.getText().equals(texto_nombre)) {
                 busqueda.put("nombre", campo_busquedaNombre.getText());
             }
-            if (check_apellidos.isSelected()) {
+            if (!campo_busquedaApellidos.getText().equals(texto_apellido)) {
                 busqueda.put("apellidos", campo_busquedaApellidos.getText());
             }
-            if (check_telefono.isSelected()) {
+            if (!campo_busquedaTelefono.getText().equals(texto_telefono)) {
                 busqueda.put("telefono", campo_busquedaTelefono.getText());
             }
             if (check_nacimiento.isSelected()) {
                 busqueda.put("anio", String.valueOf(dateChooser_busqueda.getYear()));
             }
+
         } else if (campo_busquedaSimple.isVisible()) {
             busqueda.put("simple", campo_busquedaSimple.getText());
         }
 
         vista_padre.buscaUsuarios(busqueda);
     }//GEN-LAST:event_busquedaUsuarios
+
+    private void boton_limpiar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_boton_limpiar1ActionPerformed
+
+    private void dateChooser_busquedaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaPropertyChange
+        if (check_nacimiento.isSelected())
+            busquedaUsuarios(null);
+    }//GEN-LAST:event_dateChooser_busquedaPropertyChange
 
     private class listenerCampos implements DocumentListener {
 
@@ -740,7 +752,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         @Override
         public void removeUpdate(DocumentEvent e) {
-
+            busquedaUsuarios(null);
         }
 
         @Override
@@ -753,6 +765,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_busqueda;
     private javax.swing.JButton boton_limpiar;
+    private javax.swing.JButton boton_limpiar1;
     private javax.swing.JButton boton_multiple;
     private javax.swing.JTextField campo_busquedaApellidos;
     private javax.swing.JTextField campo_busquedaNombre;
@@ -764,11 +777,8 @@ public class DialogoPersona extends javax.swing.JDialog {
     private javax.swing.JTextField campo_priApellido;
     private javax.swing.JTextField campo_segApellido;
     private javax.swing.JTextField campo_telefono;
-    private javax.swing.JCheckBox check_apellidos;
     private javax.swing.JCheckBox check_filtros;
     private javax.swing.JCheckBox check_nacimiento;
-    private javax.swing.JCheckBox check_telefono;
-    private javax.swing.JCheckBox chek_nombre;
     private com.toedter.calendar.JYearChooser dateChooser_busqueda;
     private com.toedter.calendar.JDateChooser dateChooser_nacimiento;
     private javax.swing.Box.Filler filler1;
@@ -776,6 +786,9 @@ public class DialogoPersona extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler_busqueda;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel label_dni;
     private javax.swing.JLabel label_email;
     private javax.swing.JLabel label_fechNacimiento;
