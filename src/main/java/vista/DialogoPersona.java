@@ -544,6 +544,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panel_busquedaAvanzada.add(jLabel1, gridBagConstraints);
 
@@ -552,6 +553,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panel_busquedaAvanzada.add(jLabel2, gridBagConstraints);
 
@@ -560,6 +562,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panel_busquedaAvanzada.add(jLabel3, gridBagConstraints);
 
@@ -596,9 +599,9 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         campo_busquedaSimple.setText("Introduce tu buqueda...");
         campo_busquedaSimple.setToolTipText("Busca un usuario por nombre o apellidos");
-        campo_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 27));
-        campo_busquedaSimple.setMinimumSize(new java.awt.Dimension(64, 27));
-        campo_busquedaSimple.setPreferredSize(new java.awt.Dimension(200, 22));
+        campo_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 25));
+        campo_busquedaSimple.setMinimumSize(new java.awt.Dimension(64, 25));
+        campo_busquedaSimple.setPreferredSize(new java.awt.Dimension(200, 25));
         campo_busquedaSimple.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 campoBusquedaClicked(evt);
@@ -626,6 +629,8 @@ public class DialogoPersona extends javax.swing.JDialog {
         boton_limpiar.setText("Limpiar");
         boton_limpiar.setToolTipText("Limpiar");
         boton_limpiar.setFocusPainted(false);
+        boton_limpiar.setMaximumSize(new java.awt.Dimension(94, 25));
+        boton_limpiar.setMinimumSize(new java.awt.Dimension(94, 25));
         boton_limpiar.setPreferredSize(new java.awt.Dimension(94, 25));
         boton_limpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -671,8 +676,10 @@ public class DialogoPersona extends javax.swing.JDialog {
         if (lista.hasFocus()) {
             if (!lista.getValueIsAdjusting()) {
 
-                Usuario usuario_seleccionado = (Usuario) lista.getSelectedValue();
-                rellenaDatosPersona(usuario_seleccionado);
+                if (lista_Usuarios.getSelectedIndex() != -1) {
+                    Usuario usuario_seleccionado = (Usuario) lista.getSelectedValue();
+                    rellenaDatosPersona(usuario_seleccionado);
+                }
             }
         }
     }//GEN-LAST:event_lista_UsuariosValueChanged
@@ -696,6 +703,8 @@ public class DialogoPersona extends javax.swing.JDialog {
             this.setPreferredSize(DIMENSION_GRANDE_BUSQUEDA);
             campo_busquedaSimple.setVisible(false);
             filler_busqueda.setVisible(false);
+
+            setLocation(getX(), (getY() - 100));
         } else {
             panel_busquedaAvanzada.setVisible(false);
             this.setPreferredSize(DIMENSION_GRANDE);

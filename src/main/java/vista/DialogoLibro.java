@@ -8,9 +8,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Objects;
 
 import static extras.Colores_Dimensiones.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * @author Escoz
@@ -22,6 +23,10 @@ public class DialogoLibro extends javax.swing.JDialog {
     private final DefaultListModel<Libro> modelo_lista;
     private final DefaultListModel<Libro> modelo_busqueda;
 
+    private final String texto_titulo = "Introduce un titulo...";
+    private final String texto_autor = "Introduce un autor...";
+    private final String texto_simple = "Introduce tu búsqueda...";
+
     /**
      * Creates new form DialogoPersona
      */
@@ -30,10 +35,19 @@ public class DialogoLibro extends javax.swing.JDialog {
         this.vista_padre = parent;
 
         initComponents();
-
         this.lista_libros.setModel(this.modelo_lista = modelo_lista);
         modelo_busqueda = new DefaultListModel<>();
 
+        aniadeListeners();
+    }
+
+    private void aniadeListeners() {
+        for (Component component : panel_busquedaAvanzada.getComponents()) {
+            if (component instanceof JTextField) {
+                ((JTextField) component).getDocument().addDocumentListener(new listenerCampos());
+            }
+        }
+        campo_busquedaSimple.getDocument().addDocumentListener(new listenerCampos());
     }
 
     public void muestraModoAniadir() {
@@ -91,7 +105,6 @@ public class DialogoLibro extends javax.swing.JDialog {
         // Filtros y búsqueda
         panel_busquedaSimple.setVisible(true);
         boton_limpiar.setVisible(false);
-        boton_busqueda.setVisible(true);
         panel_busquedaAvanzada.setVisible(false);
         filler_busqueda.setVisible(true);
         check_filtros.setVisible(true);
@@ -121,17 +134,19 @@ public class DialogoLibro extends javax.swing.JDialog {
     }
 
     public void actualizaListaLibros(ArrayList<Libro> libros_econtrados) {
+        modelo_busqueda.clear();
+        boton_limpiar.setVisible(!panel_busquedaAvanzada.isVisible());
 
         if (!libros_econtrados.isEmpty()) {
-            modelo_busqueda.clear();
             modelo_busqueda.addAll(libros_econtrados);
             lista_libros.setModel(modelo_busqueda);
-            boton_limpiar.setVisible(true);
 
-        } else {
-            JOptionPane.showMessageDialog(this, "Sin resultados",
-                    "Búsqueda de libros", JOptionPane.INFORMATION_MESSAGE);
+        } else if (this.isVisible()) {
+            modelo_busqueda.addAll(libros_econtrados);
+            lista_libros.setModel(modelo_busqueda);
+
         }
+
         pack();
         repaint();
     }
@@ -151,20 +166,16 @@ public class DialogoLibro extends javax.swing.JDialog {
                 ((JCheckBox) component).setSelected(false);
 
             }
-            if (component instanceof JTextField) {
-                component.setEnabled(false);
-            }
         }
         dateChooser_busqueda.setEnabled(false);
 
-        campo_busquedaTitulo.setText("Introduce un titulo...");
-        campo_busquedaAutor.setText("Introduce un autor...");
+        campo_busquedaTitulo.setText(texto_titulo);
+        campo_busquedaAutor.setText(texto_autor);
         dateChooser_busqueda.setYear(Calendar.getInstance().get(Calendar.YEAR));
 
-        campo_busquedaSimple.setText("Introduce tu búsqueda...");
+        campo_busquedaSimple.setText(texto_simple);
 
         boton_limpiar.setVisible(false);
-        boton_busqueda.setVisible(true);
 
     }
 
@@ -193,10 +204,11 @@ public class DialogoLibro extends javax.swing.JDialog {
         campo_busquedaTitulo = new javax.swing.JTextField();
         campo_busquedaAutor = new javax.swing.JTextField();
         check_publicacion = new javax.swing.JCheckBox();
-        check_autor = new javax.swing.JCheckBox();
-        chek_titulo = new javax.swing.JCheckBox();
         dateChooser_busqueda = new com.toedter.calendar.JYearChooser();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        boton_limpiarAvanzado = new javax.swing.JButton();
         panel_busquedaSimple = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         campo_busquedaSimple = new javax.swing.JTextField();
@@ -266,7 +278,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         getContentPane().add(campo_autor, gridBagConstraints);
 
         boton_multiple.setForeground(new java.awt.Color(51, 51, 51));
-        boton_multiple.setText("Botón");
+        boton_multiple.setText("Boton");
         boton_multiple.setPreferredSize(new java.awt.Dimension(72, 25));
         boton_multiple.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -300,7 +312,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         getContentPane().add(label_titulo, gridBagConstraints);
 
         campo_titulo.setEditable(false);
-        campo_titulo.setColumns(10);
+        campo_titulo.setColumns(12);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
@@ -312,17 +324,8 @@ public class DialogoLibro extends javax.swing.JDialog {
         panel_lista.setBorder(javax.swing.BorderFactory.createTitledBorder("Libros"));
         panel_lista.setPreferredSize(new java.awt.Dimension(100, 146));
 
-        lista_libros.setModel(new javax.swing.AbstractListModel<>() {
-            final Libro[] strings = {};
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public Libro getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        lista_libros.setModel(new DefaultListModel<Libro>()
+        );
         lista_libros.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lista_librosValueChanged(evt);
@@ -395,7 +398,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
         panel_busquedaAvanzada.add(campo_busquedaAutor, gridBagConstraints);
 
-        check_publicacion.setText("Publicación");
+        check_publicacion.setText("Año");
         check_publicacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 check_publicacionActionPerformed(evt);
@@ -408,35 +411,14 @@ public class DialogoLibro extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
         panel_busquedaAvanzada.add(check_publicacion, gridBagConstraints);
 
-        check_autor.setText("Autor");
-        check_autor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_autorActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
-        panel_busquedaAvanzada.add(check_autor, gridBagConstraints);
-
-        chek_titulo.setText("Titulo");
-        chek_titulo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chek_tituloActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
-        panel_busquedaAvanzada.add(chek_titulo, gridBagConstraints);
-
         dateChooser_busqueda.setToolTipText("Busca un libro por año de publicacion");
         dateChooser_busqueda.setMaximum(Calendar.getInstance().get(Calendar.YEAR));
         dateChooser_busqueda.setPreferredSize(new java.awt.Dimension(100, 22));
+        dateChooser_busqueda.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateChooser_busquedaPropertyChange(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -452,6 +434,39 @@ public class DialogoLibro extends javax.swing.JDialog {
         gridBagConstraints.weighty = 0.1;
         panel_busquedaAvanzada.add(filler4, gridBagConstraints);
 
+        jLabel1.setText("Titulo");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panel_busquedaAvanzada.add(jLabel1, gridBagConstraints);
+
+        jLabel2.setText("Autor");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        panel_busquedaAvanzada.add(jLabel2, gridBagConstraints);
+
+        boton_limpiarAvanzado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
+        boton_limpiarAvanzado.setText("Limpiar");
+        boton_limpiarAvanzado.setToolTipText("Limpiar");
+        boton_limpiarAvanzado.setFocusPainted(false);
+        boton_limpiarAvanzado.setPreferredSize(new java.awt.Dimension(94, 25));
+        boton_limpiarAvanzado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_limpiarAvanzadoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
+        panel_busquedaAvanzada.add(boton_limpiarAvanzado, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -466,11 +481,11 @@ public class DialogoLibro extends javax.swing.JDialog {
         panel_busquedaSimple.setLayout(new javax.swing.BoxLayout(panel_busquedaSimple, javax.swing.BoxLayout.LINE_AXIS));
         panel_busquedaSimple.add(filler2);
 
-        campo_busquedaSimple.setText("Introduce tu búsqueda...");
+        campo_busquedaSimple.setText("Introduce tu buqueda...");
         campo_busquedaSimple.setToolTipText("Busca un libro por titulo");
-        campo_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 27));
-        campo_busquedaSimple.setMinimumSize(new java.awt.Dimension(64, 27));
-        campo_busquedaSimple.setPreferredSize(new java.awt.Dimension(200, 20));
+        campo_busquedaSimple.setMaximumSize(new java.awt.Dimension(2147483647, 25));
+        campo_busquedaSimple.setMinimumSize(new java.awt.Dimension(64, 25));
+        campo_busquedaSimple.setPreferredSize(new java.awt.Dimension(200, 25));
         campo_busquedaSimple.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 campo_busquedaSimplecampoBusquedaClicked(evt);
@@ -479,7 +494,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         panel_busquedaSimple.add(campo_busquedaSimple);
         panel_busquedaSimple.add(filler_busqueda);
 
-        boton_busqueda.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/buscar_pequenio.png")))); // NOI18N
+        boton_busqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buscar_pequenio.png"))); // NOI18N
         boton_busqueda.setText("Buscar");
         boton_busqueda.setToolTipText("Buscar");
         boton_busqueda.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -490,10 +505,11 @@ public class DialogoLibro extends javax.swing.JDialog {
                 boton_busquedabusquedaUsuarios(evt);
             }
         });
+        boton_busqueda.setVisible(false);
         panel_busquedaSimple.add(boton_busqueda);
         panel_busquedaSimple.add(filler5);
 
-        boton_limpiar.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/limpiar_pequenio.png")))); // NOI18N
+        boton_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
         boton_limpiar.setText("Limpiar");
         boton_limpiar.setToolTipText("Limpiar");
         boton_limpiar.setFocusPainted(false);
@@ -506,8 +522,8 @@ public class DialogoLibro extends javax.swing.JDialog {
         panel_busquedaSimple.add(boton_limpiar);
         panel_busquedaSimple.add(filler1);
 
-        check_filtros.setText("Búsqueda avanzada");
-        check_filtros.setToolTipText("Despliega la búsqueda avanzada");
+        check_filtros.setText("Busqueda avanzada");
+        check_filtros.setToolTipText("Despliega la busqueda avanzada");
         check_filtros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 check_filtrosActionPerformed(evt);
@@ -575,8 +591,10 @@ public class DialogoLibro extends javax.swing.JDialog {
         if (lista.hasFocus()) {
             if (!lista.getValueIsAdjusting()) {
 
-                Libro libro_seleccionado = (Libro) lista.getSelectedValue();
-                rellenaDatosLibros(libro_seleccionado);
+                if (lista_libros.getSelectedIndex() != -1) {
+                    Libro libro_seleccionado = (Libro) lista.getSelectedValue();
+                    rellenaDatosLibros(libro_seleccionado);
+                }
             }
         }
     }//GEN-LAST:event_lista_librosValueChanged
@@ -597,14 +615,6 @@ public class DialogoLibro extends javax.swing.JDialog {
         dateChooser_busqueda.setEnabled(check_publicacion.isSelected());
     }//GEN-LAST:event_check_publicacionActionPerformed
 
-    private void check_autorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_autorActionPerformed
-        campo_busquedaAutor.setEnabled(check_autor.isSelected());
-    }//GEN-LAST:event_check_autorActionPerformed
-
-    private void chek_tituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chek_tituloActionPerformed
-        campo_busquedaTitulo.setEnabled(chek_titulo.isSelected());
-    }//GEN-LAST:event_chek_tituloActionPerformed
-
     private void campo_busquedaSimplecampoBusquedaClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campo_busquedaSimplecampoBusquedaClicked
         JTextField campo = (JTextField) evt.getSource();
         if (campo.isEnabled())
@@ -615,15 +625,17 @@ public class DialogoLibro extends javax.swing.JDialog {
         HashMap<String, String> busqueda = new HashMap<>();
 
         if (panel_busquedaAvanzada.isVisible()) {
-            if (chek_titulo.isSelected()) {
+
+            if (!campo_busquedaTitulo.getText().equals(texto_titulo)) {
                 busqueda.put("titulo", campo_busquedaTitulo.getText());
             }
-            if (check_autor.isSelected()) {
+            if (!campo_busquedaAutor.getText().equals(texto_autor)) {
                 busqueda.put("autor", campo_busquedaAutor.getText());
             }
             if (check_publicacion.isSelected()) {
                 busqueda.put("publicacion", String.valueOf(dateChooser_busqueda.getYear()));
             }
+
         } else if (campo_busquedaSimple.isVisible()) {
             busqueda.put("simple", campo_busquedaSimple.getText());
         }
@@ -644,19 +656,56 @@ public class DialogoLibro extends javax.swing.JDialog {
             this.setPreferredSize(DIMENSION_GRANDE_BUSQUEDA);
             campo_busquedaSimple.setVisible(false);
             filler_busqueda.setVisible(false);
+
+            setLocation(getX(), (getY() - 100));
         } else {
             panel_busquedaAvanzada.setVisible(false);
             this.setPreferredSize(DIMENSION_GRANDE);
             campo_busquedaSimple.setVisible(true);
             filler_busqueda.setVisible(true);
         }
-        pack();
+
+        if (!campo_busquedaSimple.getText().equals(texto_simple)) {
+            boton_limpiar.setVisible(!panel_busquedaAvanzada.isVisible());
+        }
+
         repaint();
+        pack();
     }//GEN-LAST:event_check_filtrosActionPerformed
+
+    private void boton_limpiarAvanzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarAvanzadoActionPerformed
+        boton_limpiarActionPerformed(null);
+    }//GEN-LAST:event_boton_limpiarAvanzadoActionPerformed
+
+    private void dateChooser_busquedaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaPropertyChange
+        if (check_publicacion.isSelected()) {
+            boton_busquedabusquedaUsuarios(null);
+        }
+    }//GEN-LAST:event_dateChooser_busquedaPropertyChange
+
+    private class listenerCampos implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            boton_busquedabusquedaUsuarios(null);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            boton_busquedabusquedaUsuarios(null);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            // De momento no hace nada
+        }
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_busqueda;
     private javax.swing.JButton boton_limpiar;
+    private javax.swing.JButton boton_limpiarAvanzado;
     private javax.swing.JButton boton_multiple;
     private javax.swing.JTextField campo_autor;
     private javax.swing.JTextField campo_busquedaAutor;
@@ -664,10 +713,8 @@ public class DialogoLibro extends javax.swing.JDialog {
     private javax.swing.JTextField campo_busquedaTitulo;
     private javax.swing.JTextField campo_isbn;
     private javax.swing.JTextField campo_titulo;
-    private javax.swing.JCheckBox check_autor;
     private javax.swing.JCheckBox check_filtros;
     private javax.swing.JCheckBox check_publicacion;
-    private javax.swing.JCheckBox chek_titulo;
     private com.toedter.calendar.JYearChooser dateChooser_busqueda;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
@@ -675,6 +722,8 @@ public class DialogoLibro extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler_busqueda;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel label_anio;
     private javax.swing.JLabel label_autor;
     private javax.swing.JLabel label_ejemplares;

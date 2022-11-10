@@ -118,7 +118,8 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                     contexto = new BusquedaUsuarios(new BuscaUsuarioAnio());
                     usuarios_econtrados = contexto.busca(usuarios_aux, busqueda.get(key));
                 }
-                case "simple" -> usuarios_econtrados = buscaUsuarios(busqueda.get(key));
+                case "simple" ->
+                    usuarios_econtrados = buscaUsuarios(busqueda.get(key));
             }
             usuarios_aux.clear();
             usuarios_aux.addAll(usuarios_econtrados);
@@ -154,7 +155,8 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
                     contexto = new BusquedaLibros(new BuscaLibroPublicacion());
                     libros_econtrados = contexto.busca(libros_aux, busqueda.get(key));
                 }
-                case "simple" -> libros_econtrados = buscaLibroTitulo(busqueda.get(key));
+                case "simple" ->
+                    libros_econtrados = buscaLibroTitulo(busqueda.get(key));
             }
             libros_aux.clear();
             libros_aux.addAll(libros_econtrados);
