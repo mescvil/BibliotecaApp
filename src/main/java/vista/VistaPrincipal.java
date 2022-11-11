@@ -176,7 +176,7 @@ public class VistaPrincipal extends JFrame {
 
         rellenaCamposLibro((Libro) lista.getSelectedValue());
         boton_devolucion.setEnabled(false);
-        dialogoAlquileres.actualizaTabla(controlador.getAlquileres());
+        dialogoAlquileres.actualizaTablaBusqueda(controlador.getAlquileres());
     }
 
     private void rellenaCamposLibro(Libro libro) {
