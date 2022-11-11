@@ -107,7 +107,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
 
     public void actualizaTablaBusqueda(ArrayList<Alquiler> alquileres_encontrados) {
         modelo_busqueda = new ModeloAlquiler();
-        boton_limpiar.setVisible(!panel_busquedaUsuario.isVisible());
 
         if (!alquileres_encontrados.isEmpty()) {
             modelo_busqueda.addAlquileres(alquileres_encontrados);
@@ -148,7 +147,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
 
         campo_busquedaSimple.setText(texto_simple);
 
-        boton_limpiar.setVisible(false);
     }
 
     public void reseteaFiltrosBusquedaLibro() {
@@ -167,7 +165,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
 
         campo_busquedaSimple.setText(texto_simple);
 
-        boton_limpiar.setVisible(false);
     }
 
     /**
@@ -388,6 +385,11 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         dateChooser_busquedaUsuario.setToolTipText("Busca un alquiler por año de nacimiento");
         dateChooser_busquedaUsuario.setMaximum(Calendar.getInstance().get(Calendar.YEAR));
         dateChooser_busquedaUsuario.setPreferredSize(new java.awt.Dimension(100, 22));
+        dateChooser_busquedaUsuario.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateChooser_busquedaUsuarioPropertyChange(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -443,7 +445,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         panel_busquedaLibro.add(campo_busquedaTitulo, gridBagConstraints);
 
         campo_busquedaAutor.setText("Introduce un autor...");
-        campo_busquedaAutor.setToolTipText("Busca un alquiler por titulo");
+        campo_busquedaAutor.setToolTipText("Busca un alquiler por autor");
         campo_busquedaAutor.setPreferredSize(new java.awt.Dimension(250, 22));
         campo_busquedaAutor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -475,6 +477,11 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         dateChooser_busquedaLibro.setToolTipText("Busca un alquiler por año de publicacion");
         dateChooser_busquedaLibro.setMaximum(Calendar.getInstance().get(Calendar.YEAR));
         dateChooser_busquedaLibro.setPreferredSize(new java.awt.Dimension(100, 22));
+        dateChooser_busquedaLibro.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateChooser_busquedaLibroPropertyChange(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -569,6 +576,9 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             if (check_nacimiento.isSelected()) {
                 busqueda.put("anio", String.valueOf(dateChooser_busquedaUsuario.getYear()));
             }
+            if (!campo_busquedaSimple.getText().equals(texto_simple)) {
+                busqueda.put("simple", campo_busquedaSimple.getText());
+            }
 
             vista_padre.buscaAlquileres(busqueda);
         }
@@ -585,7 +595,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     }//GEN-LAST:event_boton_limpiarmouseFuera
 
     private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed
-        boton_limpiar.setVisible(false);
         ajustaTabla();
         reseteaFiltrosBusquedaLibro();
         reseteaFiltrosBusquedaUsuario();
@@ -651,7 +660,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void check_avanzadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_avanzadaActionPerformed
         if (check_avanzada.isSelected()) {
             this.setPreferredSize(DIMENSION_EXTRA_BUSQUEDA);
-            campo_busquedaSimple.setVisible(false);
             panel_busquedaUsuario.setVisible(true);
             panel_busquedaLibro.setVisible(true);
 
@@ -659,7 +667,6 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             panel_busquedaUsuario.setVisible(false);
             panel_busquedaLibro.setVisible(false);
             this.setPreferredSize(DIMENSION_EXTRA);
-            campo_busquedaSimple.setVisible(true);
         }
 
         pack();
@@ -681,6 +688,18 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void check_publicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_publicacionActionPerformed
         dateChooser_busquedaLibro.setEnabled(check_publicacion.isSelected());
     }//GEN-LAST:event_check_publicacionActionPerformed
+
+    private void dateChooser_busquedaLibroPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaLibroPropertyChange
+        if (check_publicacion.isSelected()) {
+            boton_busquedaActionPerformed(null);
+        }
+    }//GEN-LAST:event_dateChooser_busquedaLibroPropertyChange
+
+    private void dateChooser_busquedaUsuarioPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaUsuarioPropertyChange
+        if (check_nacimiento.isSelected()) {
+            boton_busquedaActionPerformed(null);
+        }
+    }//GEN-LAST:event_dateChooser_busquedaUsuarioPropertyChange
 
     private class listenerCampos implements DocumentListener {
 

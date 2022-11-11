@@ -104,9 +104,7 @@ public class DialogoLibro extends javax.swing.JDialog {
 
         // Filtros y búsqueda
         panel_busquedaSimple.setVisible(true);
-        boton_limpiar.setVisible(false);
         panel_busquedaAvanzada.setVisible(false);
-        filler_busqueda.setVisible(true);
         check_filtros.setVisible(true);
         campo_busquedaSimple.setVisible(true);
         reseteaPanelFiltros();
@@ -135,7 +133,6 @@ public class DialogoLibro extends javax.swing.JDialog {
 
     public void actualizaListaLibros(ArrayList<Libro> libros_econtrados) {
         modelo_busqueda.clear();
-        boton_limpiar.setVisible(!panel_busquedaAvanzada.isVisible());
 
         if (!libros_econtrados.isEmpty()) {
             modelo_busqueda.addAll(libros_econtrados);
@@ -175,8 +172,6 @@ public class DialogoLibro extends javax.swing.JDialog {
 
         campo_busquedaSimple.setText(texto_simple);
 
-        boton_limpiar.setVisible(false);
-
     }
 
     /**
@@ -208,13 +203,10 @@ public class DialogoLibro extends javax.swing.JDialog {
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        boton_limpiarAvanzado = new javax.swing.JButton();
         panel_busquedaSimple = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         campo_busquedaSimple = new javax.swing.JTextField();
-        filler_busqueda = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         boton_busqueda = new javax.swing.JButton();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(10, 32767));
         boton_limpiar = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
         check_filtros = new javax.swing.JCheckBox();
@@ -450,23 +442,6 @@ public class DialogoLibro extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panel_busquedaAvanzada.add(jLabel2, gridBagConstraints);
 
-        boton_limpiarAvanzado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
-        boton_limpiarAvanzado.setText("Limpiar");
-        boton_limpiarAvanzado.setToolTipText("Limpiar");
-        boton_limpiarAvanzado.setFocusPainted(false);
-        boton_limpiarAvanzado.setPreferredSize(new java.awt.Dimension(94, 25));
-        boton_limpiarAvanzado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                boton_limpiarAvanzadoActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 5);
-        panel_busquedaAvanzada.add(boton_limpiarAvanzado, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -492,7 +467,6 @@ public class DialogoLibro extends javax.swing.JDialog {
             }
         });
         panel_busquedaSimple.add(campo_busquedaSimple);
-        panel_busquedaSimple.add(filler_busqueda);
 
         boton_busqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buscar_pequenio.png"))); // NOI18N
         boton_busqueda.setText("Buscar");
@@ -507,13 +481,21 @@ public class DialogoLibro extends javax.swing.JDialog {
         });
         boton_busqueda.setVisible(false);
         panel_busquedaSimple.add(boton_busqueda);
-        panel_busquedaSimple.add(filler5);
 
         boton_limpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
-        boton_limpiar.setText("Limpiar");
         boton_limpiar.setToolTipText("Limpiar");
+        boton_limpiar.setBorderPainted(false);
+        boton_limpiar.setContentAreaFilled(false);
         boton_limpiar.setFocusPainted(false);
-        boton_limpiar.setPreferredSize(new java.awt.Dimension(94, 25));
+        boton_limpiar.setPreferredSize(new java.awt.Dimension(40, 25));
+        boton_limpiar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton_limpiarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton_limpiarMouseExited(evt);
+            }
+        });
         boton_limpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 boton_limpiarActionPerformed(evt);
@@ -635,6 +617,9 @@ public class DialogoLibro extends javax.swing.JDialog {
             if (check_publicacion.isSelected()) {
                 busqueda.put("publicacion", String.valueOf(dateChooser_busqueda.getYear()));
             }
+            if (!campo_busquedaSimple.getText().equals(texto_simple)) {
+                busqueda.put("simple", campo_busquedaSimple.getText());
+            }
 
         } else if (campo_busquedaSimple.isVisible()) {
             busqueda.put("simple", campo_busquedaSimple.getText());
@@ -654,34 +639,31 @@ public class DialogoLibro extends javax.swing.JDialog {
         if (check_filtros.isSelected()) {
             panel_busquedaAvanzada.setVisible(true);
             this.setPreferredSize(DIMENSION_GRANDE_BUSQUEDA);
-            campo_busquedaSimple.setVisible(false);
-            filler_busqueda.setVisible(false);
 
-            setLocation(getX(), (getY() - 100));
         } else {
             panel_busquedaAvanzada.setVisible(false);
             this.setPreferredSize(DIMENSION_GRANDE);
-            campo_busquedaSimple.setVisible(true);
-            filler_busqueda.setVisible(true);
-        }
-
-        if (!campo_busquedaSimple.getText().equals(texto_simple)) {
-            boton_limpiar.setVisible(!panel_busquedaAvanzada.isVisible());
         }
 
         repaint();
         pack();
     }//GEN-LAST:event_check_filtrosActionPerformed
 
-    private void boton_limpiarAvanzadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarAvanzadoActionPerformed
-        boton_limpiarActionPerformed(null);
-    }//GEN-LAST:event_boton_limpiarAvanzadoActionPerformed
-
     private void dateChooser_busquedaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaPropertyChange
         if (check_publicacion.isSelected()) {
             boton_busquedabusquedaUsuarios(null);
         }
     }//GEN-LAST:event_dateChooser_busquedaPropertyChange
+
+    private void boton_limpiarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_limpiarMouseEntered
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(true);
+    }//GEN-LAST:event_boton_limpiarMouseEntered
+
+    private void boton_limpiarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_limpiarMouseExited
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(false);
+    }//GEN-LAST:event_boton_limpiarMouseExited
 
     private class listenerCampos implements DocumentListener {
 
@@ -705,7 +687,6 @@ public class DialogoLibro extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton_busqueda;
     private javax.swing.JButton boton_limpiar;
-    private javax.swing.JButton boton_limpiarAvanzado;
     private javax.swing.JButton boton_multiple;
     private javax.swing.JTextField campo_autor;
     private javax.swing.JTextField campo_busquedaAutor;
@@ -720,8 +701,6 @@ public class DialogoLibro extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler_busqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel label_anio;
