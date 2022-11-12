@@ -323,7 +323,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
 
         getContentPane().add(panel_busquedaSimple);
 
-        panel_filtros.setLayout(new java.awt.GridLayout());
+        panel_filtros.setLayout(new java.awt.GridLayout(1, 0));
 
         panel_busquedaUsuario.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 0, 5), javax.swing.BorderFactory.createTitledBorder("Filtros de usuarios")));
         panel_busquedaUsuario.setLayout(new java.awt.GridBagLayout());

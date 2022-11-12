@@ -128,8 +128,44 @@ public class DialogoPersona extends javax.swing.JDialog {
     }
 
     public void muestraModoVer(Usuario usuario) {
-        muestraModoVer();
+        // Campos del usuario
+        campo_nombre.setEditable(false);
+        campo_segApellido.setEditable(false);
+        campo_priApellido.setEditable(false);
+        campo_dni.setEditable(false);
+        campo_email.setEditable(false);
+        campo_telefono.setEditable(false);
+        dateChooser_nacimiento.setEnabled(false);
         rellenaDatosPersona(usuario);
+
+        // Botón de uso multiple
+        boton_multiple.setVisible(false);
+        boton_multiple.setText("Cerrar");
+        boton_multiple.setBackground(ROJO);
+
+        // Lista de usuarios
+        lista_usuarios.setEnabled(true);
+        panel_busquedaAvanzada.setVisible(true);
+        lista_usuarios.setModel(modelo_lista);
+
+        // Busqueda y filtros
+        panel_busquedaSimple.setVisible(true);
+        boton_limpiar.setVisible(true);
+        panel_busquedaAvanzada.setVisible(false);
+        check_filtros.setVisible(true);
+        campo_busquedaSimple.setVisible(true);
+        reseteaPanelFiltros();
+
+        // General 
+        this.setTitle("Usuarios registrados");
+        setPreferredSize(DIMENSION_GRANDE);
+        setLocationRelativeTo(vista_padre);
+        lista_usuarios.requestFocus();
+
+        lista_usuarios.setSelectedValue(usuario, true);
+        pack();
+        setVisible(true);
+
     }
 
     private void reseteaPanelFiltros() {
@@ -419,10 +455,12 @@ public class DialogoPersona extends javax.swing.JDialog {
         dateChooser_nacimiento.setForeground(new java.awt.Color(255, 255, 255));
         dateChooser_nacimiento.setDateFormatString("d/MM/y");
         dateChooser_nacimiento.setMaxSelectableDate(new Date());
+        dateChooser_nacimiento.setMinimumSize(new java.awt.Dimension(150, 22));
+        dateChooser_nacimiento.setPreferredSize(new java.awt.Dimension(150, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         getContentPane().add(dateChooser_nacimiento, gridBagConstraints);

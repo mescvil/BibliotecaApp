@@ -30,12 +30,12 @@ public class DialogoLibro extends javax.swing.JDialog {
     /**
      * Creates new form DialogoPersona
      */
-    public DialogoLibro(VistaPrincipal parent, boolean modal, DefaultListModel<Libro> modelo_lista) {
+    public DialogoLibro(VistaPrincipal parent, boolean modal) {
         super(parent, modal);
         this.vista_padre = parent;
         
         initComponents();
-        this.lista_libros.setModel(this.modelo_lista = modelo_lista);
+        this.lista_libros.setModel(this.modelo_lista = new DefaultListModel<>());
         modelo_busqueda = new DefaultListModel<>();
         
         aniadeListeners();
@@ -85,7 +85,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         
     }
     
-    public void muestraModoVer() {
+    public void muestraModoVer(ArrayList<Libro> array_libros) {
 
         // Campos del libro
         campo_titulo.setEditable(false);
@@ -98,10 +98,12 @@ public class DialogoLibro extends javax.swing.JDialog {
         // Botón multiple
         boton_multiple.setVisible(true);
         boton_multiple.setForeground(Color.WHITE);
-        boton_multiple.setText("Nuevo prestamo");
+        boton_multiple.setText("Nuevo préstamo");
         boton_multiple.setBackground(AZUL);
 
         // Lista de libros
+        modelo_lista.clear();
+        modelo_lista.addAll(array_libros);
         lista_libros.setEnabled(true);
 
         // Filtros y búsqueda
@@ -128,9 +130,44 @@ public class DialogoLibro extends javax.swing.JDialog {
         
     }
     
-    public void muestraModoVer(Libro libro) {
-        muestraModoVer();
+    public void muestraModoVer(Libro libro, ArrayList<Libro> array_libros) {
+
+        // Campos del libro
+        campo_titulo.setEditable(false);
+        campo_autor.setEditable(false);
+        campo_isbn.setEditable(false);
+        spiner_ejemplares.setEnabled(false);
+        yearChooser_anio.setEnabled(false);
         rellenaDatosLibros(libro);
+
+        // Botón multiple
+        boton_multiple.setVisible(true);
+        boton_multiple.setForeground(Color.WHITE);
+        boton_multiple.setText("Nuevo préstamo");
+        boton_multiple.setBackground(AZUL);
+
+        // Lista de libros
+        modelo_lista.clear();
+        modelo_lista.addAll(array_libros);
+        lista_libros.setEnabled(true);
+
+        // Filtros y búsqueda
+        panel_busquedaSimple.setVisible(true);
+        panel_busquedaAvanzada.setVisible(false);
+        check_filtros.setVisible(true);
+        campo_busquedaSimple.setVisible(true);
+        reseteaPanelFiltros();
+
+        // General
+        setTitle("Libros registrados");
+        setPreferredSize(DIMENSION_GRANDE);
+        lista_libros.requestFocus();
+        lista_libros.setSelectedValue(libro, true);
+        
+        setLocationRelativeTo(vista_padre);
+        pack();
+        setVisible(true);
+        
     }
     
     public void actualizaListaLibros(ArrayList<Libro> libros_econtrados) {
@@ -155,7 +192,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         campo_autor.setText(libro.getAutor());
         campo_isbn.setText(libro.getIsbn());
         yearChooser_anio.setValue(Integer.parseInt(libro.getAnio_publicacion()));
-        spiner_ejemplares.setValue((libro.getN_ejemplares() == 0) ? 1 : libro.getN_ejemplares());
+        spiner_ejemplares.setValue(libro.getN_ejemplares());
     }
     
     public void resetaFiltrosBusquedaDuro() {
@@ -338,19 +375,21 @@ public class DialogoLibro extends javax.swing.JDialog {
         getContentPane().add(panel_lista, gridBagConstraints);
 
         yearChooser_anio.setMaximum(Calendar.getInstance().get(Calendar.YEAR));
+        yearChooser_anio.setPreferredSize(new java.awt.Dimension(100, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         getContentPane().add(yearChooser_anio, gridBagConstraints);
 
-        spiner_ejemplares.setModel(new javax.swing.SpinnerNumberModel(1, 1, 999, 1));
+        spiner_ejemplares.setModel(new javax.swing.SpinnerNumberModel(1, 0, 999, 1));
+        spiner_ejemplares.setPreferredSize(new java.awt.Dimension(100, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         getContentPane().add(spiner_ejemplares, gridBagConstraints);
@@ -563,8 +602,21 @@ public class DialogoLibro extends javax.swing.JDialog {
                         "Nuevo libro", JOptionPane.ERROR_MESSAGE);
             }
             
-        } else {
-            dispose();
+        } else if (texto_boton.equals("Nuevo préstamo")) {
+            if (lista_libros.getSelectedIndex() != -1) {
+                Libro libro = lista_libros.getSelectedValue();
+                
+                if (libro.getN_ejemplares() < 1) {
+                    JOptionPane.showMessageDialog(this, "No quedan ejemplares",
+                            "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    vista_padre.abreDialogoPrestamo(libro);
+                }
+                
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecciona un libro",
+                        "Nuevo préstamo", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }//GEN-LAST:event_boton_multipleActionPerformed
 
@@ -639,6 +691,7 @@ public class DialogoLibro extends javax.swing.JDialog {
     private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed
         resetaFiltrosBusquedaDuro();
         lista_libros.setModel(modelo_lista);
+        rellenaDatosLibros(new Libro());
         pack();
         repaint();
     }//GEN-LAST:event_boton_limpiarActionPerformed

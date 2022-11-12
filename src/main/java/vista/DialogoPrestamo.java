@@ -14,6 +14,8 @@ import java.util.GregorianCalendar;
 
 import static extras.Colores_Dimensiones.AZUL;
 import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Escoz
@@ -37,7 +39,6 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         this.lista_Usuarios.setModel(this.modelo_lista = modelo_lista);
 
     }
-
 
     public void muestraDialogo(Libro libro) {
         this.libro_aPrestar = libro;
@@ -91,7 +92,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         label_titulo = new javax.swing.JLabel();
         campo_titulo = new javax.swing.JTextField();
         panel_lista = new javax.swing.JScrollPane();
-        lista_Usuarios = new JList<Usuario>();
+        lista_Usuarios = new javax.swing.JList<>();
         spiner_ejemplares = new javax.swing.JSpinner();
         dateChooser_devolucion = new com.toedter.calendar.JDateChooser();
 
@@ -134,7 +135,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         getContentPane().add(label_ejemplares, gridBagConstraints);
 
         boton_multiple.setForeground(new java.awt.Color(255, 255, 255));
-        boton_multiple.setText("Botón");
+        boton_multiple.setText("Boton");
         boton_multiple.setPreferredSize(new java.awt.Dimension(72, 25));
         boton_multiple.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,7 +169,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         getContentPane().add(label_titulo, gridBagConstraints);
 
         campo_titulo.setEditable(false);
-        campo_titulo.setColumns(15);
+        campo_titulo.setColumns(20);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -179,17 +180,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         panel_lista.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios"));
         panel_lista.setPreferredSize(new java.awt.Dimension(100, 146));
 
-        lista_Usuarios.setModel(new AbstractListModel<>() {
-            Usuario[] strings = {};
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public Usuario getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        lista_Usuarios.setModel(new DefaultListModel<Usuario>());
         lista_Usuarios.setPreferredSize(new java.awt.Dimension(100, 90));
         lista_Usuarios.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -209,17 +200,20 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         getContentPane().add(panel_lista, gridBagConstraints);
 
         spiner_ejemplares.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spiner_ejemplares.setPreferredSize(new java.awt.Dimension(150, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         getContentPane().add(spiner_ejemplares, gridBagConstraints);
+
+        dateChooser_devolucion.setPreferredSize(new java.awt.Dimension(150, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.15;
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
         getContentPane().add(dateChooser_devolucion, gridBagConstraints);
@@ -299,7 +293,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
     private javax.swing.JLabel label_ejemplares;
     private javax.swing.JLabel label_isbn;
     private javax.swing.JLabel label_titulo;
-    private JList<Usuario> lista_Usuarios;
+    private javax.swing.JList<Usuario> lista_Usuarios;
     private javax.swing.JScrollPane panel_lista;
     private javax.swing.JSpinner spiner_ejemplares;
     // End of variables declaration//GEN-END:variables

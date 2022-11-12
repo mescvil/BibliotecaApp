@@ -46,7 +46,7 @@ public class VistaPrincipal extends JFrame {
         this.modelo_listaAlquileres = new DefaultListModel<>();
         this.modelo_listaUsuarios = new DefaultListModel<>();
 
-        this.dialogoLibro = new DialogoLibro(this, true, modelo_listaLibros);
+        this.dialogoLibro = new DialogoLibro(this, true);
         this.dialogoPersona = new DialogoPersona(this, true, modelo_listaUsuarios);
         this.dialogoPrestamo = new DialogoPrestamo(this, true, modelo_listaUsuarios);
         this.dialogoAlquileres = new DialogoAlquiler(this, false);
@@ -216,6 +216,10 @@ public class VistaPrincipal extends JFrame {
 
     public void actualizaBusquedaAlquiler(ArrayList<Alquiler> alquileres_econtrados) {
         dialogoAlquileres.actualizaTablaBusqueda(alquileres_econtrados);
+    }
+
+    public void abreDialogoPrestamo(Libro libro_prestado) {
+        dialogoPrestamo.muestraDialogo(libro_prestado);
     }
 
     /*
@@ -509,7 +513,7 @@ public class VistaPrincipal extends JFrame {
 
         boton_nuevoPrestamo.setBackground(new java.awt.Color(51, 153, 255));
         boton_nuevoPrestamo.setForeground(new java.awt.Color(255, 255, 255));
-        boton_nuevoPrestamo.setText("Nuevo prestamo");
+        boton_nuevoPrestamo.setText("Nuevo préstamo");
         boton_nuevoPrestamo.setEnabled(false);
         boton_nuevoPrestamo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -762,7 +766,7 @@ public class VistaPrincipal extends JFrame {
     }//GEN-LAST:event_menu_aniadeLibroActionPerformed
 
     public void abreDialogoVerLibros(Libro libro) {
-        dialogoLibro.muestraModoVer(libro);
+        dialogoLibro.muestraModoVer(libro, controlador.getLibros());
     }
 
     private void boton_nuevoPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_nuevoPrestamoActionPerformed
@@ -818,7 +822,7 @@ public class VistaPrincipal extends JFrame {
     }//GEN-LAST:event_campo_busquedaLibroFocusGained
 
     private void boton_listaLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_listaLibrosActionPerformed
-        dialogoLibro.muestraModoVer();
+        dialogoLibro.muestraModoVer(controlador.getLibros());
     }//GEN-LAST:event_boton_listaLibrosActionPerformed
 
     private void menu_listaAlquileresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_listaAlquileresActionPerformed
@@ -826,7 +830,7 @@ public class VistaPrincipal extends JFrame {
     }//GEN-LAST:event_menu_listaAlquileresActionPerformed
 
     private void menu_listaLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_listaLibrosActionPerformed
-        dialogoLibro.muestraModoVer();
+        dialogoLibro.muestraModoVer(controlador.getLibros());
     }//GEN-LAST:event_menu_listaLibrosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

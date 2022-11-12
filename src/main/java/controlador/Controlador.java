@@ -1,7 +1,6 @@
 package controlador;
 
 import accesoDatos.Modelo;
-import accesoDatos.ModeloArchivo;
 import accesoDatos.ModeloSimple;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
