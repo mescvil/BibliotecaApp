@@ -22,7 +22,7 @@ import javax.swing.event.DocumentListener;
 public class DialogoAlquiler extends javax.swing.JDialog {
 
     private final VistaPrincipal vista_padre;
-    private ModeloAlquiler modelo_tabla;
+    private final ModeloAlquiler modelo_tabla;
     private ModeloAlquiler modelo_busqueda;
 
     private final String texto_titulo = "Introduce un titulo...";
@@ -553,45 +553,52 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     }//GEN-LAST:event_boton_busquedamouseFuera
 
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
-        if (!check_avanzada.isSelected()) {
-            String texto = campo_busquedaSimple.getText();
+        HashMap<String, String> busqueda = new HashMap<>();
+        String busqueda_simple = campo_busquedaSimple.getText();
 
-            if (!texto.equals(texto_simple)) {
-                ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
-                actualizaTablaBusqueda(alquileres_encontrados);
+        if (!check_avanzada.isSelected()) {
+            if (!busqueda_simple.equals(texto_simple) && !busqueda_simple.isBlank()) {
+                busqueda.put("simple", busqueda_simple);
             }
 
         } else {
-            HashMap<String, String> busqueda = new HashMap<>();
+            String busqueda_titulo = campo_busquedaTitulo.getText();
+            String busqueda_autor = campo_busquedaAutor.getText();
+            String busqueda_nombre = campo_busquedaNombre.getText();
+            String busqueda_apellidos = campo_busquedaApellidos.getText();
+            String busqueda_telefono = campo_busquedaTelefono.getText();
 
-            if (!campo_busquedaTitulo.getText().equals(texto_titulo)) {
-                busqueda.put("titulo", campo_busquedaTitulo.getText());
+            if (!busqueda_titulo.equals(texto_titulo) && !busqueda_titulo.isBlank()) {
+                busqueda.put("titulo", busqueda_titulo);
             }
-            if (!campo_busquedaAutor.getText().equals(texto_autor)) {
-                busqueda.put("autor", campo_busquedaAutor.getText());
+            if (!busqueda_autor.equals(texto_autor) && !busqueda_autor.isBlank()) {
+                busqueda.put("autor", busqueda_autor);
             }
             if (check_publicacion.isSelected()) {
                 busqueda.put("publicacion", String.valueOf(dateChooser_busquedaLibro.getYear()));
             }
-            if (!campo_busquedaNombre.getText().equals(texto_nombre)) {
-                busqueda.put("nombre", campo_busquedaNombre.getText());
+            if (!busqueda_nombre.equals(texto_nombre) && !busqueda_nombre.isBlank()) {
+                busqueda.put("nombre", busqueda_nombre);
             }
-            if (!campo_busquedaApellidos.getText().equals(texto_apellido)) {
-                busqueda.put("apellidos", campo_busquedaApellidos.getText());
+            if (!busqueda_apellidos.equals(texto_apellido) && !busqueda_apellidos.isBlank()) {
+                busqueda.put("apellidos", busqueda_apellidos);
             }
-            if (!campo_busquedaTelefono.getText().equals(texto_telefono)) {
-                busqueda.put("telefono", campo_busquedaTelefono.getText());
+            if (!busqueda_telefono.equals(texto_telefono) && !busqueda_telefono.isBlank()) {
+                busqueda.put("telefono", busqueda_telefono);
             }
             if (check_nacimiento.isSelected()) {
                 busqueda.put("anio", String.valueOf(dateChooser_busquedaUsuario.getYear()));
             }
-            if (!campo_busquedaSimple.getText().equals(texto_simple)) {
-                busqueda.put("simple", campo_busquedaSimple.getText());
+            if (!busqueda_simple.equals(texto_simple) && !busqueda_simple.isBlank()) {
+                busqueda.put("simple", busqueda_simple);
             }
+        }
 
-            if (!busqueda.isEmpty()) {
-                vista_padre.buscaAlquileres(busqueda);
-            }
+        if (!busqueda.isEmpty()) {
+            vista_padre.buscaAlquileres(busqueda);
+        } else {
+            tabla_alquileres.setModel(modelo_tabla);
+            ajustaTabla();
         }
     }//GEN-LAST:event_boton_busquedaActionPerformed
 

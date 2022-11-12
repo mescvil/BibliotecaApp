@@ -605,27 +605,35 @@ public class DialogoLibro extends javax.swing.JDialog {
 
     private void boton_busquedabusquedaUsuarios(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedabusquedaUsuarios
         HashMap<String, String> busqueda = new HashMap<>();
+        String busqueda_titulo = campo_busquedaTitulo.getText();
+        String busqueda_autor = campo_busquedaAutor.getText();
+        String busqueda_simple = campo_busquedaSimple.getText();
 
         if (panel_busquedaAvanzada.isVisible()) {
-
-            if (!campo_busquedaTitulo.getText().equals(texto_titulo)) {
-                busqueda.put("titulo", campo_busquedaTitulo.getText());
+            if (!busqueda_titulo.equals(texto_titulo) && !busqueda_titulo.isBlank()) {
+                busqueda.put("titulo", busqueda_titulo);
             }
-            if (!campo_busquedaAutor.getText().equals(texto_autor)) {
-                busqueda.put("autor", campo_busquedaAutor.getText());
+            if (!busqueda_autor.equals(texto_autor) && !busqueda_autor.isBlank()) {
+                busqueda.put("autor", busqueda_autor);
             }
             if (check_publicacion.isSelected()) {
                 busqueda.put("publicacion", String.valueOf(dateChooser_busqueda.getYear()));
             }
-            if (!campo_busquedaSimple.getText().equals(texto_simple)) {
-                busqueda.put("simple", campo_busquedaSimple.getText());
+            if (!busqueda_simple.equals(texto_simple) && !busqueda_simple.isBlank()) {
+                busqueda.put("simple", busqueda_simple);
             }
 
         } else if (campo_busquedaSimple.isVisible()) {
-            busqueda.put("simple", campo_busquedaSimple.getText());
+            if (!busqueda_simple.equals(texto_simple) && !busqueda_simple.isBlank()) {
+                busqueda.put("simple", busqueda_simple);
+            }
         }
 
-        vista_padre.buscaLibros(busqueda);
+        if (!busqueda.isEmpty()) {
+            vista_padre.buscaLibros(busqueda);
+        } else {
+            lista_libros.setModel(modelo_lista);
+        }
     }//GEN-LAST:event_boton_busquedabusquedaUsuarios
 
     private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed

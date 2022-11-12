@@ -34,7 +34,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         this.vista_padre = parent;
 
         initComponents();
-        this.lista_Usuarios.setModel(this.modelo_lista = modelo_lista);
+        this.lista_usuarios.setModel(this.modelo_lista = modelo_lista);
         modelo_busqueda = new DefaultListModel<>();
 
         aniadeListeners();
@@ -69,8 +69,8 @@ public class DialogoPersona extends javax.swing.JDialog {
         boton_multiple.setBackground(VERDE);
 
         // Lista de usuarios
-        lista_Usuarios.setEnabled(false);
-        lista_Usuarios.clearSelection();
+        lista_usuarios.setEnabled(false);
+        lista_usuarios.clearSelection();
 
         // Búsqueda y filtros
         panel_busquedaSimple.setVisible(false);
@@ -105,9 +105,9 @@ public class DialogoPersona extends javax.swing.JDialog {
         boton_multiple.setBackground(ROJO);
 
         // Lista de usuarios
-        lista_Usuarios.setEnabled(true);
+        lista_usuarios.setEnabled(true);
         panel_busquedaAvanzada.setVisible(true);
-        lista_Usuarios.setModel(modelo_lista);
+        lista_usuarios.setModel(modelo_lista);
 
         // Busqueda y filtros
         panel_busquedaSimple.setVisible(true);
@@ -121,7 +121,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         this.setTitle("Usuarios registrados");
         setPreferredSize(DIMENSION_GRANDE);
         setLocationRelativeTo(vista_padre);
-        lista_Usuarios.requestFocus();
+        lista_usuarios.requestFocus();
 
         pack();
         setVisible(true);
@@ -162,11 +162,11 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         if (!usuarios_encontrados.isEmpty()) {
             modelo_busqueda.addAll(usuarios_encontrados);
-            lista_Usuarios.setModel(modelo_busqueda);
+            lista_usuarios.setModel(modelo_busqueda);
 
         } else if (this.isVisible()) {
             modelo_busqueda.addAll(usuarios_encontrados);
-            lista_Usuarios.setModel(modelo_busqueda);
+            lista_usuarios.setModel(modelo_busqueda);
 
         }
 
@@ -253,7 +253,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         campo_nombre = new javax.swing.JTextField();
         dateChooser_nacimiento = new com.toedter.calendar.JDateChooser();
         panel_lista = new javax.swing.JScrollPane();
-        lista_Usuarios = new javax.swing.JList<>();
+        lista_usuarios = new javax.swing.JList<>();
         panel_busquedaAvanzada = new javax.swing.JPanel();
         campo_busquedaNombre = new javax.swing.JTextField();
         campo_busquedaTelefono = new javax.swing.JTextField();
@@ -429,16 +429,16 @@ public class DialogoPersona extends javax.swing.JDialog {
         panel_lista.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios"));
         panel_lista.setPreferredSize(new java.awt.Dimension(100, 146));
 
-        lista_Usuarios.setModel(new DefaultListModel<Usuario>()
+        lista_usuarios.setModel(new DefaultListModel<Usuario>()
         );
-        lista_Usuarios.setMinimumSize(new java.awt.Dimension(50, 90));
-        lista_Usuarios.setPreferredSize(new java.awt.Dimension(50, 90));
-        lista_Usuarios.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lista_usuarios.setMinimumSize(new java.awt.Dimension(50, 90));
+        lista_usuarios.setPreferredSize(new java.awt.Dimension(50, 90));
+        lista_usuarios.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lista_UsuariosValueChanged(evt);
+                lista_usuariosValueChanged(evt);
             }
         });
-        panel_lista.setViewportView(lista_Usuarios);
+        panel_lista.setViewportView(lista_usuarios);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -655,22 +655,22 @@ public class DialogoPersona extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_boton_multipleActionPerformed
 
-    private void lista_UsuariosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lista_UsuariosValueChanged
+    private void lista_usuariosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lista_usuariosValueChanged
         JList lista = (JList) evt.getSource();
         if (lista.hasFocus()) {
             if (!lista.getValueIsAdjusting()) {
 
-                if (lista_Usuarios.getSelectedIndex() != -1) {
+                if (lista_usuarios.getSelectedIndex() != -1) {
                     Usuario usuario_seleccionado = (Usuario) lista.getSelectedValue();
                     rellenaDatosPersona(usuario_seleccionado);
                 }
             }
         }
-    }//GEN-LAST:event_lista_UsuariosValueChanged
+    }//GEN-LAST:event_lista_usuariosValueChanged
 
     private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed
         resetaFiltrosBusquedaDuro();
-        lista_Usuarios.setModel(modelo_lista);
+        lista_usuarios.setModel(modelo_lista);
         pack();
         repaint();
     }//GEN-LAST:event_boton_limpiarActionPerformed
@@ -702,30 +702,40 @@ public class DialogoPersona extends javax.swing.JDialog {
 
     private void busquedaUsuarios(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaUsuarios
         HashMap<String, String> busqueda = new HashMap<>();
+        String busqueda_nombre = campo_busquedaNombre.getText();
+        String busqueda_apellidos = campo_busquedaApellidos.getText();
+        String busqueda_telefono = campo_busquedaTelefono.getText();
+        String busqueda_simple = campo_busquedaSimple.getText();
 
         if (panel_busquedaAvanzada.isVisible()) {
 
-            if (!campo_busquedaNombre.getText().equals(texto_nombre)) {
-                busqueda.put("nombre", campo_busquedaNombre.getText());
+            if (!busqueda_nombre.equals(texto_nombre) && !busqueda_nombre.isBlank()) {
+                busqueda.put("nombre", busqueda_nombre);
             }
-            if (!campo_busquedaApellidos.getText().equals(texto_apellido)) {
-                busqueda.put("apellidos", campo_busquedaApellidos.getText());
+            if (!busqueda_apellidos.equals(texto_apellido) && !busqueda_apellidos.isBlank()) {
+                busqueda.put("apellidos", busqueda_apellidos);
             }
-            if (!campo_busquedaTelefono.getText().equals(texto_telefono)) {
-                busqueda.put("telefono", campo_busquedaTelefono.getText());
+            if (!busqueda_telefono.equals(texto_telefono) && !busqueda_nombre.isBlank()) {
+                busqueda.put("telefono", busqueda_telefono);
             }
             if (check_nacimiento.isSelected()) {
                 busqueda.put("anio", String.valueOf(dateChooser_busqueda.getYear()));
             }
-            if (!campo_busquedaSimple.getText().equals(texto_simple)) {
-                busqueda.put("simple", campo_busquedaSimple.getText());
+            if (!busqueda_simple.equals(texto_simple) && !busqueda_simple.isBlank()) {
+                busqueda.put("simple", busqueda_simple);
             }
 
         } else if (campo_busquedaSimple.isVisible()) {
-            busqueda.put("simple", campo_busquedaSimple.getText());
+            if (!busqueda_simple.equals(texto_simple) && !busqueda_simple.isBlank()) {
+                busqueda.put("simple", busqueda_simple);
+            }
         }
 
-        vista_padre.buscaUsuarios(busqueda);
+        if (!busqueda.isEmpty()) {
+            vista_padre.buscaUsuarios(busqueda);
+        } else {
+            lista_usuarios.setModel(modelo_lista);
+        }
     }//GEN-LAST:event_busquedaUsuarios
 
     private void dateChooser_busquedaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaPropertyChange
@@ -793,7 +803,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     private javax.swing.JLabel label_priApellido;
     private javax.swing.JLabel label_segApellido;
     private javax.swing.JLabel label_telefono;
-    private javax.swing.JList<Usuario> lista_Usuarios;
+    private javax.swing.JList<Usuario> lista_usuarios;
     private javax.swing.JPanel panel_busquedaAvanzada;
     private javax.swing.JPanel panel_busquedaSimple;
     private javax.swing.JScrollPane panel_lista;

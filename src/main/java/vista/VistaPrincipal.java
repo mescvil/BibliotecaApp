@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import controlador.Controlador;
 import excepciones.GuardaDatosException;
+import static extras.Colores_Dimensiones.MORADO;
 import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Usuario;
@@ -567,7 +568,7 @@ public class VistaPrincipal extends JFrame {
         gridBagConstraints.weighty = 0.1;
         panel_datosUsuario.add(jScrollPane2, gridBagConstraints);
 
-        boton_devolucion.setBackground(new java.awt.Color(153, 0, 153));
+        boton_devolucion.setBackground(MORADO);
         boton_devolucion.setForeground(new java.awt.Color(255, 255, 255));
         boton_devolucion.setText("Devolver");
         boton_devolucion.setEnabled(false);
