@@ -50,6 +50,10 @@ public class Usuario implements Serializable {
         return String.format("%s %s %s", nombre, apellido_1, apellido_2);
     }
 
+    public String getApellidos() {
+        return String.format("%s %S", apellido_1, apellido_2);
+    }
+
     @Override
     public String toString() {
         return getNombreCompleto();

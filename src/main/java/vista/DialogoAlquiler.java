@@ -22,7 +22,7 @@ import javax.swing.event.DocumentListener;
 public class DialogoAlquiler extends javax.swing.JDialog {
 
     private final VistaPrincipal vista_padre;
-    private final ModeloAlquiler modelo_tabla;
+    private ModeloAlquiler modelo_tabla;
     private ModeloAlquiler modelo_busqueda;
 
     private final String texto_titulo = "Introduce un titulo...";
@@ -82,6 +82,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         tabla_alquileres.getRowSorter().setSortKeys(null);
         tabla_alquileres.setModel(modelo_tabla);
 
+        ajustaTabla();
         pack();
         repaint();
     }
@@ -121,6 +122,12 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         }
 
         repaint();
+    }
+
+    public void actualizaTablaDevolucion(ArrayList<Alquiler> alquileres_actualizados) {
+        modelo_tabla.addAlquileres(alquileres_actualizados);
+        boton_busquedaActionPerformed(null);
+        ajustaTabla();
     }
 
     private void reseteaPanelFiltros() {
@@ -548,9 +555,11 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void boton_busquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_busquedaActionPerformed
         if (!check_avanzada.isSelected()) {
             String texto = campo_busquedaSimple.getText();
-            ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
 
-            actualizaTablaBusqueda(alquileres_encontrados);
+            if (!texto.equals(texto_simple)) {
+                ArrayList<Alquiler> alquileres_encontrados = vista_padre.buscaAlquileres(texto);
+                actualizaTablaBusqueda(alquileres_encontrados);
+            }
 
         } else {
             HashMap<String, String> busqueda = new HashMap<>();
@@ -580,7 +589,9 @@ public class DialogoAlquiler extends javax.swing.JDialog {
                 busqueda.put("simple", campo_busquedaSimple.getText());
             }
 
-            vista_padre.buscaAlquileres(busqueda);
+            if (!busqueda.isEmpty()) {
+                vista_padre.buscaAlquileres(busqueda);
+            }
         }
     }//GEN-LAST:event_boton_busquedaActionPerformed
 
@@ -595,11 +606,11 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     }//GEN-LAST:event_boton_limpiarmouseFuera
 
     private void boton_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarActionPerformed
-        ajustaTabla();
         reseteaFiltrosBusquedaLibro();
         reseteaFiltrosBusquedaUsuario();
 
         tabla_alquileres.setModel(modelo_tabla);
+        ajustaTabla();
     }//GEN-LAST:event_boton_limpiarActionPerformed
 
     private void tabla_alquileresMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_alquileresMousePressed

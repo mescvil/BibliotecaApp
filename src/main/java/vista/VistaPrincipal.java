@@ -172,11 +172,10 @@ public class VistaPrincipal extends JFrame {
 
     public void cambioDeAlquiler() {
         JList lista = lista_libros;
-        Libro libro = (Libro) lista.getSelectedValue();
 
         rellenaCamposLibro((Libro) lista.getSelectedValue());
         boton_devolucion.setEnabled(false);
-        dialogoAlquileres.actualizaTablaBusqueda(controlador.getAlquileres());
+        dialogoAlquileres.actualizaTablaDevolucion(controlador.getAlquileres());
     }
 
     private void rellenaCamposLibro(Libro libro) {

@@ -17,8 +17,7 @@ public class BuscaUsuarioApellidos implements InterfazBusquedaUsuario {
             return usuarios_encontrados;
         }
         for (Usuario usuario : lista_usuarios) {
-            if (usuario.getApellido_1().toLowerCase().contains(busqueda.toLowerCase())
-                    || usuario.getApellido_2().toLowerCase().contains(busqueda.toLowerCase())) {
+            if (usuario.getApellidos().toLowerCase().contains(busqueda.toLowerCase())) {
                 usuarios_encontrados.add(usuario);
             }
         }
