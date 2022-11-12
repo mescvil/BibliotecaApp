@@ -263,6 +263,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         panel_busquedaSimple = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         campo_busquedaSimple = new javax.swing.JTextField();
@@ -455,7 +456,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         campo_busquedaNombre.setText("Introduce un nombre...");
         campo_busquedaNombre.setToolTipText("Busca un usuario por nombre");
-        campo_busquedaNombre.setPreferredSize(new java.awt.Dimension(250, 22));
+        campo_busquedaNombre.setPreferredSize(new java.awt.Dimension(300, 22));
         campo_busquedaNombre.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 campoBusquedaClicked(evt);
@@ -464,7 +465,6 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
@@ -472,7 +472,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         campo_busquedaTelefono.setText("Introduce un telefono...");
         campo_busquedaTelefono.setToolTipText("Busca un usuario por teléfono");
-        campo_busquedaTelefono.setPreferredSize(new java.awt.Dimension(250, 22));
+        campo_busquedaTelefono.setPreferredSize(new java.awt.Dimension(300, 22));
         campo_busquedaTelefono.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 campoBusquedaClicked(evt);
@@ -481,7 +481,6 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
@@ -489,7 +488,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         campo_busquedaApellidos.setText("Introduce un apellido...");
         campo_busquedaApellidos.setToolTipText("Busca un usuario por apellidos");
-        campo_busquedaApellidos.setPreferredSize(new java.awt.Dimension(250, 22));
+        campo_busquedaApellidos.setPreferredSize(new java.awt.Dimension(300, 22));
         campo_busquedaApellidos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 campoBusquedaClicked(evt);
@@ -498,7 +497,6 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
@@ -559,6 +557,13 @@ public class DialogoPersona extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         panel_busquedaAvanzada.add(jLabel3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.1;
+        panel_busquedaAvanzada.add(filler4, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -793,6 +798,7 @@ public class DialogoPersona extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
