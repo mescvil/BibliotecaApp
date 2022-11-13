@@ -220,6 +220,7 @@ public class VistaPrincipal extends JFrame {
 
     public void abreDialogoPrestamo(Libro libro_prestado) {
         dialogoPrestamo.muestraDialogo(libro_prestado);
+        dialogoLibro.rellenaDatosLibros(libro_prestado);
     }
 
     /*

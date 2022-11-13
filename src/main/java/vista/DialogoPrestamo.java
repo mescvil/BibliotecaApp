@@ -14,8 +14,6 @@ import java.util.GregorianCalendar;
 
 import static extras.Colores_Dimensiones.AZUL;
 import static extras.Colores_Dimensiones.DIMENSION_GRANDE;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Escoz
