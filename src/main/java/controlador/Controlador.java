@@ -1,7 +1,7 @@
 package controlador;
 
 import accesoDatos.Modelo;
-import accesoDatos.ModeloSimple;
+import accesoDatos.ModeloArchivo;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
 import modelo.Alquiler;
@@ -15,6 +15,7 @@ import vista.VistaPrincipal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import vista.DialogoArchivos;
 
 /**
  * @author Escoz
@@ -29,9 +30,25 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     private ArrayList<Alquiler> lista_alquileres;
 
     public Controlador() {
-        modelo = new ModeloSimple();
-        ((ModeloSimple) modelo).suscribirseLibro(this);
-        ((ModeloSimple) modelo).suscribirseAlquiler(this);
+        modelo = new ModeloArchivo();
+        ((ModeloArchivo) modelo).suscribirseLibro(this);
+        ((ModeloArchivo) modelo).suscribirseAlquiler(this);
+
+        mapa_usuarios = new HashMap<>();
+        mapa_libros = new HashMap<>();
+        lista_alquileres = new ArrayList<>();
+
+        vista = new VistaPrincipal(this);
+        vista.setVisible(true);
+
+        /* Dialgo cargar archivos */
+        new DialogoArchivos(vista, true, this).setVisible(true);
+
+    }
+
+    /* ================== MODELO DE ARCHIVOS ================== */
+    public void cargaDatos(String ruta) {
+        ((ModeloArchivo) modelo).setRuta(ruta);
 
         try {
             mapa_usuarios = modelo.cargaPersonas();
@@ -41,12 +58,17 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         } catch (CargaDatosException ex) {
             // POR VER
         }
-
-        vista = new VistaPrincipal(this);
-        vista.setVisible(true);
-
     }
 
+    public void creaFicherosDatos(String ruta) {
+        ((ModeloArchivo) modelo).creaFicherosDatos(ruta);
+    }
+
+    public String getRutaAnterior() {
+        return ((ModeloArchivo) modelo).getRutaAnterior();
+    }
+
+    /* ================== MODELO GENERAL================== */
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
         mapa_usuarios.put(usuario.getDni(), usuario);
         modelo.guardaPersonas(mapa_usuarios);
@@ -56,6 +78,31 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         return new ArrayList<>(mapa_libros.values());
     }
 
+    public ArrayList<Usuario> getPersonas() {
+        return new ArrayList<>(mapa_usuarios.values());
+    }
+
+    public void guardaLibro(Libro libro) throws GuardaDatosException {
+        mapa_libros.put(libro.getIsbn(), libro);
+        modelo.guardaLibros(mapa_libros);
+    }
+
+    public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
+        lista_alquileres.add(alquiler);
+        modelo.guardaAlquileres(lista_alquileres);
+    }
+
+    public void realizaDevolucion(Alquiler alquiler) throws GuardaDatosException {
+        alquiler.elimaAlquiler();
+        lista_alquileres.remove(alquiler);
+        modelo.guardaAlquileres(lista_alquileres);
+    }
+
+    public ArrayList<Alquiler> getAlquileres() {
+        return lista_alquileres;
+    }
+
+    /* ================== BUSQUEDAS ================== */
     public ArrayList<Libro> buscaLibroTitulo(String busqueda) {
         ArrayList<Libro> libros_encontrados = new ArrayList<>();
 
@@ -238,30 +285,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             }
         }
         return alquileres_libro;
-    }
-
-    public ArrayList<Usuario> getPersonas() {
-        return new ArrayList<>(mapa_usuarios.values());
-    }
-
-    public void guardaLibro(Libro libro) throws GuardaDatosException {
-        mapa_libros.put(libro.getIsbn(), libro);
-        modelo.guardaLibros(mapa_libros);
-    }
-
-    public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
-        lista_alquileres.add(alquiler);
-        modelo.guardaAlquileres(lista_alquileres);
-    }
-
-    public void realizaDevolucion(Alquiler alquiler) throws GuardaDatosException {
-        alquiler.elimaAlquiler();
-        lista_alquileres.remove(alquiler);
-        modelo.guardaAlquileres(lista_alquileres);
-    }
-
-    public ArrayList<Alquiler> getAlquileres() {
-        return lista_alquileres;
     }
 
     @Override

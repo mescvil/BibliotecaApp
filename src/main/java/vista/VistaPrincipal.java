@@ -41,6 +41,7 @@ public class VistaPrincipal extends JFrame {
      * Creates new form Vista
      */
     public VistaPrincipal(Controlador controlador) {
+
         this.controlador = controlador;
         this.modelo_listaLibros = new DefaultListModel<>();
         this.modelo_listaAlquileres = new DefaultListModel<>();
@@ -64,8 +65,6 @@ public class VistaPrincipal extends JFrame {
         UIManager.put("OptionPane.yesButtonText", "Si");
         UIManager.put("OptionPane.noButtonText", "No");
 
-        // UN POCO CHAPUZA PERO HACE EL APAÑO
-        panel_toolBar.requestFocus();
     }
 
     private void iconoAplicacion() {

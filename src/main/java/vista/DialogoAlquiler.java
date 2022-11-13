@@ -1,6 +1,5 @@
 package vista;
 
-import static extras.Colores_Dimensiones.AZUL;
 import extras.ModeloAlquiler;
 import modelo.Alquiler;
 
