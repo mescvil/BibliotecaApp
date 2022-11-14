@@ -71,7 +71,6 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
 
             /* Si no existe crea un fichero de configuracion */
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
             try {
                 new File(ruta_configuracion).createNewFile();
             } catch (IOException ex1) {
@@ -84,16 +83,15 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
 
     private void escribeFicheroConfig() {
         try {
-            FileWriter fileWriter = new FileWriter(ruta_configuracion);
-            String usuarios = "rutaUsuarios=" + ruta_usuarios;
-            String libros = "rutaLibros=" + ruta_libros;
-            String alquileres = "rutaAlquileres=" + ruta_alquileres;
+            try ( FileWriter fileWriter = new FileWriter(ruta_configuracion)) {
+                String r_usuarios = "rutaUsuarios=" + ruta_usuarios;
+                String r_libros = "rutaLibros=" + ruta_libros;
+                String r_alquileres = "rutaAlquileres=" + ruta_alquileres;
 
-            fileWriter.write(usuarios + "\n");
-            fileWriter.write(libros + "\n");
-            fileWriter.write(alquileres + "\n");
-
-            fileWriter.close();
+                fileWriter.write(r_usuarios + "\n");
+                fileWriter.write(r_libros + "\n");
+                fileWriter.write(r_alquileres + "\n");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
