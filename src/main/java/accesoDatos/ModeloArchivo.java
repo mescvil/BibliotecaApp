@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import modelo.Alquiler;
 import modelo.Libro;
@@ -70,6 +71,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
 
             /* Si no existe crea un fichero de configuracion */
         } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
             try {
                 new File(ruta_configuracion).createNewFile();
             } catch (IOException ex1) {
@@ -80,12 +82,46 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         }
     }
 
-    public void creaFicherosDatos(String ruta) {
+    private void escribeFicheroConfig() {
+        try {
+            FileWriter fileWriter = new FileWriter(ruta_configuracion);
+            String usuarios = "rutaUsuarios=" + ruta_usuarios;
+            String libros = "rutaLibros=" + ruta_libros;
+            String alquileres = "rutaAlquileres=" + ruta_alquileres;
 
+            fileWriter.write(usuarios + "\n");
+            fileWriter.write(libros + "\n");
+            fileWriter.write(alquileres + "\n");
+
+            fileWriter.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void creaFicherosDatos(String ruta) {
+        /* Creamos un directorio nuevo para los archivos */
+        ruta += "/DatosBiblioteca/";
+        File file = new File(ruta);
+        file.mkdir();
+
+        /* Creamos los archivos */
+        setRuta(ruta);
+        try {
+            new File(ruta_libros).createNewFile();
+            new File(ruta_usuarios).createNewFile();
+            new File(ruta_alquileres).createNewFile();
+
+            escribeFicheroConfig();
+
+        } catch (IOException ex) {
+            // TODO crear una excepcion
+        }
     }
 
     public String getRutaAnterior() {
-        return ruta_libros;
+        File file = new File(ruta_libros);
+        return file.getParent();
     }
 
     @Override
@@ -121,9 +157,9 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
     }
 
     public void setRuta(String nueva_ruta) {
-        ruta_libros = ruta_libros + "libros.csv";
-        ruta_usuarios = ruta_usuarios + "usuarios.csv";
-        ruta_alquileres = ruta_alquileres + "alquileres.csv";
+        ruta_libros = nueva_ruta + "libros.csv";
+        ruta_usuarios = nueva_ruta + "usuarios.csv";
+        ruta_alquileres = nueva_ruta + "alquileres.csv";
     }
 
     @Override
