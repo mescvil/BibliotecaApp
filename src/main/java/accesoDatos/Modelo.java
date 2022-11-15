@@ -16,7 +16,7 @@ public interface Modelo {
 
     Map<String, Libro> cargaLibros() throws CargaDatosException;
 
-    Map<String, Usuario> cargaPersonas() throws CargaDatosException;
+    Map<String, Usuario> cargaUsuarios() throws CargaDatosException;
 
     ArrayList<Alquiler> cargaAlquileres() throws CargaDatosException;
 

@@ -1,6 +1,9 @@
 package accesoDatos;
 
+import excepciones.CargaDatosException;
+import excepciones.GuardaDatosException;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -47,28 +50,34 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         leeFicheroConfig();
     }
 
+    public void setRuta(String nueva_ruta) {
+        ruta_libros = nueva_ruta + "libros.csv";
+        ruta_usuarios = nueva_ruta + "usuarios.csv";
+        ruta_alquileres = nueva_ruta + "alquileres.csv";
+    }
+
     private void leeFicheroConfig() {
         try {
             FileReader fileReader = new FileReader(ruta_configuracion);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            String linea = bufferedReader.readLine();
+            try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
-            while (linea != null) {
-                String[] partes = linea.split("=");
-                switch (partes[0]) {
-                    case "rutaUsuarios" ->
-                        ruta_usuarios = partes[1];
-                    case "rutaLibros" ->
-                        ruta_libros = partes[1];
-                    case "rutaAlquileres" ->
-                        ruta_alquileres = partes[1];
-                    default ->
-                        throw new IOException();
+                String linea = bufferedReader.readLine();
+                while (linea != null) {
+                    String[] partes = linea.split("=");
+                    switch (partes[0]) {
+                        case "rutaUsuarios" ->
+                            ruta_usuarios = partes[1];
+                        case "rutaLibros" ->
+                            ruta_libros = partes[1];
+                        case "rutaAlquileres" ->
+                            ruta_alquileres = partes[1];
+                        default ->
+                            throw new IOException();
+                    }
+
+                    linea = bufferedReader.readLine();
                 }
-
-                linea = bufferedReader.readLine();
             }
-
             /* Si no existe crea un fichero de configuracion */
         } catch (FileNotFoundException ex) {
             try {
@@ -123,25 +132,68 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
     }
 
     @Override
-    public Map<String, Libro> cargaLibros() {
+    public Map<String, Libro> cargaLibros() throws CargaDatosException {
         Libro libro;
         HashMap<String, Libro> mapa_libros = new HashMap<>();
 
         if (ruta_libros != null || !ruta_libros.isBlank()) {
+            try {
+                FileReader fileReader = new FileReader(ruta_libros);
+                try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                    String linea = bufferedReader.readLine();
 
+                    while (linea != null) {
+                        String[] partes = linea.split(",");
+                        libro = new Libro();
+                        libro.setIsbn(partes[0]);
+                        libro.setTitulo(partes[1]);
+                        libro.setAutor(partes[2]);
+                        libro.setAnio_publicacion(partes[3]);
+                        libro.setN_ejemplares(Integer.parseInt(partes[4]));
+
+                        mapa_libros.put(libro.getIsbn(), libro);
+                        linea = bufferedReader.readLine();
+                    }
+                }
+            } catch (IOException ex) {
+                throw new CargaDatosException("Libros");
+            }
         }
         return this.libros = mapa_libros;
+
     }
 
     @Override
-    public HashMap<String, Usuario> cargaPersonas() {
-        Usuario persona;
-        HashMap<String, Usuario> mapa_personas = new HashMap<>();
+    public HashMap<String, Usuario> cargaUsuarios() throws CargaDatosException {
+        Usuario usuario;
+        HashMap<String, Usuario> mapa_usuarios = new HashMap<>();
 
         if (ruta_usuarios != null || !ruta_usuarios.isBlank()) {
+            try {
+                FileReader fileReader = new FileReader(ruta_usuarios);
+                try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                    String linea = bufferedReader.readLine();
 
+                    while (linea != null) {
+                        String[] partes = linea.split(",");
+                        usuario = new Usuario();
+                        usuario.setDni(partes[0]);
+                        usuario.setNombre(partes[1]);
+                        usuario.setApellido_1(partes[2]);
+                        usuario.setApellido_2(partes[3]);
+                        usuario.setTelefono(partes[4]);
+                        usuario.setCorreo(partes[5]);
+                        // Fata la fecha de naciemieto
+
+                        mapa_usuarios.put(usuario.getDni(), usuario);
+                        linea = bufferedReader.readLine();
+                    }
+                }
+            } catch (IOException ex) {
+                throw new CargaDatosException("Usuarios");
+            }
         }
-        return this.personas = mapa_personas;
+        return this.personas = mapa_usuarios;
     }
 
     @Override
@@ -154,20 +206,33 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         return alquileres;
     }
 
-    public void setRuta(String nueva_ruta) {
-        ruta_libros = nueva_ruta + "libros.csv";
-        ruta_usuarios = nueva_ruta + "usuarios.csv";
-        ruta_alquileres = nueva_ruta + "alquileres.csv";
-    }
-
     @Override
-    public void guardaLibros(Map<String, Libro> libros) {
+    public void guardaLibros(Map<String, Libro> libros) throws GuardaDatosException {
+        try {
+            FileWriter fileWriter = new FileWriter(ruta_libros);
+            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+                for (Libro libro : libros.values()) {
+                    bufferedWriter.write(libro.toCSV() + "\n");
+                }
+            }
+        } catch (Exception e) {
+            throw new GuardaDatosException("Libros");
+        }
         notificaCambioLibro();
     }
 
     @Override
-    public void guardaPersonas(Map<String, Usuario> usuario) {
-        // TODO
+    public void guardaPersonas(Map<String, Usuario> usuarios) throws GuardaDatosException {
+        try {
+            FileWriter fileWriter = new FileWriter(ruta_usuarios);
+            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+                for (Usuario usuario : usuarios.values()) {
+                    bufferedWriter.write(usuario.toCSV() + "\n");
+                }
+            }
+        } catch (Exception e) {
+            throw new GuardaDatosException("Usuario");
+        }
     }
 
     @Override

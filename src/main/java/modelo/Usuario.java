@@ -54,6 +54,11 @@ public class Usuario implements Serializable {
         return String.format("%s %S", apellido_1, apellido_2);
     }
 
+    public String toCSV() {
+        String f_nac = extras.Utilidades.gregorianCalendarToString(fecha_nacimiento);
+        return String.format("%s,%s,%s,%s,%s,%s,%s", dni, nombre, apellido_1, apellido_2, telefono, correo, f_nac);
+    }
+
     @Override
     public String toString() {
         return getNombreCompleto();

@@ -49,7 +49,7 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
     }
 
     @Override
-    public HashMap<String, Usuario> cargaPersonas() {
+    public HashMap<String, Usuario> cargaUsuarios() {
 
         Usuario persona;
         HashMap<String, Usuario> mapa_personas = new HashMap<>();

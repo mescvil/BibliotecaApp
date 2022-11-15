@@ -40,6 +40,10 @@ public class Libro implements Serializable {
     }
 
     // --------------- MÉTODOS ---------------
+    public String toCSV() {
+        return String.format("%s,%s,%s,%s,%s", isbn, titulo, autor, anio_publicacion, n_ejemplares);
+    }
+
     @Override
     public String toString() {
         return String.format("%s - %s", isbn, titulo);

@@ -55,6 +55,7 @@ public class DialogoArchivos extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Selección de datos");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -77,9 +78,14 @@ public class DialogoArchivos extends javax.swing.JDialog {
         panel_datos.setPreferredSize(new java.awt.Dimension(300, 170));
         panel_datos.setLayout(new java.awt.GridBagLayout());
 
-        boton_anterior.setText("Usar ");
+        boton_anterior.setText("Usar anterior");
         boton_anterior.setMinimumSize(new java.awt.Dimension(0, 27));
         boton_anterior.setPreferredSize(new java.awt.Dimension(30, 30));
+        boton_anterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_anteriorActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -112,7 +118,7 @@ public class DialogoArchivos extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 9, 5, 9);
         panel_datos.add(campo_rutaAnterior, gridBagConstraints);
 
-        boton_cargar.setText("Usar otros datos");
+        boton_cargar.setText("Cargar datos");
         boton_cargar.setMinimumSize(new java.awt.Dimension(0, 27));
         boton_cargar.setPreferredSize(new java.awt.Dimension(30, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -143,8 +149,14 @@ public class DialogoArchivos extends javax.swing.JDialog {
         if (opcion == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             controlador.creaFicherosDatos(file.getAbsolutePath());
+            
+            this.setVisible(false);
         }
     }//GEN-LAST:event_boton_crearActionPerformed
+
+    private void boton_anteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_anteriorActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_boton_anteriorActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

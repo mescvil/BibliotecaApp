@@ -127,7 +127,7 @@ public class VistaPrincipal extends JFrame {
 
     private void modeloDefectoUsuarios() {
         modelo_listaUsuarios.clear();
-        modelo_listaUsuarios.addAll(controlador.getPersonas());
+        modelo_listaUsuarios.addAll(controlador.getUsuarios());
     }
 
     private void modeloDefectoLibros() {
@@ -163,6 +163,10 @@ public class VistaPrincipal extends JFrame {
             JOptionPane.showMessageDialog(this, "Sin resultados",
                     "Búsqueda de libros", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    public void cambioEnUsuarios() {
+        modeloDefectoUsuarios();
     }
 
     public void cambioEnListaLibros() {
