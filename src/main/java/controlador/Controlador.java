@@ -43,20 +43,22 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
 
         /* Dialgo cargar archivos */
         new DialogoArchivos(vista, true, this).setVisible(true);
-
+        cargaDatosNotify();
     }
 
     /* ================== MODELO DE ARCHIVOS ================== */
-    public void cargaDatos(String ruta) {
-        ((ModeloArchivo) modelo).setRuta(ruta);
-
+    private void cargaDatosNotify() {
         try {
-            mapa_usuarios = modelo.cargaPersonas();
+            mapa_usuarios = modelo.cargaUsuarios();
             mapa_libros = modelo.cargaLibros();
             lista_alquileres = modelo.cargaAlquileres();
 
+            cambioUsuario();
+            cambioLibro();
+            cambioAlquiler();
+
         } catch (CargaDatosException ex) {
-            // POR VER
+            ex.printStackTrace();
         }
     }
 
@@ -78,7 +80,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         return new ArrayList<>(mapa_libros.values());
     }
 
-    public ArrayList<Usuario> getPersonas() {
+    public ArrayList<Usuario> getUsuarios() {
         return new ArrayList<>(mapa_usuarios.values());
     }
 
@@ -285,6 +287,10 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             }
         }
         return alquileres_libro;
+    }
+
+    public void cambioUsuario() {
+        vista.cambioEnUsuarios();
     }
 
     @Override
