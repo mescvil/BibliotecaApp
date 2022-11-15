@@ -281,7 +281,8 @@ public class VistaPrincipal extends JFrame {
         boton_devolucion = new javax.swing.JButton();
         barraMenu = new javax.swing.JMenuBar();
         menu_archivo = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        menu_cargar = new javax.swing.JMenuItem();
+        menu_guardar = new javax.swing.JMenuItem();
         menu_usuarios = new javax.swing.JMenu();
         menu_aniadeUsuario = new javax.swing.JMenuItem();
         menu_verUsuarios = new javax.swing.JMenuItem();
@@ -626,13 +627,21 @@ public class VistaPrincipal extends JFrame {
 
         menu_archivo.setText("Archivo");
 
-        jMenuItem1.setText("Cargar datos...");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        menu_cargar.setText("Cargar datos...");
+        menu_cargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                menu_cargarActionPerformed(evt);
             }
         });
-        menu_archivo.add(jMenuItem1);
+        menu_archivo.add(menu_cargar);
+
+        menu_guardar.setText("Guardar como...");
+        menu_guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_guardarActionPerformed(evt);
+            }
+        });
+        menu_archivo.add(menu_guardar);
 
         menu_usuarios.setText("Usuarios");
 
@@ -890,7 +899,7 @@ public class VistaPrincipal extends JFrame {
         }
     }//GEN-LAST:event_boton_destruccionActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void menu_cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_cargarActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int opcion = fileChooser.showDialog(this, "Seleccionar");
@@ -907,7 +916,24 @@ public class VistaPrincipal extends JFrame {
                         "Carga de datos", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_menu_cargarActionPerformed
+
+    private void menu_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_guardarActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int opcion = fileChooser.showDialog(this, "Seleccionar");
+
+        if (opcion == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                controlador.creaNuevaRuta(file.getAbsolutePath());
+
+            } catch (CargaDatosException | GuardaDatosException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Carga de datos", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_menu_guardarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
@@ -929,7 +955,6 @@ public class VistaPrincipal extends JFrame {
     private javax.swing.JTextField campo_titulo;
     private javax.swing.JCheckBoxMenuItem checkMenu_modoOscuro;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
@@ -948,6 +973,8 @@ public class VistaPrincipal extends JFrame {
     private javax.swing.JMenuItem menu_aniadeLibro;
     private javax.swing.JMenuItem menu_aniadeUsuario;
     private javax.swing.JMenu menu_archivo;
+    private javax.swing.JMenuItem menu_cargar;
+    private javax.swing.JMenuItem menu_guardar;
     private javax.swing.JMenu menu_libros;
     private javax.swing.JMenuItem menu_listaAlquileres;
     private javax.swing.JMenuItem menu_listaLibros;

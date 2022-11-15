@@ -28,43 +28,43 @@ import java.util.logging.Logger;
  * @author Escoz
  */
 public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
-    
+
     private final String ruta_configuracion = "config.ini";
     private String ruta_libros;
     private String ruta_usuarios;
     private String ruta_alquileres;
-    
+
     private HashMap<String, Libro> map_libros;
     private HashMap<String, Usuario> map_usuarios;
-    
+
     private final ArrayList<ObservadorLibros> lista_observadoresLibro;
     private final ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
-    
+
     public ModeloArchivo() {
         map_libros = new HashMap<>();
         map_usuarios = new HashMap<>();
         lista_observadoresLibro = new ArrayList<>();
         lista_observadoresAlquiler = new ArrayList<>();
-        
+
         ruta_alquileres = "";
         ruta_usuarios = "";
         ruta_libros = "";
-        
+
         leeFicheroConfig();
     }
-    
+
     public void setRuta(String nueva_ruta) {
         ruta_libros = nueva_ruta + "/libros.csv";
         ruta_usuarios = nueva_ruta + "/usuarios.csv";
         ruta_alquileres = nueva_ruta + "/alquileres.csv";
         escribeFicheroConfig();
     }
-    
+
     private void leeFicheroConfig() {
         try {
             FileReader fileReader = new FileReader(ruta_configuracion);
             try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-                
+
                 String linea = bufferedReader.readLine();
                 while (linea != null) {
                     String[] partes = linea.split("=");
@@ -78,7 +78,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                         default ->
                             throw new IOException();
                     }
-                    
+
                     linea = bufferedReader.readLine();
                 }
             }
@@ -93,14 +93,14 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
             Logger.getLogger(ModeloArchivo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void escribeFicheroConfig() {
         try {
             try ( FileWriter fileWriter = new FileWriter(ruta_configuracion)) {
                 String r_usuarios = "rutaUsuarios=" + ruta_usuarios;
                 String r_libros = "rutaLibros=" + ruta_libros;
                 String r_alquileres = "rutaAlquileres=" + ruta_alquileres;
-                
+
                 fileWriter.write(r_usuarios + "\n");
                 fileWriter.write(r_libros + "\n");
                 fileWriter.write(r_alquileres + "\n");
@@ -109,7 +109,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
             ex.printStackTrace();
         }
     }
-    
+
     public void creaFicherosDatos(String ruta) {
         /* Creamos un directorio nuevo para los archivos */
         ruta += "/DatosBiblioteca/";
@@ -122,39 +122,52 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
             new File(ruta_libros).createNewFile();
             new File(ruta_usuarios).createNewFile();
             new File(ruta_alquileres).createNewFile();
-            
+
             escribeFicheroConfig();
-            
+
         } catch (IOException ex) {
             // TODO crear una excepcion
         }
     }
-    
+
     public String getRutaAnterior() {
         File file = new File(ruta_libros);
         return file.getParent();
     }
-    
+
+    public void creaNuevaRuta(String ruta) throws CargaDatosException, GuardaDatosException {
+        Map usuarios = cargaUsuarios();
+        Map libros = cargaLibros();
+        ArrayList<Alquiler> alquileres = new ArrayList<>(cargaAlquileres());
+
+        creaFicherosDatos(ruta);
+        leeFicheroConfig();
+
+        guardaPersonas(usuarios);
+        guardaLibros(libros);
+        guardaAlquileres(alquileres);
+    }
+
     public void autodestruccion() throws GuardaDatosException {
         map_libros = new HashMap<>();
         map_usuarios = new HashMap<>();
-        
+
         guardaLibros(map_libros);
         guardaPersonas(map_usuarios);
         guardaAlquileres(new ArrayList<>());
     }
-    
+
     @Override
     public Map<String, Libro> cargaLibros() throws CargaDatosException {
         Libro libro;
         HashMap<String, Libro> mapa_libros = new HashMap<>();
-        
+
         if (ruta_libros != null || !ruta_libros.isBlank()) {
             try {
                 FileReader fileReader = new FileReader(ruta_libros);
                 try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                     String linea = bufferedReader.readLine();
-                    
+
                     while (linea != null) {
                         String[] partes = linea.split(",");
                         libro = new Libro();
@@ -163,7 +176,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                         libro.setAutor(partes[2]);
                         libro.setAnio_publicacion(partes[3]);
                         libro.setN_ejemplares(Integer.parseInt(partes[4]));
-                        
+
                         mapa_libros.put(libro.getIsbn(), libro);
                         linea = bufferedReader.readLine();
                     }
@@ -173,20 +186,20 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
             }
         }
         return this.map_libros = mapa_libros;
-        
+
     }
-    
+
     @Override
     public HashMap<String, Usuario> cargaUsuarios() throws CargaDatosException {
         Usuario usuario;
         HashMap<String, Usuario> mapa_usuarios = new HashMap<>();
-        
+
         if (ruta_usuarios != null || !ruta_usuarios.isBlank()) {
             try {
                 FileReader fileReader = new FileReader(ruta_usuarios);
                 try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                     String linea = bufferedReader.readLine();
-                    
+
                     while (linea != null) {
                         String[] partes = linea.split(",");
                         usuario = new Usuario();
@@ -197,7 +210,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                         usuario.setTelefono(partes[4]);
                         usuario.setCorreo(partes[5]);
                         usuario.setFecha_nacimiento(Utilidades.stringToGregorianCalendar(partes[6]));
-                        
+
                         mapa_usuarios.put(usuario.getDni(), usuario);
                         linea = bufferedReader.readLine();
                     }
@@ -210,28 +223,28 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         }
         return this.map_usuarios = mapa_usuarios;
     }
-    
+
     @Override
     public ArrayList<Alquiler> cargaAlquileres() throws CargaDatosException {
         ArrayList<Alquiler> alquileres = new ArrayList<>();
-        
+
         if (ruta_alquileres != null || !ruta_alquileres.isBlank()) {
             try {
                 FileReader fileReader = new FileReader(ruta_alquileres);
                 try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                     String linea = bufferedReader.readLine();
-                    
+
                     while (linea != null) {
                         String[] partes = linea.split(",");
-                        
+
                         Libro l = map_libros.get(partes[0]);
                         Usuario u = map_usuarios.get(partes[1]);
                         GregorianCalendar f_limite = Utilidades.stringToGregorianCalendar(partes[2]);
                         GregorianCalendar f_creacion = Utilidades.stringToGregorianCalendar(partes[3]);
                         int n_ejemplares = Integer.parseInt(partes[4]);
-                        
+
                         alquileres.add(new Alquiler(l, u, f_limite, f_creacion, n_ejemplares));
-                        
+
                         linea = bufferedReader.readLine();
                     }
                 } catch (ParseException | SinEjemplaresException | NullPointerException ex) {
@@ -243,7 +256,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         }
         return alquileres;
     }
-    
+
     @Override
     public void guardaLibros(Map<String, Libro> libros) throws GuardaDatosException {
         try {
@@ -258,7 +271,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
             throw new GuardaDatosException("Libros");
         }
     }
-    
+
     @Override
     public void guardaPersonas(Map<String, Usuario> usuarios) throws GuardaDatosException {
         try {
@@ -272,7 +285,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
             throw new GuardaDatosException("Usuarios");
         }
     }
-    
+
     @Override
     public void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException {
         try {
@@ -287,29 +300,29 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
             throw new GuardaDatosException("Alquileres");
         }
     }
-    
+
     @Override
     public void suscribirseLibro(ObservadorLibros o) {
         lista_observadoresLibro.add(o);
     }
-    
+
     @Override
     public void notificaCambioLibro() {
         for (ObservadorLibros observadorLibros : lista_observadoresLibro) {
             observadorLibros.cambioLibro();
         }
     }
-    
+
     @Override
     public void suscribirseAlquiler(ObservadorAlquiler o) {
         lista_observadoresAlquiler.add(o);
     }
-    
+
     @Override
     public void notificaCambioAlquiler() {
         for (ObservadorAlquiler observadorAlquiler : lista_observadoresAlquiler) {
             observadorAlquiler.cambioAlquiler();
         }
     }
-    
+
 }

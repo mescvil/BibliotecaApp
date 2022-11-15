@@ -74,6 +74,11 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         cargaDatosNotify();
     }
 
+    public void creaNuevaRuta(String ruta) throws CargaDatosException, GuardaDatosException {
+        ((ModeloArchivo) modelo).creaNuevaRuta(ruta);
+        cargaDatosNotify();
+    }
+
     /* ================== MODELO GENERAL================== */
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
         mapa_usuarios.put(usuario.getDni(), usuario);
