@@ -170,7 +170,12 @@ public class DialogoLibro extends javax.swing.JDialog {
 
     }
 
-    public void actualizaListaLibros(ArrayList<Libro> libros_econtrados) {
+    public void actualizaListaLibros(ArrayList<Libro> libros) {
+        modelo_lista.clear();
+        modelo_lista.addAll(libros);
+    }
+
+    public void actualizaListaLibrosBusqueda(ArrayList<Libro> libros_econtrados) {
         modelo_busqueda.clear();
 
         if (!libros_econtrados.isEmpty()) {

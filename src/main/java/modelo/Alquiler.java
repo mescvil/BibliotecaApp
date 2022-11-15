@@ -5,6 +5,7 @@ import excepciones.SinEjemplaresException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import extras.Utilidades;
 
 /**
  * @author Escoz
@@ -13,7 +14,7 @@ public class Alquiler implements Serializable {
 
     // -------------- ATRIBUTOS ---------------
     private Libro libro;
-    private Usuario persona;
+    private Usuario usuario;
     private GregorianCalendar fecha_limite;
     private final GregorianCalendar fecha_creacion;
     private int n_ejemplares;
@@ -45,9 +46,14 @@ public class Alquiler implements Serializable {
         dateFormat.setCalendar(fecha_limite);
         String fecha_entrega = dateFormat.format(fecha_limite.getTime());
 
-        return String.format("(%d) %s %s, %s - %s", n_ejemplares, persona.getApellido_1(),
-                persona.getApellido_2(),
-                persona.getNombre(), fecha_entrega);
+        return String.format("(%d) %s %s, %s - %s", n_ejemplares, usuario.getApellido_1(),
+                usuario.getApellido_2(), usuario.getNombre(), fecha_entrega);
+    }
+
+    public String toCSV() {
+        return String.format("%s,%s,%s,%s,%s", libro.getIsbn(), usuario.getDni(),
+                Utilidades.gregorianCalendarToString(fecha_limite), Utilidades.gregorianCalendarToString(fecha_creacion),
+                n_ejemplares);
     }
 
     private void creaAlquiler(int n_ejemplares) throws SinEjemplaresException {
@@ -68,7 +74,7 @@ public class Alquiler implements Serializable {
         if (!comparado.getLibro().equals(libro)) {
             return false;
         }
-        if (!comparado.getUsuario().equals(persona)) {
+        if (!comparado.getUsuario().equals(usuario)) {
             return false;
         }
         if (!comparado.getFecha_limite().equals(getFecha_limite())) {
@@ -87,11 +93,11 @@ public class Alquiler implements Serializable {
     }
 
     public Usuario getUsuario() {
-        return persona;
+        return usuario;
     }
 
     public void setUsuario(Usuario persona) {
-        this.persona = persona;
+        this.usuario = persona;
     }
 
     public GregorianCalendar getFecha_limite() {

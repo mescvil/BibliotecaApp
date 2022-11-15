@@ -1,5 +1,6 @@
 package accesoDatos;
 
+import extras.Utilidades;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
 import java.io.BufferedReader;
@@ -9,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Usuario;
@@ -51,9 +53,10 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
     }
 
     public void setRuta(String nueva_ruta) {
-        ruta_libros = nueva_ruta + "libros.csv";
-        ruta_usuarios = nueva_ruta + "usuarios.csv";
-        ruta_alquileres = nueva_ruta + "alquileres.csv";
+        ruta_libros = nueva_ruta + "/libros.csv";
+        ruta_usuarios = nueva_ruta + "/usuarios.csv";
+        ruta_alquileres = nueva_ruta + "/alquileres.csv";
+        escribeFicheroConfig();
     }
 
     private void leeFicheroConfig() {
@@ -183,11 +186,13 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                         usuario.setApellido_2(partes[3]);
                         usuario.setTelefono(partes[4]);
                         usuario.setCorreo(partes[5]);
-                        // Fata la fecha de naciemieto
+                        usuario.setFecha_nacimiento(Utilidades.stringToGregorianCalendar(partes[6]));
 
                         mapa_usuarios.put(usuario.getDni(), usuario);
                         linea = bufferedReader.readLine();
                     }
+                } catch (ParseException ex) {
+                    throw new CargaDatosException("Usuarios");
                 }
             } catch (IOException ex) {
                 throw new CargaDatosException("Usuarios");
@@ -215,10 +220,10 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                     bufferedWriter.write(libro.toCSV() + "\n");
                 }
             }
-        } catch (Exception e) {
+            notificaCambioLibro();
+        } catch (IOException e) {
             throw new GuardaDatosException("Libros");
         }
-        notificaCambioLibro();
     }
 
     @Override
@@ -230,14 +235,24 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                     bufferedWriter.write(usuario.toCSV() + "\n");
                 }
             }
-        } catch (Exception e) {
-            throw new GuardaDatosException("Usuario");
+        } catch (IOException e) {
+            throw new GuardaDatosException("Usuarios");
         }
     }
 
     @Override
-    public void guardaAlquileres(ArrayList<Alquiler> alquileres) {
-        notificaCambioAlquiler();
+    public void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException {
+        try {
+            FileWriter fileWriter = new FileWriter(ruta_alquileres);
+            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+                for (Alquiler alquiler : alquileres) {
+                    bufferedWriter.write(alquiler.toCSV() + "\n");
+                }
+            }
+            notificaCambioAlquiler();
+        } catch (IOException e) {
+            throw new GuardaDatosException("Alquileres");
+        }
     }
 
     @Override

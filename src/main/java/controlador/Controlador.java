@@ -41,25 +41,24 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         vista = new VistaPrincipal(this);
         vista.setVisible(true);
 
-        /* Dialgo cargar archivos */
+        /* Dialgo para cargar los archivos */
         new DialogoArchivos(vista, true, this).setVisible(true);
-        cargaDatosNotify();
     }
 
     /* ================== MODELO DE ARCHIVOS ================== */
-    private void cargaDatosNotify() {
-        try {
-            mapa_usuarios = modelo.cargaUsuarios();
-            mapa_libros = modelo.cargaLibros();
-            lista_alquileres = modelo.cargaAlquileres();
+    public void cargaDatosNotify() throws CargaDatosException {
 
-            cambioUsuario();
-            cambioLibro();
-            cambioAlquiler();
+        mapa_usuarios = modelo.cargaUsuarios();
+        mapa_libros = modelo.cargaLibros();
+        lista_alquileres = modelo.cargaAlquileres();
 
-        } catch (CargaDatosException ex) {
-            ex.printStackTrace();
-        }
+        cambioUsuario();
+        cambioLibro();
+        cambioAlquiler();
+    }
+
+    public void setRutaFicheros(String ruta) {
+        ((ModeloArchivo) modelo).setRuta(ruta);
     }
 
     public void creaFicherosDatos(String ruta) {

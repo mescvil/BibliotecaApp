@@ -3,17 +3,19 @@
 package vista;
 
 import controlador.Controlador;
+import excepciones.CargaDatosException;
 import static extras.Colores_Dimensiones.AZUL;
 import java.awt.Frame;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Escoz
  */
 public class DialogoArchivos extends javax.swing.JDialog {
-    
+
     private Controlador controlador;
     private JFileChooser fileChooser;
 
@@ -23,17 +25,21 @@ public class DialogoArchivos extends javax.swing.JDialog {
     public DialogoArchivos(Frame parent, boolean modal, Controlador controlador) {
         super(parent, modal);
         initComponents();
-        
+
         this.controlador = controlador;
         setLocationRelativeTo(parent);
         iniciaDialogo();
     }
-    
+
     private void iniciaDialogo() {
         campo_rutaAnterior.setText(controlador.getRutaAnterior());
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
+        if (campo_rutaAnterior.getText().isBlank()) {
+            boton_anterior.setEnabled(false);
+        }
+
         label_logo.requestFocus();
     }
 
@@ -55,7 +61,7 @@ public class DialogoArchivos extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Selección de datos");
+        setTitle("Inicio");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -78,6 +84,8 @@ public class DialogoArchivos extends javax.swing.JDialog {
         panel_datos.setPreferredSize(new java.awt.Dimension(300, 170));
         panel_datos.setLayout(new java.awt.GridBagLayout());
 
+        boton_anterior.setBackground(AZUL);
+        boton_anterior.setForeground(new java.awt.Color(255, 255, 255));
         boton_anterior.setText("Usar anterior");
         boton_anterior.setMinimumSize(new java.awt.Dimension(0, 27));
         boton_anterior.setPreferredSize(new java.awt.Dimension(30, 30));
@@ -121,6 +129,11 @@ public class DialogoArchivos extends javax.swing.JDialog {
         boton_cargar.setText("Cargar datos");
         boton_cargar.setMinimumSize(new java.awt.Dimension(0, 27));
         boton_cargar.setPreferredSize(new java.awt.Dimension(30, 30));
+        boton_cargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_cargarActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -146,17 +159,51 @@ public class DialogoArchivos extends javax.swing.JDialog {
 
     private void boton_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_crearActionPerformed
         int opcion = fileChooser.showDialog(this, "Seleccionar");
+
         if (opcion == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             controlador.creaFicherosDatos(file.getAbsolutePath());
-            
-            this.setVisible(false);
+
+            try {
+                controlador.cargaDatosNotify();
+                this.setVisible(false);
+
+            } catch (CargaDatosException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Carga de datos", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_boton_crearActionPerformed
 
     private void boton_anteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_anteriorActionPerformed
-        this.setVisible(false);
+        try {
+            controlador.cargaDatosNotify();
+            this.setVisible(false);
+        } catch (CargaDatosException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Carga de datos", JOptionPane.ERROR_MESSAGE);
+
+            boton_anterior.setEnabled(false);
+        }
     }//GEN-LAST:event_boton_anteriorActionPerformed
+
+    private void boton_cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_cargarActionPerformed
+        int opcion = fileChooser.showDialog(this, "Seleccionar");
+
+        if (opcion == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            controlador.setRutaFicheros(file.getAbsolutePath());
+
+            try {
+                controlador.cargaDatosNotify();
+                this.setVisible(false);
+
+            } catch (CargaDatosException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Carga de datos", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_boton_cargarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

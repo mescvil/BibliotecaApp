@@ -134,6 +134,7 @@ public class VistaPrincipal extends JFrame {
         modelo_listaLibros.clear();
         ArrayList<Libro> libros = controlador.getLibros();
         modelo_listaLibros.addAll(libros);
+
     }
 
     private void modeloDefectoAlquileres() {
@@ -171,7 +172,9 @@ public class VistaPrincipal extends JFrame {
 
     public void cambioEnListaLibros() {
         ArrayList<Libro> libros = controlador.getLibros();
-        setModeloListaLibros(libros);
+        modelo_listaLibros.clear();
+        modelo_listaLibros.addAll(libros);
+        dialogoLibro.actualizaListaLibros(libros);
     }
 
     public void cambioDeAlquiler() {
@@ -214,7 +217,7 @@ public class VistaPrincipal extends JFrame {
     }
 
     public void actualizaBusquedaLibros(ArrayList<Libro> libros_encontrados) {
-        dialogoLibro.actualizaListaLibros(libros_encontrados);
+        dialogoLibro.actualizaListaLibrosBusqueda(libros_encontrados);
     }
 
     public void actualizaBusquedaAlquiler(ArrayList<Alquiler> alquileres_econtrados) {
@@ -375,9 +378,9 @@ public class VistaPrincipal extends JFrame {
 
         campo_busquedaLibro.setText("Introduce un titulo...");
         campo_busquedaLibro.setToolTipText("Busca un libro por titulo");
-        campo_busquedaLibro.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                campo_busquedaLibroFocusGained(evt);
+        campo_busquedaLibro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campo_busquedaLibroMouseClicked(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -820,11 +823,6 @@ public class VistaPrincipal extends JFrame {
         dialogoAlquileres.muestraAlquileres(controlador.getAlquileres());
     }//GEN-LAST:event_boton_alquileresActionPerformed
 
-    private void campo_busquedaLibroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campo_busquedaLibroFocusGained
-        JTextField campo = (JTextField) evt.getSource();
-        campo.setText("");
-    }//GEN-LAST:event_campo_busquedaLibroFocusGained
-
     private void boton_listaLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_listaLibrosActionPerformed
         dialogoLibro.muestraModoVer(controlador.getLibros());
     }//GEN-LAST:event_boton_listaLibrosActionPerformed
@@ -836,6 +834,11 @@ public class VistaPrincipal extends JFrame {
     private void menu_listaLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_listaLibrosActionPerformed
         dialogoLibro.muestraModoVer(controlador.getLibros());
     }//GEN-LAST:event_menu_listaLibrosActionPerformed
+
+    private void campo_busquedaLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campo_busquedaLibroMouseClicked
+        JTextField campo = (JTextField) evt.getSource();
+        campo.setText("");
+    }//GEN-LAST:event_campo_busquedaLibroMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;

@@ -1,6 +1,8 @@
 package extras;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -19,5 +21,12 @@ public class Utilidades {
         GregorianCalendar nueva_fecha = (GregorianCalendar) fecha.clone();
         nueva_fecha.add(GregorianCalendar.DAY_OF_MONTH, n_dias);
         return nueva_fecha;
+    }
+
+    public static GregorianCalendar stringToGregorianCalendar(String fecha) throws ParseException {
+        Date date = formato_fecha.parse(fecha);
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        return calendar;
     }
 }
