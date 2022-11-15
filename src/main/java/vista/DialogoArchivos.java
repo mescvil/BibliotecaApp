@@ -72,8 +72,9 @@ public class DialogoArchivos extends javax.swing.JDialog {
 
         panel_azul.setBackground(AZUL);
         panel_azul.setPreferredSize(new java.awt.Dimension(100, 150));
+        panel_azul.setLayout(new java.awt.GridLayout());
 
-        label_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
+        label_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/hyperion_pandora.png"))); // NOI18N
         label_logo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         panel_azul.add(label_logo);
 

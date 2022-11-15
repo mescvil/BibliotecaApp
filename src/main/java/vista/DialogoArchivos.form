@@ -38,12 +38,15 @@
         </Property>
       </Properties>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="label_logo">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/logo.png"/>
+              <Image iconType="3" name="/hyperion_pandora.png"/>
             </Property>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>

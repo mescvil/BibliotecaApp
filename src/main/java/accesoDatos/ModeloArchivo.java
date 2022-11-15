@@ -3,6 +3,7 @@ package accesoDatos;
 import extras.Utilidades;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
+import excepciones.SinEjemplaresException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,15 +34,15 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
     private String ruta_usuarios;
     private String ruta_alquileres;
 
-    private HashMap<String, Libro> libros;
-    private HashMap<String, Usuario> personas;
+    private HashMap<String, Libro> map_libros;
+    private HashMap<String, Usuario> map_usuarios;
 
     private final ArrayList<ObservadorLibros> lista_observadoresLibro;
     private final ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
 
     public ModeloArchivo() {
-        libros = new HashMap<>();
-        personas = new HashMap<>();
+        map_libros = new HashMap<>();
+        map_usuarios = new HashMap<>();
         lista_observadoresLibro = new ArrayList<>();
         lista_observadoresAlquiler = new ArrayList<>();
 
@@ -162,7 +163,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                 throw new CargaDatosException("Libros");
             }
         }
-        return this.libros = mapa_libros;
+        return this.map_libros = mapa_libros;
 
     }
 
@@ -198,15 +199,38 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                 throw new CargaDatosException("Usuarios");
             }
         }
-        return this.personas = mapa_usuarios;
+        return this.map_usuarios = mapa_usuarios;
     }
 
     @Override
-    public ArrayList<Alquiler> cargaAlquileres() {
+    public ArrayList<Alquiler> cargaAlquileres() throws CargaDatosException {
         ArrayList<Alquiler> alquileres = new ArrayList<>();
 
         if (ruta_alquileres != null || !ruta_alquileres.isBlank()) {
+            try {
+                FileReader fileReader = new FileReader(ruta_alquileres);
+                try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                    String linea = bufferedReader.readLine();
 
+                    while (linea != null) {
+                        String[] partes = linea.split(",");
+
+                        Libro l = map_libros.get(partes[0]);
+                        Usuario u = map_usuarios.get(partes[1]);
+                        GregorianCalendar f_limite = Utilidades.stringToGregorianCalendar(partes[2]);
+                        GregorianCalendar f_creacion = Utilidades.stringToGregorianCalendar(partes[3]);
+                        int n_ejemplares = Integer.parseInt(partes[4]);
+
+                        alquileres.add(new Alquiler(l, u, f_limite, f_creacion, n_ejemplares));
+
+                        linea = bufferedReader.readLine();
+                    }
+                } catch (ParseException | SinEjemplaresException | NullPointerException ex) {
+                    throw new CargaDatosException("Alquileres");
+                }
+            } catch (IOException ex) {
+                throw new CargaDatosException("Alquileres");
+            }
         }
         return alquileres;
     }

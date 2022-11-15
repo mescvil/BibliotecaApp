@@ -288,7 +288,7 @@ public class VistaPrincipal extends JFrame {
         menu_salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca App 1.3.5 - Hyperion");
+        setTitle("Biblioteca App 1.4 - Hyperion");
         setMinimumSize(new java.awt.Dimension(700, 425));
         setPreferredSize(new java.awt.Dimension(600, 500));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -378,9 +378,9 @@ public class VistaPrincipal extends JFrame {
 
         campo_busquedaLibro.setText("Introduce un titulo...");
         campo_busquedaLibro.setToolTipText("Busca un libro por titulo");
-        campo_busquedaLibro.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                campo_busquedaLibroMouseClicked(evt);
+        campo_busquedaLibro.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                campo_busquedaLibroFocusGained(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -835,10 +835,9 @@ public class VistaPrincipal extends JFrame {
         dialogoLibro.muestraModoVer(controlador.getLibros());
     }//GEN-LAST:event_menu_listaLibrosActionPerformed
 
-    private void campo_busquedaLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campo_busquedaLibroMouseClicked
-        JTextField campo = (JTextField) evt.getSource();
-        campo.setText("");
-    }//GEN-LAST:event_campo_busquedaLibroMouseClicked
+    private void campo_busquedaLibroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campo_busquedaLibroFocusGained
+
+    }//GEN-LAST:event_campo_busquedaLibroFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
