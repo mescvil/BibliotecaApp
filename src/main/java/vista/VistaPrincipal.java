@@ -7,6 +7,7 @@ package vista;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import controlador.Controlador;
+import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
 import static extras.Colores_Dimensiones.MORADO;
 import modelo.Alquiler;
@@ -15,9 +16,12 @@ import modelo.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Escoz
@@ -247,6 +251,8 @@ public class VistaPrincipal extends JFrame {
         boton_aniadeUsuario = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         boton_alquileres = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        boton_destruccion = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         logo = new javax.swing.JLabel();
         panel_buscador = new javax.swing.JPanel();
@@ -275,6 +281,7 @@ public class VistaPrincipal extends JFrame {
         boton_devolucion = new javax.swing.JButton();
         barraMenu = new javax.swing.JMenuBar();
         menu_archivo = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         menu_usuarios = new javax.swing.JMenu();
         menu_aniadeUsuario = new javax.swing.JMenuItem();
         menu_verUsuarios = new javax.swing.JMenuItem();
@@ -363,6 +370,19 @@ public class VistaPrincipal extends JFrame {
             }
         });
         toolBar.add(boton_alquileres);
+        toolBar.add(jSeparator3);
+
+        boton_destruccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/destruccion.png"))); // NOI18N
+        boton_destruccion.setToolTipText("Autodestrucción");
+        boton_destruccion.setFocusable(false);
+        boton_destruccion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        boton_destruccion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        boton_destruccion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boton_destruccionActionPerformed(evt);
+            }
+        });
+        toolBar.add(boton_destruccion);
         toolBar.add(filler1);
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
@@ -606,6 +626,14 @@ public class VistaPrincipal extends JFrame {
 
         menu_archivo.setText("Archivo");
 
+        jMenuItem1.setText("Cargar datos...");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        menu_archivo.add(jMenuItem1);
+
         menu_usuarios.setText("Usuarios");
 
         menu_aniadeUsuario.setText("Agregar usuario...");
@@ -839,12 +867,55 @@ public class VistaPrincipal extends JFrame {
 
     }//GEN-LAST:event_campo_busquedaLibroFocusGained
 
+    private void boton_destruccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_destruccionActionPerformed
+        ImageIcon icono = new javax.swing.ImageIcon(getClass().getResource("/destruccion_grande.png"));
+
+        int resultado = JOptionPane.showConfirmDialog(this, "¿Seguro?",
+                "Autodestrucción", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono);
+
+        if (resultado == 0) {
+            resultado = JOptionPane.showConfirmDialog(this, "¿De verdad de la buena?",
+                    "Autodestrucción", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono);
+            if (resultado == 0) {
+                try {
+                    controlador.autodestruccion();
+
+                    JOptionPane.showMessageDialog(this, "Done!",
+                            "Autodestrucción", JOptionPane.ERROR_MESSAGE, icono);
+
+                } catch (CargaDatosException | GuardaDatosException ex) {
+                    Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_boton_destruccionActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int opcion = fileChooser.showDialog(this, "Seleccionar");
+
+        if (opcion == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            controlador.setRutaFicheros(file.getAbsolutePath());
+
+            try {
+                controlador.cargaDatosNotify();
+
+            } catch (CargaDatosException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Carga de datos", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
     private javax.swing.JButton boton_alquileres;
     private javax.swing.JButton boton_aniadeLibro;
     private javax.swing.JButton boton_aniadeUsuario;
     private javax.swing.JButton boton_buscarLibro;
+    private javax.swing.JButton boton_destruccion;
     private javax.swing.JButton boton_devolucion;
     private javax.swing.JButton boton_limpiarBusqueda;
     private javax.swing.JButton boton_listaLibros;
@@ -858,10 +929,12 @@ public class VistaPrincipal extends JFrame {
     private javax.swing.JTextField campo_titulo;
     private javax.swing.JCheckBoxMenuItem checkMenu_modoOscuro;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JLabel label_autor;
     private javax.swing.JLabel label_ejemplares;
     private javax.swing.JLabel label_fecha;

@@ -69,6 +69,11 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         return ((ModeloArchivo) modelo).getRutaAnterior();
     }
 
+    public void autodestruccion() throws CargaDatosException, GuardaDatosException {
+        ((ModeloArchivo) modelo).autodestruccion();
+        cargaDatosNotify();
+    }
+
     /* ================== MODELO GENERAL================== */
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
         mapa_usuarios.put(usuario.getDni(), usuario);
