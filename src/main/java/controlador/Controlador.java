@@ -26,8 +26,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     private final VistaPrincipal vista;
 
     private Map<String, Usuario> mapa_usuarios;
-    private Map<String, Libro> mapa_libros;
-    private ArrayList<Alquiler> lista_alquileres;
 
     public Controlador() {
         modelo = new ModeloArchivo();
@@ -35,8 +33,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         ((ModeloArchivo) modelo).suscribirseAlquiler(this);
 
         mapa_usuarios = new HashMap<>();
-        mapa_libros = new HashMap<>();
-        lista_alquileres = new ArrayList<>();
 
         vista = new VistaPrincipal(this);
         vista.setVisible(true);
@@ -49,8 +45,8 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     public void cargaDatosNotify() throws CargaDatosException {
 
         mapa_usuarios = modelo.cargaUsuarios();
-        mapa_libros = modelo.cargaLibros();
-        lista_alquileres = modelo.cargaAlquileres();
+        modelo.cargaLibros();
+        modelo.cargaAlquileres();
 
         cambioUsuario();
         cambioLibro();
@@ -86,7 +82,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     }
 
     public ArrayList<Libro> getLibros() {
-        return new ArrayList<>(mapa_libros.values());
+        return new ArrayList<>(((ModeloArchivo) modelo).getMap_libros().values());
     }
 
     public ArrayList<Usuario> getUsuarios() {
@@ -94,23 +90,22 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     }
 
     public void guardaLibro(Libro libro) throws GuardaDatosException {
-        mapa_libros.put(libro.getIsbn(), libro);
-        modelo.guardaLibros(mapa_libros);
+        ((ModeloArchivo) modelo).guardaLibro(libro);
     }
 
     public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
-        lista_alquileres.add(alquiler);
-        modelo.guardaAlquileres(lista_alquileres);
+        ((ModeloArchivo) modelo).getLista_alquileres().add(alquiler);
+        modelo.guardaAlquileres(((ModeloArchivo) modelo).getLista_alquileres());
     }
 
     public void realizaDevolucion(Alquiler alquiler) throws GuardaDatosException {
         alquiler.elimaAlquiler();
-        lista_alquileres.remove(alquiler);
-        modelo.guardaAlquileres(lista_alquileres);
+        ((ModeloArchivo) modelo).getLista_alquileres().remove(alquiler);
+        modelo.guardaAlquileres(((ModeloArchivo) modelo).getLista_alquileres());
     }
 
     public ArrayList<Alquiler> getAlquileres() {
-        return lista_alquileres;
+        return ((ModeloArchivo) modelo).getLista_alquileres();
     }
 
     /* ================== BUSQUEDAS ================== */
@@ -121,7 +116,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             return libros_encontrados;
         }
 
-        for (Libro object : mapa_libros.values()) {
+        for (Libro object : ((ModeloArchivo) modelo).getMap_libros().values()) {
             String titulo = object.getTitulo();
 
             if ((titulo.toLowerCase()).contains(busqueda.toLowerCase())) {
@@ -195,7 +190,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
 
         ArrayList<Libro> libros_econtrados = new ArrayList<>();
 
-        ArrayList<Libro> libros = new ArrayList<>(mapa_libros.values());
+        ArrayList<Libro> libros = new ArrayList<>(((ModeloArchivo) modelo).getMap_libros().values());
         ArrayList<Libro> libros_aux = new ArrayList<>(libros);
 
         for (String key : busqueda.keySet()) {
@@ -231,7 +226,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         ArrayList<Libro> libros_econtrados = buscaLibrosArray(busqueda);
         ArrayList<Usuario> usuarios_encontrados = buscaUsuariosArray(busqueda);
 
-        for (Alquiler alquiler : lista_alquileres) {
+        for (Alquiler alquiler : ((ModeloArchivo) modelo).getLista_alquileres()) {
             Libro libro = alquiler.getLibro();
             Usuario usuario = alquiler.getUsuario();
 
@@ -258,7 +253,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             return alquileres_encontrados;
         }
 
-        for (Alquiler alquiler : lista_alquileres) {
+        for (Alquiler alquiler : ((ModeloArchivo) modelo).getLista_alquileres()) {
             String libro = alquiler.getLibro().toString();
             String usuario = alquiler.getUsuario().toString();
 
@@ -278,7 +273,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         ArrayList<Alquiler> alquileres_libro = new ArrayList<>();
         Libro libro_buscado = new Libro(isbn_buscado);
 
-        for (Alquiler alquiler : lista_alquileres) {
+        for (Alquiler alquiler : ((ModeloArchivo) modelo).getLista_alquileres()) {
             if (alquiler.getLibro().equals(libro_buscado)) {
                 alquileres_libro.add(alquiler);
             }
@@ -290,7 +285,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     public ArrayList<Alquiler> getInfoAlquileres(Libro libro) {
         ArrayList<Alquiler> alquileres_libro = new ArrayList<>();
 
-        for (Alquiler alquiler : lista_alquileres) {
+        for (Alquiler alquiler : ((ModeloArchivo) modelo).getLista_alquileres()) {
             if (alquiler.getLibro().equals(libro)) {
                 alquileres_libro.add(alquiler);
             }

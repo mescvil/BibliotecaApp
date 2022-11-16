@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class DialogoArchivos extends javax.swing.JDialog {
 
-    private Controlador controlador;
+    private final Controlador controlador;
     private JFileChooser fileChooser;
 
     /**

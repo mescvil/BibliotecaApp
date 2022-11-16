@@ -36,6 +36,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
 
     private HashMap<String, Libro> map_libros;
     private HashMap<String, Usuario> map_usuarios;
+    private ArrayList<Alquiler> lista_alquileres;
 
     private final ArrayList<ObservadorLibros> lista_observadoresLibro;
     private final ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
@@ -43,6 +44,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
     public ModeloArchivo() {
         map_libros = new HashMap<>();
         map_usuarios = new HashMap<>();
+        lista_alquileres = new ArrayList<>();
         lista_observadoresLibro = new ArrayList<>();
         lista_observadoresAlquiler = new ArrayList<>();
 
@@ -254,7 +256,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                 throw new CargaDatosException("Alquileres");
             }
         }
-        return alquileres;
+        return lista_alquileres = alquileres;
     }
 
     @Override
@@ -270,6 +272,11 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         } catch (IOException e) {
             throw new GuardaDatosException("Libros");
         }
+    }
+
+    public void guardaLibro(Libro libro) throws GuardaDatosException {
+        map_libros.put(libro.getIsbn(), libro);
+        guardaLibros(map_libros);
     }
 
     @Override
@@ -323,6 +330,18 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         for (ObservadorAlquiler observadorAlquiler : lista_observadoresAlquiler) {
             observadorAlquiler.cambioAlquiler();
         }
+    }
+
+    public ArrayList<Alquiler> getLista_alquileres() {
+        return lista_alquileres;
+    }
+
+    public HashMap<String, Usuario> getMap_usuarios() {
+        return map_usuarios;
+    }
+
+    public HashMap<String, Libro> getMap_libros() {
+        return map_libros;
     }
 
 }
