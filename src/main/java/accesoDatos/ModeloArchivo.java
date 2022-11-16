@@ -286,11 +286,13 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         }
     }
 
+    @Override
     public void guardaLibro(Libro libro) throws GuardaDatosException {
         map_libros.put(libro.getIsbn(), libro);
         guardaLibros(map_libros);
     }
 
+    @Override
     public void eliminaLibro(Libro libro) throws GuardaDatosException {
         map_libros.remove(libro.getIsbn());
         guardaLibros(map_libros);

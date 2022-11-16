@@ -2,6 +2,7 @@ package controlador;
 
 import accesoDatos.Modelo;
 import accesoDatos.ModeloArchivo;
+import command.OrdenAddLibro;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
 import modelo.Alquiler;
@@ -48,10 +49,6 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         cambioAlquiler();
     }
 
-    public void elimina(Libro libro) throws GuardaDatosException {
-        ((ModeloArchivo) modelo).eliminaLibro(libro);
-    }
-
     public void setRutaFicheros(String ruta) {
         ((ModeloArchivo) modelo).setRuta(ruta);
     }
@@ -88,7 +85,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     }
 
     public void guardaLibro(Libro libro) throws GuardaDatosException {
-        ((ModeloArchivo) modelo).guardaLibro(libro);
+        new OrdenAddLibro(modelo, libro).execute();
     }
 
     public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {

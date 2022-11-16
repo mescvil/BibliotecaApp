@@ -1,5 +1,6 @@
 package accesoDatos;
 
+import excepciones.GuardaDatosException;
 import excepciones.SinEjemplaresException;
 import modelo.Alquiler;
 import modelo.Libro;
@@ -118,6 +119,16 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
         for (ObservadorAlquiler observadorAlquiler : lista_observadoresAlquiler) {
             observadorAlquiler.cambioAlquiler();
         }
+    }
+
+    @Override
+    public void guardaLibro(Libro libro) throws GuardaDatosException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void eliminaLibro(Libro libro) throws GuardaDatosException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
