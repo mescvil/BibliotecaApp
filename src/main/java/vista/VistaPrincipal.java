@@ -827,7 +827,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     }//GEN-LAST:event_menu_aniadeUsuarioActionPerformed
 
     private void menu_verUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_verUsuariosActionPerformed
-        abreDialogoVerUsuarios(new Usuario());
+        dialogoPersona.muestraModoVer();
     }//GEN-LAST:event_menu_verUsuariosActionPerformed
 
     private void abreDialogoVerUsuarios(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abreDialogoVerUsuarios
