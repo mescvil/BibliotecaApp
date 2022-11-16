@@ -28,5 +28,9 @@ public interface Modelo {
 
     void guardaUsuarios(Map<String, Usuario> personas) throws GuardaDatosException;
 
+    void guardaUsuario(Usuario usuario) throws GuardaDatosException;
+
+    void eliminaUsuario(Usuario usuario) throws GuardaDatosException;
+
     void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException;
 }

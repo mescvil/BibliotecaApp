@@ -3,6 +3,7 @@ package controlador;
 import accesoDatos.Modelo;
 import accesoDatos.ModeloArchivo;
 import command.OrdenAddLibro;
+import command.OrdenAddUsuario;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
 import modelo.Alquiler;
@@ -15,12 +16,13 @@ import vista.VistaPrincipal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import observer.ObservadorUsuario;
 import vista.DialogoArchivos;
 
 /**
  * @author Escoz
  */
-public class Controlador implements ObservadorLibros, ObservadorAlquiler {
+public class Controlador implements ObservadorLibros, ObservadorAlquiler, ObservadorUsuario {
 
     private final Modelo modelo;
     private final VistaPrincipal vista;
@@ -29,6 +31,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         modelo = new ModeloArchivo();
         ((ModeloArchivo) modelo).suscribirseLibro(this);
         ((ModeloArchivo) modelo).suscribirseAlquiler(this);
+        ((ModeloArchivo) modelo).suscribirseUsuario(this);
 
         vista = new VistaPrincipal(this);
         vista.setVisible(true);
@@ -73,7 +76,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
 
     /* ================== MODELO GENERAL================== */
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
-        ((ModeloArchivo) modelo).guardaUsuario(usuario);
+        new OrdenAddUsuario(modelo, usuario).execute();
     }
 
     public ArrayList<Libro> getLibros() {
@@ -288,6 +291,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
         return alquileres_libro;
     }
 
+    @Override
     public void cambioUsuario() {
         vista.cambioEnUsuarios();
     }

@@ -249,7 +249,6 @@ public class DialogoPersona extends javax.swing.JDialog {
             Usuario u = new Usuario(dni, nombre, apellido_1, apellido_2, telf, correo, f_nacimiento);
 
             vista_padre.guardaUsuario(u);
-            modelo_lista.addElement(u);
 
             rellenaDatosPersona(new Usuario());
 

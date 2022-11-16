@@ -23,11 +23,13 @@ import observer.ObservadorLibros;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import observer.EventoUsuario;
+import observer.ObservadorUsuario;
 
 /**
  * @author Escoz
  */
-public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
+public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, EventoUsuario {
 
     private final String ruta_configuracion = "config.ini";
     private String ruta_libros;
@@ -40,13 +42,16 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
 
     private final ArrayList<ObservadorLibros> lista_observadoresLibro;
     private final ArrayList<ObservadorAlquiler> lista_observadoresAlquiler;
+    private final ArrayList<ObservadorUsuario> lista_observadoresUsuario;
 
     public ModeloArchivo() {
         map_libros = new HashMap<>();
         map_usuarios = new HashMap<>();
         lista_alquileres = new ArrayList<>();
+
         lista_observadoresLibro = new ArrayList<>();
         lista_observadoresAlquiler = new ArrayList<>();
+        lista_observadoresUsuario = new ArrayList<>();
 
         ruta_alquileres = "";
         ruta_usuarios = "";
@@ -307,18 +312,22 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                     bufferedWriter.write(usuario.toCSV() + "\n");
                 }
             }
+            notificaCambioUsuario();
         } catch (IOException e) {
             throw new GuardaDatosException("Usuarios");
         }
     }
 
+    @Override
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
         map_usuarios.put(usuario.getDni(), usuario);
         guardaUsuarios(map_usuarios);
     }
 
-    public void eliminaUsuario(Usuario usuario) {
+    @Override
+    public void eliminaUsuario(Usuario usuario) throws GuardaDatosException {
         map_usuarios.remove(usuario.getDni());
+        guardaUsuarios(map_usuarios);
     }
 
     @Override
@@ -357,6 +366,18 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
     public void notificaCambioAlquiler() {
         for (ObservadorAlquiler observadorAlquiler : lista_observadoresAlquiler) {
             observadorAlquiler.cambioAlquiler();
+        }
+    }
+
+    @Override
+    public void suscribirseUsuario(ObservadorUsuario o) {
+        lista_observadoresUsuario.add(o);
+    }
+
+    @Override
+    public void notificaCambioUsuario() {
+        for (ObservadorUsuario observadorUsuario : lista_observadoresUsuario) {
+            observadorUsuario.cambioUsuario();
         }
     }
 

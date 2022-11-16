@@ -9,32 +9,32 @@ import excepciones.GuardaDatosException;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-import modelo.Libro;
+import modelo.Usuario;
 
 /**
  *
  * @author theky
  */
-public class OrdenAddLibro extends AbstractUndoableEdit {
+public class OrdenAddUsuario extends AbstractUndoableEdit {
 
     private final Modelo receptor;
-    private final Libro nuevo_libro;
+    private final Usuario nuevo_usuario;
 
-    public OrdenAddLibro(Modelo receptor, Libro nuevo_libro) {
+    public OrdenAddUsuario(Modelo receptor, Usuario nuevo_libro) {
         this.receptor = receptor;
-        this.nuevo_libro = nuevo_libro;
+        this.nuevo_usuario = nuevo_libro;
     }
 
     @Override
     public String getPresentationName() {
-        return "añadir un libro";
+        return "añadir un usuario";
     }
 
     @Override
     public void undo() throws CannotUndoException {
         try {
             super.undo();
-            receptor.eliminaLibro(nuevo_libro);
+            receptor.eliminaUsuario(nuevo_usuario);
         } catch (GuardaDatosException ex) {
             throw new CannotUndoException();
         }
@@ -44,14 +44,14 @@ public class OrdenAddLibro extends AbstractUndoableEdit {
     public void redo() throws CannotRedoException {
         try {
             super.redo();
-            receptor.guardaLibro(nuevo_libro);
+            receptor.guardaUsuario(nuevo_usuario);
         } catch (GuardaDatosException ex) {
             throw new CannotRedoException();
         }
     }
 
     public void execute() throws GuardaDatosException {
-        receptor.guardaLibro(nuevo_libro);
+        receptor.guardaUsuario(nuevo_usuario);
         PilaCommand.addOrden(this);
 
     }

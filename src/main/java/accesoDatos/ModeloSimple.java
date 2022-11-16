@@ -15,6 +15,7 @@ import java.util.*;
 /**
  * @author Escoz
  */
+@Deprecated
 public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
 
     private HashMap<String, Libro> libros;
@@ -128,6 +129,16 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
 
     @Override
     public void eliminaLibro(Libro libro) throws GuardaDatosException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void eliminaUsuario(Usuario usuario) throws GuardaDatosException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
