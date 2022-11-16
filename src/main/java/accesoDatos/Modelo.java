@@ -33,4 +33,8 @@ public interface Modelo {
     void eliminaUsuario(Usuario usuario) throws GuardaDatosException;
 
     void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException;
+
+    void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException;
+
+    void eliminaAlquiler(Alquiler alquiler) throws GuardaDatosException;
 }

@@ -3,7 +3,6 @@ package accesoDatos;
 import extras.Utilidades;
 import excepciones.CargaDatosException;
 import excepciones.GuardaDatosException;
-import excepciones.SinEjemplaresException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -257,17 +256,10 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
                         n_ejemplares = Integer.parseInt(partes[4]);
 
                         alquileres.add(new Alquiler(l, u, f_limite, f_creacion, n_ejemplares));
-
                         linea = bufferedReader.readLine();
                     }
                 } catch (ParseException | NullPointerException ex) {
                     throw new CargaDatosException("Alquileres");
-                } catch (SinEjemplaresException ex) {
-                    l.aniadeEjemplar(n_ejemplares);
-                    try {
-                        alquileres.add(new Alquiler(l, u, f_limite, f_creacion, n_ejemplares));
-                    } catch (SinEjemplaresException ignored) {
-                    }
                 }
             } catch (IOException ex) {
                 throw new CargaDatosException("Alquileres");
@@ -343,6 +335,19 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
         } catch (IOException e) {
             throw new GuardaDatosException("Alquileres");
         }
+    }
+
+    @Override
+    public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
+        lista_alquileres.add(alquiler);
+        guardaAlquileres(lista_alquileres);
+    }
+
+    @Override
+    public void eliminaAlquiler(Alquiler alquiler) throws GuardaDatosException {
+        alquiler.elimaAlquiler();
+        lista_alquileres.remove(alquiler);
+        guardaAlquileres(lista_alquileres);
     }
 
     @Override

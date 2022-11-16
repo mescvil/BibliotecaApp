@@ -2,6 +2,7 @@ package controlador;
 
 import accesoDatos.Modelo;
 import accesoDatos.ModeloArchivo;
+import command.OrdenAddAlquiler;
 import command.OrdenAddLibro;
 import command.OrdenAddUsuario;
 import excepciones.CargaDatosException;
@@ -92,14 +93,12 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler, Observ
     }
 
     public void guardaAlquiler(Alquiler alquiler) throws GuardaDatosException {
-        ((ModeloArchivo) modelo).getLista_alquileres().add(alquiler);
-        modelo.guardaAlquileres(((ModeloArchivo) modelo).getLista_alquileres());
+        new OrdenAddAlquiler(modelo, alquiler).execute();
     }
 
     public void realizaDevolucion(Alquiler alquiler) throws GuardaDatosException {
-        alquiler.elimaAlquiler();
-        ((ModeloArchivo) modelo).getLista_alquileres().remove(alquiler);
-        modelo.guardaAlquileres(((ModeloArchivo) modelo).getLista_alquileres());
+        modelo.eliminaAlquiler(alquiler);
+        modelo.guardaLibro(alquiler.getLibro());
     }
 
     public ArrayList<Alquiler> getAlquileres() {

@@ -39,11 +39,10 @@ public class Alquiler implements Serializable {
         fecha_creacion = new GregorianCalendar();
     }
 
-    public Alquiler(Libro libro, Usuario persona, GregorianCalendar fecha_limite, GregorianCalendar fecha_creacion, int n_ejemplares) throws SinEjemplaresException {
+    public Alquiler(Libro libro, Usuario persona, GregorianCalendar fecha_limite, GregorianCalendar fecha_creacion, int n_ejemplares) {
         setLibro(libro);
         setUsuario(persona);
         setFecha_limite(fecha_limite);
-        creaAlquiler(n_ejemplares);
         setN_ejemplares(n_ejemplares);
         setFecha_creacion(fecha_creacion);
     }
@@ -71,6 +70,10 @@ public class Alquiler implements Serializable {
 
     public void elimaAlquiler() {
         libro.aniadeEjemplar(n_ejemplares);
+    }
+
+    public void restauraAlquiler() {
+        libro.aniadeEjemplar(-n_ejemplares);
     }
 
     @Override
