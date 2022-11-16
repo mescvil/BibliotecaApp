@@ -14,7 +14,6 @@ import vista.VistaPrincipal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import vista.DialogoArchivos;
 
 /**
@@ -25,14 +24,10 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     private final Modelo modelo;
     private final VistaPrincipal vista;
 
-    private Map<String, Usuario> mapa_usuarios;
-
     public Controlador() {
         modelo = new ModeloArchivo();
         ((ModeloArchivo) modelo).suscribirseLibro(this);
         ((ModeloArchivo) modelo).suscribirseAlquiler(this);
-
-        mapa_usuarios = new HashMap<>();
 
         vista = new VistaPrincipal(this);
         vista.setVisible(true);
@@ -44,13 +39,17 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     /* ================== MODELO DE ARCHIVOS ================== */
     public void cargaDatosNotify() throws CargaDatosException {
 
-        mapa_usuarios = modelo.cargaUsuarios();
+        modelo.cargaUsuarios();
         modelo.cargaLibros();
         modelo.cargaAlquileres();
 
         cambioUsuario();
         cambioLibro();
         cambioAlquiler();
+    }
+
+    public void elimina(Libro libro) throws GuardaDatosException {
+        ((ModeloArchivo) modelo).eliminaLibro(libro);
     }
 
     public void setRutaFicheros(String ruta) {
@@ -77,8 +76,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
 
     /* ================== MODELO GENERAL================== */
     public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
-        mapa_usuarios.put(usuario.getDni(), usuario);
-        modelo.guardaPersonas(mapa_usuarios);
+        ((ModeloArchivo) modelo).guardaUsuario(usuario);
     }
 
     public ArrayList<Libro> getLibros() {
@@ -86,7 +84,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
     }
 
     public ArrayList<Usuario> getUsuarios() {
-        return new ArrayList<>(mapa_usuarios.values());
+        return new ArrayList<>(((ModeloArchivo) modelo).getMap_usuarios().values());
     }
 
     public void guardaLibro(Libro libro) throws GuardaDatosException {
@@ -134,7 +132,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
             return usuarios_encontrados;
         }
 
-        for (Usuario o : mapa_usuarios.values()) {
+        for (Usuario o : ((ModeloArchivo) modelo).getMap_usuarios().values()) {
 
             if (o.getNombreCompleto().toLowerCase().contains(busqueda.toLowerCase())) {
                 usuarios_encontrados.add(o);
@@ -149,7 +147,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler {
 
         ArrayList<Usuario> usuarios_econtrados = new ArrayList<>();
 
-        ArrayList<Usuario> usuarios = new ArrayList<>(mapa_usuarios.values());
+        ArrayList<Usuario> usuarios = new ArrayList<>(((ModeloArchivo) modelo).getMap_usuarios().values());
         ArrayList<Usuario> usuarios_aux = new ArrayList<>(usuarios);
 
         for (String key : busqueda.keySet()) {

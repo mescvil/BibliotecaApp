@@ -145,7 +145,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         creaFicherosDatos(ruta);
         leeFicheroConfig();
 
-        guardaPersonas(usuarios);
+        guardaUsuarios(usuarios);
         guardaLibros(libros);
         guardaAlquileres(alquileres);
     }
@@ -155,7 +155,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         map_usuarios = new HashMap<>();
 
         guardaLibros(map_libros);
-        guardaPersonas(map_usuarios);
+        guardaUsuarios(map_usuarios);
         guardaAlquileres(new ArrayList<>());
     }
 
@@ -231,6 +231,12 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         ArrayList<Alquiler> alquileres = new ArrayList<>();
 
         if (ruta_alquileres != null || !ruta_alquileres.isBlank()) {
+            Libro l = null;
+            int n_ejemplares = 0;
+            Usuario u = null;
+            GregorianCalendar f_limite = null;
+            GregorianCalendar f_creacion = null;
+
             try {
                 FileReader fileReader = new FileReader(ruta_alquileres);
                 try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
@@ -239,18 +245,24 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
                     while (linea != null) {
                         String[] partes = linea.split(",");
 
-                        Libro l = map_libros.get(partes[0]);
-                        Usuario u = map_usuarios.get(partes[1]);
-                        GregorianCalendar f_limite = Utilidades.stringToGregorianCalendar(partes[2]);
-                        GregorianCalendar f_creacion = Utilidades.stringToGregorianCalendar(partes[3]);
-                        int n_ejemplares = Integer.parseInt(partes[4]);
+                        l = map_libros.get(partes[0]);
+                        u = map_usuarios.get(partes[1]);
+                        f_limite = Utilidades.stringToGregorianCalendar(partes[2]);
+                        f_creacion = Utilidades.stringToGregorianCalendar(partes[3]);
+                        n_ejemplares = Integer.parseInt(partes[4]);
 
                         alquileres.add(new Alquiler(l, u, f_limite, f_creacion, n_ejemplares));
 
                         linea = bufferedReader.readLine();
                     }
-                } catch (ParseException | SinEjemplaresException | NullPointerException ex) {
+                } catch (ParseException | NullPointerException ex) {
                     throw new CargaDatosException("Alquileres");
+                } catch (SinEjemplaresException ex) {
+                    l.aniadeEjemplar(n_ejemplares);
+                    try {
+                        alquileres.add(new Alquiler(l, u, f_limite, f_creacion, n_ejemplares));
+                    } catch (SinEjemplaresException ignored) {
+                    }
                 }
             } catch (IOException ex) {
                 throw new CargaDatosException("Alquileres");
@@ -279,8 +291,13 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         guardaLibros(map_libros);
     }
 
+    public void eliminaLibro(Libro libro) throws GuardaDatosException {
+        map_libros.remove(libro.getIsbn());
+        guardaLibros(map_libros);
+    }
+
     @Override
-    public void guardaPersonas(Map<String, Usuario> usuarios) throws GuardaDatosException {
+    public void guardaUsuarios(Map<String, Usuario> usuarios) throws GuardaDatosException {
         try {
             FileWriter fileWriter = new FileWriter(ruta_usuarios);
             try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
@@ -291,6 +308,15 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler {
         } catch (IOException e) {
             throw new GuardaDatosException("Usuarios");
         }
+    }
+
+    public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
+        map_usuarios.put(usuario.getDni(), usuario);
+        guardaUsuarios(map_usuarios);
+    }
+
+    public void eliminaUsuario(Usuario usuario) {
+        map_usuarios.remove(usuario.getDni());
     }
 
     @Override

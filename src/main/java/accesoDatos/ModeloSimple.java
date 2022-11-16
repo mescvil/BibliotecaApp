@@ -87,7 +87,7 @@ public class ModeloSimple implements Modelo, EventoLibro, EventoAlquiler {
     }
 
     @Override
-    public void guardaPersonas(Map<String, Usuario> usuario) {
+    public void guardaUsuarios(Map<String, Usuario> usuario) {
         // TODO
     }
 

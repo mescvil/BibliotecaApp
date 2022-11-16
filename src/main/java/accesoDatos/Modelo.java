@@ -22,7 +22,7 @@ public interface Modelo {
 
     void guardaLibros(Map<String, Libro> libros) throws GuardaDatosException;
 
-    void guardaPersonas(Map<String, Usuario> personas) throws GuardaDatosException;
+    void guardaUsuarios(Map<String, Usuario> personas) throws GuardaDatosException;
 
     void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException;
 }
