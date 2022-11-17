@@ -26,6 +26,8 @@ public interface Modelo {
 
     void eliminaLibro(Libro libro) throws GuardaDatosException;
 
+    void actualizaLibros() throws GuardaDatosException;
+
     void guardaUsuarios(Map<String, Usuario> personas) throws GuardaDatosException;
 
     void guardaUsuario(Usuario usuario) throws GuardaDatosException;

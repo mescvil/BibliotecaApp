@@ -296,6 +296,20 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     }
 
     @Override
+    public void actualizaLibros() throws GuardaDatosException {
+        try {
+            FileWriter fileWriter = new FileWriter(ruta_libros);
+            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+                for (Libro libro : map_libros.values()) {
+                    bufferedWriter.write(libro.toCSV() + "\n");
+                }
+            }
+        } catch (IOException e) {
+            throw new GuardaDatosException("Libros");
+        }
+    }
+
+    @Override
     public void guardaUsuarios(Map<String, Usuario> usuarios) throws GuardaDatosException {
         try {
             FileWriter fileWriter = new FileWriter(ruta_usuarios);
@@ -332,6 +346,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
                 }
             }
             notificaCambioAlquiler();
+            actualizaLibros();
         } catch (IOException e) {
             throw new GuardaDatosException("Alquileres");
         }
