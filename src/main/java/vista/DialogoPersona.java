@@ -746,6 +746,7 @@ public class DialogoPersona extends javax.swing.JDialog {
 
     private void check_nacimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_nacimientoActionPerformed
         dateChooser_busqueda.setEnabled(check_nacimiento.isSelected());
+        busquedaUsuarios(null);
     }//GEN-LAST:event_check_nacimientoActionPerformed
 
     private void busquedaUsuarios(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busquedaUsuarios

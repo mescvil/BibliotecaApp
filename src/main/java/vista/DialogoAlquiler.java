@@ -679,6 +679,8 @@ public class DialogoAlquiler extends javax.swing.JDialog {
 
     private void check_nacimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_nacimientoActionPerformed
         dateChooser_busquedaUsuario.setEnabled(check_nacimiento.isSelected());
+        boton_busquedaActionPerformed(null);
+
     }//GEN-LAST:event_check_nacimientoActionPerformed
 
     private void check_avanzadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_avanzadaActionPerformed
@@ -709,6 +711,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
 
     private void check_publicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_publicacionActionPerformed
         dateChooser_busquedaLibro.setEnabled(check_publicacion.isSelected());
+        boton_busquedaActionPerformed(null);
     }//GEN-LAST:event_check_publicacionActionPerformed
 
     private void dateChooser_busquedaLibroPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dateChooser_busquedaLibroPropertyChange
