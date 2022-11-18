@@ -319,7 +319,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         menu_salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca App 1.5 - Hyperion");
+        setTitle("Biblioteca App 1.5 Fantaremix - Hyperion");
         setMinimumSize(new java.awt.Dimension(700, 425));
         setPreferredSize(new java.awt.Dimension(900, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -938,12 +938,9 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
             resultado = JOptionPane.showConfirmDialog(this, "¿De verdad de la buena?",
                     "Autodestrucción", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono);
             if (resultado == 0) {
+                sonidoNuke();
                 try {
                     controlador.autodestruccion();
-                    sonidoNuke();
-                    JOptionPane.showMessageDialog(this, "Done!",
-                            "Autodestrucción", JOptionPane.ERROR_MESSAGE, icono);
-
                 } catch (CargaDatosException | GuardaDatosException ex) {
                     Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
                 }
