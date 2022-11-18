@@ -635,7 +635,6 @@ public class DialogoLibro extends javax.swing.JDialog {
                     vista_padre.abreDialogoPrestamo(libro);
                     vista_padre.cambioEnListaLibros();
 
-                    /* TODO terminar la actu */
                 }
 
             } else {

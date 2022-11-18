@@ -35,7 +35,7 @@ public class Libro implements Serializable {
     }
 
     public Libro() {
-        n_ejemplares = 0;
+        n_ejemplares = 1;
         anio_publicacion = "2022";
     }
 

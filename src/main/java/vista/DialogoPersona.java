@@ -236,7 +236,7 @@ public class DialogoPersona extends javax.swing.JDialog {
             String nombre = campo_nombre.getText();
             String apellido_1 = campo_priApellido.getText();
             String apellido_2 = campo_segApellido.getText();
-            String dni = campo_dni.getText();
+            String dni = campo_dni.getText().toUpperCase();
             String telf = campo_telefono.getText();
             String correo = campo_email.getText();
             GregorianCalendar f_nacimiento = new GregorianCalendar();
