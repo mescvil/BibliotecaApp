@@ -1,5 +1,6 @@
 package vista;
 
+import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
 import modelo.Libro;
 
@@ -10,6 +11,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import static extras.Colores_Dimensiones.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -78,11 +81,15 @@ public class DialogoLibro extends javax.swing.JDialog {
         // General
         this.setTitle("Nuevo libro");
         setPreferredSize(DIMENSION_GRANDE);
+        SpinnerNumberModel snm = (SpinnerNumberModel) spiner_ejemplares.getModel();
+        snm.setMinimum(1);
+        snm.setValue(1);
 
         setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
 
+        lista_libros.requestFocus();
     }
 
     public void muestraModoVer(ArrayList<Libro> array_libros) {
@@ -117,11 +124,14 @@ public class DialogoLibro extends javax.swing.JDialog {
         setTitle("Libros registrados");
         setPreferredSize(DIMENSION_GRANDE);
         lista_libros.requestFocus();
+        SpinnerNumberModel snm = (SpinnerNumberModel) spiner_ejemplares.getModel();
+        snm.setMinimum(0);
 
         setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
 
+        lista_libros.requestFocus();
     }
 
     private void reseteaPanelFiltros() {
@@ -164,10 +174,14 @@ public class DialogoLibro extends javax.swing.JDialog {
         lista_libros.requestFocus();
         lista_libros.setSelectedValue(libro, true);
 
+        SpinnerNumberModel snm = (SpinnerNumberModel) spiner_ejemplares.getModel();
+        snm.setMinimum(0);
+
         setLocationRelativeTo(vista_padre);
         pack();
         setVisible(true);
 
+        lista_libros.requestFocus();
     }
 
     public void actualizaListaLibros(ArrayList<Libro> libros) {
@@ -604,6 +618,9 @@ public class DialogoLibro extends javax.swing.JDialog {
                 }
             } catch (GuardaDatosException ex) {
                 JOptionPane.showMessageDialog(this, "No ha sido posible crear el libro",
+                        "Nuevo libro", JOptionPane.ERROR_MESSAGE);
+            } catch (DuplicadoException ex) {
+                JOptionPane.showMessageDialog(this, "ISBN ya registrado",
                         "Nuevo libro", JOptionPane.ERROR_MESSAGE);
             }
 

@@ -197,7 +197,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(panel_lista, gridBagConstraints);
 
-        spiner_ejemplares.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spiner_ejemplares.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
         spiner_ejemplares.setPreferredSize(new java.awt.Dimension(150, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -246,19 +246,17 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         try {
             GregorianCalendar fecha = new GregorianCalendar();
             fecha.setTime(fecha_devolucion);
+            int ejemplares = (Integer) spiner_ejemplares.getValue();
 
             Alquiler alquiler = new Alquiler(libro_aPrestar, usuario_seleccionado, fecha,
-                    (Integer) spiner_ejemplares.getValue());
+                    ejemplares);
 
             vista_padre.guardaAlquiler(alquiler);
             muestraDialogo(libro_aPrestar);
 
-            int resultado = JOptionPane.showConfirmDialog(this, "Préstamo realizado con éxito, ¿Desea realizar más?",
-                    "", JOptionPane.YES_NO_OPTION);
-
-            if (resultado == 1) {
-                dispose();
-            }
+            JOptionPane.showMessageDialog(this, "Realizado con éxito",
+                    "Nuevo préstamo", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
 
         } catch (SinEjemplaresException ex) {
             JOptionPane.showMessageDialog(this, "Error faltan ejemplares",

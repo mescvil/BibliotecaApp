@@ -5,6 +5,7 @@
 package command;
 
 import accesoDatos.Modelo;
+import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
@@ -45,12 +46,12 @@ public class OrdenAddLibro extends AbstractUndoableEdit {
         try {
             super.redo();
             receptor.guardaLibro(nuevo_libro);
-        } catch (GuardaDatosException ex) {
+        } catch (GuardaDatosException | DuplicadoException ex) {
             throw new CannotRedoException();
         }
     }
 
-    public void execute() throws GuardaDatosException {
+    public void execute() throws GuardaDatosException, DuplicadoException {
         receptor.guardaLibro(nuevo_libro);
         PilaCommand.addOrden(this);
 

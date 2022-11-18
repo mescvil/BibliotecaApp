@@ -1,6 +1,7 @@
 package accesoDatos;
 
 import excepciones.CargaDatosException;
+import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
 import modelo.Alquiler;
 import modelo.Libro;
@@ -22,7 +23,7 @@ public interface Modelo {
 
     void guardaLibros(Map<String, Libro> libros) throws GuardaDatosException;
 
-    void guardaLibro(Libro libro) throws GuardaDatosException;
+    void guardaLibro(Libro libro) throws GuardaDatosException, DuplicadoException;
 
     void eliminaLibro(Libro libro) throws GuardaDatosException;
 
@@ -30,7 +31,7 @@ public interface Modelo {
 
     void guardaUsuarios(Map<String, Usuario> personas) throws GuardaDatosException;
 
-    void guardaUsuario(Usuario usuario) throws GuardaDatosException;
+    void guardaUsuario(Usuario usuario) throws GuardaDatosException, DuplicadoException;
 
     void eliminaUsuario(Usuario usuario) throws GuardaDatosException;
 

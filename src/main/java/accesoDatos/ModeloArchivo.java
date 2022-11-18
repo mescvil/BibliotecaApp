@@ -2,6 +2,7 @@ package accesoDatos;
 
 import extras.Utilidades;
 import excepciones.CargaDatosException;
+import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -284,7 +285,11 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     }
 
     @Override
-    public void guardaLibro(Libro libro) throws GuardaDatosException {
+    public void guardaLibro(Libro libro) throws GuardaDatosException, DuplicadoException {
+        if (map_libros.containsKey(libro.getIsbn())) {
+            throw new DuplicadoException("Libro");
+        }
+
         map_libros.put(libro.getIsbn(), libro);
         guardaLibros(map_libros);
     }
@@ -325,7 +330,11 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     }
 
     @Override
-    public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
+    public void guardaUsuario(Usuario usuario) throws GuardaDatosException, DuplicadoException {
+        if (map_usuarios.containsKey(usuario.getDni())) {
+            throw new DuplicadoException("Usuario");
+        }
+
         map_usuarios.put(usuario.getDni(), usuario);
         guardaUsuarios(map_usuarios);
     }

@@ -9,6 +9,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import command.PilaCommand;
 import controlador.Controlador;
 import excepciones.CargaDatosException;
+import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
 import static extras.Colores_Dimensiones.MORADO;
 import modelo.Alquiler;
@@ -93,11 +94,11 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         dialogoAlquileres.setIconImage(icono);
     }
 
-    public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
+    public void guardaUsuario(Usuario usuario) throws GuardaDatosException, DuplicadoException {
         controlador.guardaUsuario(usuario);
     }
 
-    public void guardaLibro(Libro libro) throws GuardaDatosException {
+    public void guardaLibro(Libro libro) throws GuardaDatosException, DuplicadoException {
         controlador.guardaLibro(libro);
     }
 

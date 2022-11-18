@@ -7,6 +7,7 @@ import command.OrdenAddLibro;
 import command.OrdenAddUsuario;
 import command.OrdenDevolverAlquiler;
 import excepciones.CargaDatosException;
+import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
 import modelo.Alquiler;
 import modelo.Libro;
@@ -77,7 +78,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler, Observ
     }
 
     /* ================== MODELO GENERAL================== */
-    public void guardaUsuario(Usuario usuario) throws GuardaDatosException {
+    public void guardaUsuario(Usuario usuario) throws GuardaDatosException, DuplicadoException {
         new OrdenAddUsuario(modelo, usuario).execute();
     }
 
@@ -89,7 +90,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler, Observ
         return new ArrayList<>(((ModeloArchivo) modelo).getMap_usuarios().values());
     }
 
-    public void guardaLibro(Libro libro) throws GuardaDatosException {
+    public void guardaLibro(Libro libro) throws GuardaDatosException, DuplicadoException {
         new OrdenAddLibro(modelo, libro).execute();
     }
 

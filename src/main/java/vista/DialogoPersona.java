@@ -1,5 +1,6 @@
 package vista;
 
+import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
 import modelo.Usuario;
 
@@ -8,6 +9,8 @@ import java.awt.*;
 import java.util.*;
 
 import static extras.Colores_Dimensiones.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -260,6 +263,9 @@ public class DialogoPersona extends javax.swing.JDialog {
             }
         } catch (GuardaDatosException ex) {
             JOptionPane.showMessageDialog(this, "No ha sido posible crear un nuevo usuario",
+                    "Nuevo usuario", JOptionPane.ERROR_MESSAGE);
+        } catch (DuplicadoException ex) {
+            JOptionPane.showMessageDialog(this, "DNI ya registrado",
                     "Nuevo usuario", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -757,7 +763,7 @@ public class DialogoPersona extends javax.swing.JDialog {
             if (!busqueda_apellidos.equals(texto_apellido) && !busqueda_apellidos.isBlank()) {
                 busqueda.put("apellidos", busqueda_apellidos);
             }
-            if (!busqueda_telefono.equals(texto_telefono) && !busqueda_nombre.isBlank()) {
+            if (!busqueda_telefono.equals(texto_telefono) && !busqueda_telefono.isBlank()) {
                 busqueda.put("telefono", busqueda_telefono);
             }
             if (check_nacimiento.isSelected()) {
