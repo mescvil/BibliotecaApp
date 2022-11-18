@@ -17,12 +17,19 @@ import modelo.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import observer.ObservadorPila;
 
 /**
@@ -42,6 +49,8 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private final DialogoAlquiler dialogoAlquileres;
 
     private boolean tiene_alquileres;
+
+    private int contador_clicks = 4;
 
     /**
      * Creates new form Vista
@@ -312,7 +321,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Biblioteca App 1.5 - Hyperion");
         setMinimumSize(new java.awt.Dimension(700, 425));
-        setPreferredSize(new java.awt.Dimension(800, 500));
+        setPreferredSize(new java.awt.Dimension(900, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
         panel_toolBar.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 10, 0, 5));
@@ -411,7 +420,8 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         toolBar.add(jSeparator3);
 
         boton_destruccion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/destruccion.png"))); // NOI18N
-        boton_destruccion.setToolTipText("Autodestrucción");
+        boton_destruccion.setToolTipText("Encuentra el activador secreto");
+        boton_destruccion.setEnabled(false);
         boton_destruccion.setFocusable(false);
         boton_destruccion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         boton_destruccion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -424,6 +434,11 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         toolBar.add(filler1);
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo.png"))); // NOI18N
+        logo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logoMouseClicked(evt);
+            }
+        });
         toolBar.add(logo);
 
         panel_toolBar.add(toolBar);
@@ -925,7 +940,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
             if (resultado == 0) {
                 try {
                     controlador.autodestruccion();
-
+                    sonidoNuke();
                     JOptionPane.showMessageDialog(this, "Done!",
                             "Autodestrucción", JOptionPane.ERROR_MESSAGE, icono);
 
@@ -979,6 +994,64 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private void boton_rehacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_rehacerActionPerformed
         PilaCommand.redo();
     }//GEN-LAST:event_boton_rehacerActionPerformed
+
+    private void logoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoMouseClicked
+        if (contador_clicks > 0) {
+            contador_clicks--;
+            creaDialogoClicks(contador_clicks);
+
+            if (contador_clicks == 0) {
+                boton_destruccion.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_logoMouseClicked
+
+    private void creaDialogoClicks(int n_clicks) {
+        ImageIcon icono = new javax.swing.ImageIcon(getClass().getResource("/destruccion_grande.png"));
+        String mensaje;
+
+        if (contador_clicks > 0) {
+            mensaje = String.format("Estas a %s clicks de la autodestrucción", n_clicks);
+        } else {
+            mensaje = "Autodestrucción activada!";
+        }
+
+        JOptionPane panel_informativo = new JOptionPane(mensaje, JOptionPane.INFORMATION_MESSAGE,
+                JOptionPane.DEFAULT_OPTION, icono, new Object[]{});
+        JDialog dialogo = panel_informativo.createDialog("");
+        dialogo.setModal(true);
+
+        dialogo.addWindowListener(null);
+        dialogo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        Timer timer = new Timer(1250, (ActionEvent e) -> {
+            dialogo.setVisible(false);
+            dialogo.dispose();
+        }
+        );
+
+        timer.start();
+        dialogo.setVisible(true);
+    }
+
+    private void sonidoNuke() {
+        AudioInputStream sonido = null;
+        try {
+            sonido = AudioSystem.getAudioInputStream(getClass().getResource("/nuke.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(sonido);
+            clip.start();
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                sonido.close();
+            } catch (IOException ex) {
+                Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar barraMenu;
