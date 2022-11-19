@@ -323,7 +323,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         menu_salir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca App 1.5 Fantaremix - Hyperion");
+        setTitle("Biblioteca App 1.5 Fantaremix HD Collection - Hyperion");
         setMinimumSize(new java.awt.Dimension(700, 425));
         setPreferredSize(new java.awt.Dimension(900, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
@@ -1125,7 +1125,6 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private javax.swing.JButton boton_verUsuarios;
     private javax.swing.JTextField campo_autor;
     private javax.swing.JTextField campo_busquedaLibro;
-    private javax.swing.JTextField campo_busquedaTitulo;
     private javax.swing.JTextField campo_fecha;
     private javax.swing.JTextField campo_isbn;
     private javax.swing.JTextField campo_nEjemplares;
@@ -1161,7 +1160,6 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private javax.swing.JMenu menu_usuarios;
     private javax.swing.JMenuItem menu_verUsuarios;
     private javax.swing.JPanel panel_buscador;
-    private javax.swing.JPanel panel_busquedaAvanzada;
     private javax.swing.JPanel panel_datos;
     private javax.swing.JPanel panel_datosUsuario;
     private javax.swing.JPanel panel_detallesLibro;
