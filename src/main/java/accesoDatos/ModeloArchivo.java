@@ -4,6 +4,7 @@ import extras.Utilidades;
 import excepciones.CargaDatosException;
 import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
+
 import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Usuario;
@@ -23,6 +25,7 @@ import observer.ObservadorLibros;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import observer.EventoUsuario;
 import observer.ObservadorUsuario;
 
@@ -70,20 +73,16 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     private void leeFicheroConfig() {
         try {
             FileReader fileReader = new FileReader(ruta_configuracion);
-            try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
                 String linea = bufferedReader.readLine();
                 while (linea != null) {
                     String[] partes = linea.split("=");
                     switch (partes[0]) {
-                        case "rutaUsuarios" ->
-                            ruta_usuarios = partes[1];
-                        case "rutaLibros" ->
-                            ruta_libros = partes[1];
-                        case "rutaAlquileres" ->
-                            ruta_alquileres = partes[1];
-                        default ->
-                            throw new IOException();
+                        case "rutaUsuarios" -> ruta_usuarios = partes[1];
+                        case "rutaLibros" -> ruta_libros = partes[1];
+                        case "rutaAlquileres" -> ruta_alquileres = partes[1];
+                        default -> throw new IOException();
                     }
 
                     linea = bufferedReader.readLine();
@@ -103,7 +102,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
 
     private void escribeFicheroConfig() {
         try {
-            try ( FileWriter fileWriter = new FileWriter(ruta_configuracion)) {
+            try (FileWriter fileWriter = new FileWriter(ruta_configuracion)) {
                 String r_usuarios = "rutaUsuarios=" + ruta_usuarios;
                 String r_libros = "rutaLibros=" + ruta_libros;
                 String r_alquileres = "rutaAlquileres=" + ruta_alquileres;
@@ -143,8 +142,8 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     }
 
     public void creaNuevaRuta(String ruta) throws CargaDatosException, GuardaDatosException {
-        Map usuarios = cargaUsuarios();
-        Map libros = cargaLibros();
+        Map<String, Usuario> usuarios = cargaUsuarios();
+        Map<String, Libro> libros = cargaLibros();
         ArrayList<Alquiler> alquileres = new ArrayList<>(cargaAlquileres());
 
         creaFicherosDatos(ruta);
@@ -172,7 +171,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
         if (ruta_libros != null || !ruta_libros.isBlank()) {
             try {
                 FileReader fileReader = new FileReader(ruta_libros);
-                try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                     String linea = bufferedReader.readLine();
 
                     while (linea != null) {
@@ -204,7 +203,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
         if (ruta_usuarios != null || !ruta_usuarios.isBlank()) {
             try {
                 FileReader fileReader = new FileReader(ruta_usuarios);
-                try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                     String linea = bufferedReader.readLine();
 
                     while (linea != null) {
@@ -244,7 +243,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
 
             try {
                 FileReader fileReader = new FileReader(ruta_alquileres);
-                try ( BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
                     String linea = bufferedReader.readLine();
 
                     while (linea != null) {
@@ -273,7 +272,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     public void guardaLibros(Map<String, Libro> libros) throws GuardaDatosException {
         try {
             FileWriter fileWriter = new FileWriter(ruta_libros);
-            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            try (BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
                 for (Libro libro : libros.values()) {
                     bufferedWriter.write(libro.toCSV() + "\n");
                 }
@@ -304,7 +303,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     public void actualizaLibros() throws GuardaDatosException {
         try {
             FileWriter fileWriter = new FileWriter(ruta_libros);
-            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            try (BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
                 for (Libro libro : map_libros.values()) {
                     bufferedWriter.write(libro.toCSV() + "\n");
                 }
@@ -318,7 +317,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     public void guardaUsuarios(Map<String, Usuario> usuarios) throws GuardaDatosException {
         try {
             FileWriter fileWriter = new FileWriter(ruta_usuarios);
-            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            try (BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
                 for (Usuario usuario : usuarios.values()) {
                     bufferedWriter.write(usuario.toCSV() + "\n");
                 }
@@ -349,7 +348,7 @@ public class ModeloArchivo implements Modelo, EventoLibro, EventoAlquiler, Event
     public void guardaAlquileres(ArrayList<Alquiler> alquileres) throws GuardaDatosException {
         try {
             FileWriter fileWriter = new FileWriter(ruta_alquileres);
-            try ( BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            try (BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
                 for (Alquiler alquiler : alquileres) {
                     bufferedWriter.write(alquiler.toCSV() + "\n");
                 }

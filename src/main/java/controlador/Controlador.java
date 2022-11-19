@@ -107,6 +107,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler, Observ
     }
 
     /* ================== BUSQUEDAS ================== */
+    @Deprecated
     public ArrayList<Libro> buscaLibroTitulo(String busqueda) {
         ArrayList<Libro> libros_encontrados = new ArrayList<>();
 
@@ -183,7 +184,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler, Observ
         vista.actualizaBusquedaUsuarios(buscaUsuariosArray(busqueda));
     }
 
-    private ArrayList<Libro> buscaLibrosArray(HashMap<String, String> busqueda) {
+    public ArrayList<Libro> buscaLibrosArray(HashMap<String, String> busqueda) {
         BusquedaLibros contexto;
 
         ArrayList<Libro> libros_econtrados = new ArrayList<>();

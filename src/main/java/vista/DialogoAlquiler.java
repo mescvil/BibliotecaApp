@@ -51,17 +51,17 @@ public class DialogoAlquiler extends javax.swing.JDialog {
     private void aniadeListeners() {
         for (Component component : panel_busquedaUsuario.getComponents()) {
             if (component instanceof JTextField) {
-                ((JTextField) component).getDocument().addDocumentListener(new listenerCampos());
+                ((JTextField) component).getDocument().addDocumentListener(new ListenerCampos());
             }
         }
 
         for (Component component : panel_busquedaLibro.getComponents()) {
             if (component instanceof JTextField) {
-                ((JTextField) component).getDocument().addDocumentListener(new listenerCampos());
+                ((JTextField) component).getDocument().addDocumentListener(new ListenerCampos());
             }
         }
 
-        campo_busquedaSimple.getDocument().addDocumentListener(new listenerCampos());
+        campo_busquedaSimple.getDocument().addDocumentListener(new ListenerCampos());
     }
 
     public void muestraAlquileres(ArrayList<Alquiler> alquileres) {
@@ -726,7 +726,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_dateChooser_busquedaUsuarioPropertyChange
 
-    private class listenerCampos implements DocumentListener {
+    private class ListenerCampos implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {

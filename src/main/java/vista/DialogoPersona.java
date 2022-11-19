@@ -9,8 +9,6 @@ import java.awt.*;
 import java.util.*;
 
 import static extras.Colores_Dimensiones.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -46,10 +44,10 @@ public class DialogoPersona extends javax.swing.JDialog {
     private void aniadeListeners() {
         for (Component component : panel_busquedaAvanzada.getComponents()) {
             if (component instanceof JTextField) {
-                ((JTextField) component).getDocument().addDocumentListener(new listenerCampos());
+                ((JTextField) component).getDocument().addDocumentListener(new ListenerCampos());
             }
         }
-        campo_busquedaSimple.getDocument().addDocumentListener(new listenerCampos());
+        campo_busquedaSimple.getDocument().addDocumentListener(new ListenerCampos());
 
     }
 
@@ -88,6 +86,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
+        boton_multiple.requestFocus();
     }
 
     public void muestraModoVer() {
@@ -128,6 +127,8 @@ public class DialogoPersona extends javax.swing.JDialog {
 
         pack();
         setVisible(true);
+
+        boton_multiple.requestFocus();
     }
 
     public void muestraModoVer(Usuario usuario) {
@@ -169,6 +170,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
+        boton_multiple.requestFocus();
     }
 
     private void reseteaPanelFiltros() {
@@ -314,7 +316,6 @@ public class DialogoPersona extends javax.swing.JDialog {
         check_filtros = new javax.swing.JCheckBox();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Datos de usuario");
         setResizable(false);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -802,7 +803,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         boton.setContentAreaFilled(false);
     }//GEN-LAST:event_boton_limpiarMouseExited
 
-    private class listenerCampos implements DocumentListener {
+    private class ListenerCampos implements DocumentListener {
 
         @Override
         public void insertUpdate(DocumentEvent e) {

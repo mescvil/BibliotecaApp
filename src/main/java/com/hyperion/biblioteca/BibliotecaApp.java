@@ -16,6 +16,10 @@ public class BibliotecaApp {
             UIManager.put("Button.arc", 10);
             UIManager.put("Component.arc", 10);
             UIManager.put("TextComponent.arc", 10);
+
+            UIManager.put("OptionPane.yesButtonText", "Si");
+            UIManager.put("OptionPane.noButtonText", "No");
+
             UIManager.setLookAndFeel(new FlatLightLaf());
 
         } catch (UnsupportedLookAndFeelException ex) {

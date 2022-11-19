@@ -11,7 +11,9 @@ import controlador.Controlador;
 import excepciones.CargaDatosException;
 import excepciones.DuplicadoException;
 import excepciones.GuardaDatosException;
+
 import static extras.Colores_Dimensiones.MORADO;
+
 import modelo.Alquiler;
 import modelo.Libro;
 import modelo.Usuario;
@@ -31,6 +33,9 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import observer.ObservadorPila;
 
 /**
@@ -52,6 +57,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private boolean tiene_alquileres;
 
     private int contador_clicks = 4;
+    private final String texto_busqueda = "Introduce un titulo...";
 
     /**
      * Creates new form Vista
@@ -78,8 +84,8 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         modeloDefectoAlquileres();
         modeloDefectoUsuarios();
 
-        UIManager.put("OptionPane.yesButtonText", "Si");
-        UIManager.put("OptionPane.noButtonText", "No");
+        campo_busquedaLibro.getDocument().addDocumentListener(new ListenerCampos());
+        boton_buscarLibro.setVisible(false);
 
         PilaCommand.suscribirse(this);
     }
@@ -176,10 +182,6 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
 
         if (!libros_encontrados.isEmpty()) {
             modelo_listaLibros.addAll(libros_encontrados);
-        } else {
-            modeloDefectoLibros();
-            JOptionPane.showMessageDialog(this, "Sin resultados",
-                    "Búsqueda de libros", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -283,6 +285,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         campo_busquedaLibro = new javax.swing.JTextField();
         boton_buscarLibro = new javax.swing.JButton();
         boton_limpiarBusqueda = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         panel_datos = new javax.swing.JPanel();
         panel_listadoLibros = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -452,14 +455,14 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
 
         campo_busquedaLibro.setText("Introduce un titulo...");
         campo_busquedaLibro.setToolTipText("Busca un libro por titulo");
-        campo_busquedaLibro.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                campo_busquedaLibroFocusGained(evt);
+        campo_busquedaLibro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campo_busquedaLibroMouseClicked(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         panel_buscador.add(campo_busquedaLibro, gridBagConstraints);
 
@@ -475,7 +478,18 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         panel_buscador.add(boton_buscarLibro, gridBagConstraints);
 
-        boton_limpiarBusqueda.setText("Limpiar");
+        boton_limpiarBusqueda.setForeground(new java.awt.Color(255, 255, 255));
+        boton_limpiarBusqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/limpiar_pequenio.png"))); // NOI18N
+        boton_limpiarBusqueda.setBorderPainted(false);
+        boton_limpiarBusqueda.setContentAreaFilled(false);
+        boton_limpiarBusqueda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                boton_limpiarBusquedaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                boton_limpiarBusquedaMouseExited(evt);
+            }
+        });
         boton_limpiarBusqueda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 boton_limpiarBusquedaActionPerformed(evt);
@@ -484,8 +498,12 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 10);
         panel_buscador.add(boton_limpiarBusqueda, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        panel_buscador.add(filler2, gridBagConstraints);
 
         getContentPane().add(panel_buscador);
 
@@ -793,21 +811,25 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     }//GEN-LAST:event_libroSeleccionado
 
     private void boton_buscarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_buscarLibroActionPerformed
-        String busqueda = campo_busquedaLibro.getText();
+        ArrayList<Libro> libros_encontrados;
+        HashMap<String, String> busqueda = new HashMap<>();
+        String busqueda_titulo = campo_busquedaLibro.getText();
 
-        ArrayList<Libro> libros_encontrados = controlador.buscaLibroTitulo(busqueda);
-        setModeloListaLibros(libros_encontrados);
+        if (!busqueda_titulo.equals(texto_busqueda) && !busqueda_titulo.isBlank()) {
+            busqueda.put("titulo", busqueda_titulo);
+        }
 
+        if (!busqueda.isEmpty()) {
+            libros_encontrados = controlador.buscaLibrosArray(busqueda);
+            setModeloListaLibros(libros_encontrados);
+        } else {
+            modeloDefectoLibros();
+        }
     }//GEN-LAST:event_boton_buscarLibroActionPerformed
 
     private void boton_limpiarBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_limpiarBusquedaActionPerformed
         modeloDefectoLibros();
-        campo_busquedaLibro.setText("Introduce un titulo...");
-        boton_nuevoPrestamo.setEnabled(false);
-        modelo_listaAlquileres.clear();
-        boton_devolucion.setEnabled(false);
-
-        rellenaCamposLibro(new Libro());
+        campo_busquedaLibro.setText(texto_busqueda);
     }//GEN-LAST:event_boton_limpiarBusquedaActionPerformed
 
     private void menu_salirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu_salirMouseClicked
@@ -925,12 +947,8 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         dialogoLibro.muestraModoVer(controlador.getLibros());
     }//GEN-LAST:event_menu_listaLibrosActionPerformed
 
-    private void campo_busquedaLibroFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_campo_busquedaLibroFocusGained
-
-    }//GEN-LAST:event_campo_busquedaLibroFocusGained
-
     private void boton_destruccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_destruccionActionPerformed
-        ImageIcon icono = new javax.swing.ImageIcon(getClass().getResource("/destruccion_grande.png"));
+        ImageIcon icono = new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/destruccion_grande.png")));
 
         int resultado = JOptionPane.showConfirmDialog(this, "¿Seguro?",
                 "Autodestrucción", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono);
@@ -1004,6 +1022,21 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         }
     }//GEN-LAST:event_logoMouseClicked
 
+    private void campo_busquedaLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campo_busquedaLibroMouseClicked
+        JTextField text = (JTextField) evt.getSource();
+        text.setText("");
+    }//GEN-LAST:event_campo_busquedaLibroMouseClicked
+
+    private void boton_limpiarBusquedaMouseEntered(java.awt.event.MouseEvent evt) {
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(true);
+    }
+
+    private void boton_limpiarBusquedaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton_limpiarBusquedaMouseExited
+        JButton boton = (JButton) evt.getSource();
+        boton.setContentAreaFilled(false);
+    }//GEN-LAST:event_boton_limpiarBusquedaMouseExited
+
     private void creaDialogoClicks(int n_clicks) {
         ImageIcon icono = new javax.swing.ImageIcon(getClass().getResource("/destruccion_grande.png"));
         String mensaje;
@@ -1035,20 +1068,45 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private void sonidoNuke() {
         AudioInputStream sonido = null;
         try {
-            sonido = AudioSystem.getAudioInputStream(getClass().getResource("/nuke.wav"));
+            sonido = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResource("/nuke.wav")));
             Clip clip = AudioSystem.getClip();
             clip.open(sonido);
             clip.start();
 
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-            Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VistaPrincipal.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                sonido.close();
+                if (sonido != null) {
+                    sonido.close();
+                }
+
             } catch (IOException ex) {
-                Logger.getLogger(VistaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(VistaPrincipal.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
             }
         }
+    }
+
+    private class ListenerCampos implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            boton_buscarLibroActionPerformed(null);
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            boton_buscarLibroActionPerformed(null);
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            // No hace nada
+        }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1067,12 +1125,14 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private javax.swing.JButton boton_verUsuarios;
     private javax.swing.JTextField campo_autor;
     private javax.swing.JTextField campo_busquedaLibro;
+    private javax.swing.JTextField campo_busquedaTitulo;
     private javax.swing.JTextField campo_fecha;
     private javax.swing.JTextField campo_isbn;
     private javax.swing.JTextField campo_nEjemplares;
     private javax.swing.JTextField campo_titulo;
     private javax.swing.JCheckBoxMenuItem checkMenu_modoOscuro;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
@@ -1101,6 +1161,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private javax.swing.JMenu menu_usuarios;
     private javax.swing.JMenuItem menu_verUsuarios;
     private javax.swing.JPanel panel_buscador;
+    private javax.swing.JPanel panel_busquedaAvanzada;
     private javax.swing.JPanel panel_datos;
     private javax.swing.JPanel panel_datosUsuario;
     private javax.swing.JPanel panel_detallesLibro;
