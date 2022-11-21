@@ -11,8 +11,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import static extras.Colores_Dimensiones.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -754,6 +752,7 @@ public class DialogoLibro extends javax.swing.JDialog {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
+            System.out.println(e.getType());
             boton_busquedabusquedaUsuarios(null);
         }
 

@@ -21,9 +21,9 @@ public class OrdenAddUsuario extends AbstractUndoableEdit {
     private final Modelo receptor;
     private final Usuario nuevo_usuario;
 
-    public OrdenAddUsuario(Modelo receptor, Usuario nuevo_libro) {
+    public OrdenAddUsuario(Modelo receptor, Usuario nuevo_usuario) {
         this.receptor = receptor;
-        this.nuevo_usuario = nuevo_libro;
+        this.nuevo_usuario = nuevo_usuario;
     }
 
     @Override
