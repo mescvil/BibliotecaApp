@@ -752,7 +752,6 @@ public class DialogoLibro extends javax.swing.JDialog {
 
         @Override
         public void insertUpdate(DocumentEvent e) {
-            System.out.println(e.getType());
             boton_busquedabusquedaUsuarios(null);
         }
 
