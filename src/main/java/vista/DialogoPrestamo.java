@@ -224,26 +224,26 @@ public class DialogoPrestamo extends javax.swing.JDialog {
     }//GEN-LAST:event_formComponentShown
 
     private void boton_multipleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_multipleActionPerformed
-        Date fecha_devolucion = dateChooser_devolucion.getDate();
-
-        if (fecha_devolucion.before(new Date())) {
-            JOptionPane.showMessageDialog(this, "Error en la fecha de devolución",
-                    "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
-            return;
-
-        }
-        if (lista_Usuarios.getSelectedIndex() == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona un usuario",
-                    "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if ((Integer) spiner_ejemplares.getValue() == 0) {
-            JOptionPane.showMessageDialog(this, "No quedan ejemplares",
-                    "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         try {
+            Date fecha_devolucion = dateChooser_devolucion.getDate();
+
+            if (fecha_devolucion.before(new Date())) {
+                JOptionPane.showMessageDialog(this, "Error en la fecha de devolución",
+                        "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
+                return;
+
+            }
+            if (lista_Usuarios.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(this, "Selecciona un usuario",
+                        "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if ((Integer) spiner_ejemplares.getValue() == 0) {
+                JOptionPane.showMessageDialog(this, "No quedan ejemplares",
+                        "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             GregorianCalendar fecha = new GregorianCalendar();
             fecha.setTime(fecha_devolucion);
             int ejemplares = (Integer) spiner_ejemplares.getValue();
@@ -261,7 +261,7 @@ public class DialogoPrestamo extends javax.swing.JDialog {
         } catch (SinEjemplaresException ex) {
             JOptionPane.showMessageDialog(this, "Error faltan ejemplares",
                     "Nuevo préstamo", JOptionPane.ERROR_MESSAGE);
-        } catch (GuardaDatosException ex) {
+        } catch (GuardaDatosException | NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "No ha sido posible crear el préstamo",
                     "Nuevo préstamo", JOptionPane.WARNING_MESSAGE);
         }

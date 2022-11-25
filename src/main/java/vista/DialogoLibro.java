@@ -87,7 +87,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
-        boton_multiple.requestFocus();
+        boton_limpiar.doClick();
     }
 
     public void muestraModoVer(ArrayList<Libro> array_libros) {
@@ -129,7 +129,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
-        boton_multiple.requestFocus();
+        boton_limpiar.doClick();
     }
 
     private void reseteaPanelFiltros() {
@@ -179,7 +179,7 @@ public class DialogoLibro extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
-        boton_multiple.requestFocus();
+        boton_limpiar.doClick();
     }
 
     public void actualizaListaLibros(ArrayList<Libro> libros) {
@@ -613,7 +613,7 @@ public class DialogoLibro extends javax.swing.JDialog {
                 if (resultado == 1) {
                     dispose();
                 }
-            } catch (GuardaDatosException ex) {
+            } catch (GuardaDatosException | NullPointerException ex) {
                 JOptionPane.showMessageDialog(this, "No ha sido posible crear el libro",
                         "Nuevo libro", JOptionPane.ERROR_MESSAGE);
             } catch (DuplicadoException ex) {
@@ -727,6 +727,9 @@ public class DialogoLibro extends javax.swing.JDialog {
             panel_busquedaAvanzada.setVisible(false);
             this.setPreferredSize(DIMENSION_GRANDE);
         }
+
+        campo_busquedaSimple.setEnabled(!check_filtros.isSelected());
+        campo_busquedaSimple.setText(texto_simple);
 
         repaint();
         pack();

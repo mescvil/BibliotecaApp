@@ -86,7 +86,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
-        boton_multiple.requestFocus();
+        boton_limpiar.doClick();
     }
 
     public void muestraModoVer() {
@@ -128,7 +128,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
-        boton_multiple.requestFocus();
+        boton_limpiar.doClick();
     }
 
     public void muestraModoVer(Usuario usuario) {
@@ -170,7 +170,7 @@ public class DialogoPersona extends javax.swing.JDialog {
         pack();
         setVisible(true);
 
-        boton_multiple.requestFocus();
+        boton_limpiar.doClick();
     }
 
     private void reseteaPanelFiltros() {
@@ -263,7 +263,7 @@ public class DialogoPersona extends javax.swing.JDialog {
             if (resultado == 1) {
                 dispose();
             }
-        } catch (GuardaDatosException ex) {
+        } catch (GuardaDatosException | NullPointerException ex) {
             JOptionPane.showMessageDialog(this, "No ha sido posible crear un nuevo usuario",
                     "Nuevo usuario", JOptionPane.ERROR_MESSAGE);
         } catch (DuplicadoException ex) {
@@ -740,6 +740,9 @@ public class DialogoPersona extends javax.swing.JDialog {
             this.setPreferredSize(DIMENSION_GRANDE);
 
         }
+
+        campo_busquedaSimple.setEnabled(!check_filtros.isSelected());
+        campo_busquedaSimple.setText(texto_simple);
 
         repaint();
         pack();

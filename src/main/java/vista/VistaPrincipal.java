@@ -6,6 +6,7 @@ package vista;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import command.OrdenAddLibro;
 import command.PilaCommand;
 import controlador.Controlador;
 import excepciones.CargaDatosException;
@@ -37,11 +38,12 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import observer.ObservadorPila;
+import observer.ObservadorPilaLibro;
 
 /**
  * @author Escoz
  */
-public class VistaPrincipal extends JFrame implements ObservadorPila {
+public class VistaPrincipal extends JFrame implements ObservadorPila, ObservadorPilaLibro {
 
     private final Controlador controlador;
 
@@ -88,6 +90,9 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         boton_buscarLibro.setVisible(false);
 
         PilaCommand.suscribirse(this);
+        OrdenAddLibro.suscribirse(this);
+
+        boton_limpiarBusqueda.doClick();
     }
 
     private void iconoAplicacion() {
@@ -948,7 +953,8 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     }//GEN-LAST:event_menu_listaLibrosActionPerformed
 
     private void boton_destruccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_destruccionActionPerformed
-        ImageIcon icono = new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource("/destruccion_grande.png")));
+        ImageIcon icono = new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource(
+                "/destruccion_grande.png")));
 
         int resultado = JOptionPane.showConfirmDialog(this, "¿Seguro?",
                 "Autodestrucción", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, icono);
@@ -1090,6 +1096,14 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
         }
     }
 
+    @Override
+    public void cambioEnPilaLibro() {
+        rellenaCamposLibro(new Libro());
+        boton_nuevoPrestamo.setEnabled(false);
+        boton_devolucion.setEnabled(false);
+
+    }
+
     private class ListenerCampos implements DocumentListener {
 
         @Override
@@ -1118,7 +1132,7 @@ public class VistaPrincipal extends JFrame implements ObservadorPila {
     private javax.swing.JButton boton_deshacer;
     private javax.swing.JButton boton_destruccion;
     private javax.swing.JButton boton_devolucion;
-    private javax.swing.JButton boton_limpiarBusqueda;
+    public javax.swing.JButton boton_limpiarBusqueda;
     private javax.swing.JButton boton_listaLibros;
     private javax.swing.JButton boton_nuevoPrestamo;
     private javax.swing.JButton boton_rehacer;

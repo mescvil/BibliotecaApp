@@ -41,6 +41,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler, Observ
 
         /* Dialgo para cargar los archivos */
         new DialogoArchivos(vista, true, this).setVisible(true);
+        vista.requestFocus();
     }
 
     /* ================== MODELO DE ARCHIVOS ================== */
@@ -53,6 +54,7 @@ public class Controlador implements ObservadorLibros, ObservadorAlquiler, Observ
         cambioUsuario();
         cambioLibro();
         cambioAlquiler();
+        vista.cambioEnPilaLibro();
     }
 
     public void setRutaFicheros(String ruta) {

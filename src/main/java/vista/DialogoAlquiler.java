@@ -85,7 +85,7 @@ public class DialogoAlquiler extends javax.swing.JDialog {
         pack();
         repaint();
 
-        tabla_alquileres.requestFocus();
+        boton_limpiar.doClick();
     }
 
     private void ajustaTabla() {
@@ -692,6 +692,9 @@ public class DialogoAlquiler extends javax.swing.JDialog {
             panel_filtros.setVisible(false);
             this.setPreferredSize(DIMENSION_EXTRA);
         }
+
+        campo_busquedaSimple.setEnabled(!check_avanzada.isSelected());
+        campo_busquedaSimple.setText(texto_simple);
 
         pack();
         repaint();

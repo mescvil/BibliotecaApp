@@ -11,12 +11,15 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import modelo.Libro;
+import observer.ObservadorPilaLibro;
 
 /**
  *
  * @author theky
  */
 public class OrdenAddLibro extends AbstractUndoableEdit {
+
+    private static ObservadorPilaLibro observador;
 
     private final Modelo receptor;
     private final Libro nuevo_libro;
@@ -36,6 +39,7 @@ public class OrdenAddLibro extends AbstractUndoableEdit {
         try {
             super.undo();
             receptor.eliminaLibro(nuevo_libro);
+            notifica();
         } catch (GuardaDatosException ex) {
             throw new CannotUndoException();
         }
@@ -46,6 +50,7 @@ public class OrdenAddLibro extends AbstractUndoableEdit {
         try {
             super.redo();
             receptor.guardaLibro(nuevo_libro);
+            notifica();
         } catch (GuardaDatosException | DuplicadoException ex) {
             throw new CannotRedoException();
         }
@@ -55,5 +60,13 @@ public class OrdenAddLibro extends AbstractUndoableEdit {
         receptor.guardaLibro(nuevo_libro);
         PilaCommand.addOrden(this);
 
+    }
+
+    public static void suscribirse(ObservadorPilaLibro o) {
+        observador = o;
+    }
+
+    private void notifica() {
+        observador.cambioEnPilaLibro();
     }
 }

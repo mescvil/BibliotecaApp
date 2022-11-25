@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  * @author Escoz
  */
 public class DialogoArchivos extends javax.swing.JDialog {
-
+    
     private final Controlador controlador;
     private JFileChooser fileChooser;
 
@@ -25,21 +25,21 @@ public class DialogoArchivos extends javax.swing.JDialog {
     public DialogoArchivos(Frame parent, boolean modal, Controlador controlador) {
         super(parent, modal);
         initComponents();
-
+        
         this.controlador = controlador;
         setLocationRelativeTo(parent);
         iniciaDialogo();
     }
-
+    
     private void iniciaDialogo() {
         campo_rutaAnterior.setText(controlador.getRutaAnterior());
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
+        
         if (campo_rutaAnterior.getText().isBlank()) {
             boton_anterior.setEnabled(false);
         }
-
+        
         label_logo.requestFocus();
     }
 
@@ -160,15 +160,15 @@ public class DialogoArchivos extends javax.swing.JDialog {
 
     private void boton_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_crearActionPerformed
         int opcion = fileChooser.showDialog(this, "Seleccionar");
-
+        
         if (opcion == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             controlador.creaFicherosDatos(file.getAbsolutePath());
-
+            
             try {
                 controlador.cargaDatosNotify();
                 this.setVisible(false);
-
+                
             } catch (CargaDatosException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(),
                         "Carga de datos", JOptionPane.ERROR_MESSAGE);
@@ -180,25 +180,26 @@ public class DialogoArchivos extends javax.swing.JDialog {
         try {
             controlador.cargaDatosNotify();
             this.setVisible(false);
+            
         } catch (CargaDatosException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(),
                     "Carga de datos", JOptionPane.ERROR_MESSAGE);
-
+            campo_rutaAnterior.setText("");
             boton_anterior.setEnabled(false);
         }
     }//GEN-LAST:event_boton_anteriorActionPerformed
 
     private void boton_cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_cargarActionPerformed
         int opcion = fileChooser.showDialog(this, "Seleccionar");
-
+        
         if (opcion == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             controlador.setRutaFicheros(file.getAbsolutePath());
-
+            
             try {
                 controlador.cargaDatosNotify();
                 this.setVisible(false);
-
+                
             } catch (CargaDatosException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(),
                         "Carga de datos", JOptionPane.ERROR_MESSAGE);
